@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>Bezierpath</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>//@property (nonatomic,strong) CAShapeLayer *shapeLayer;
+- (void)test {
+    
+    //[self.view.layer addSublayer:self.shapeLayer];
+    
+    //[self testPath1];
+    
+    //[self testPath2];
+}
+
+
+
+- (void)test2 {
+    DrawView *drawView = [[DrawView alloc] initWithFrame:self.view.bounds];
+    drawView.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:drawView];
+}
+
+- (void)test4 {
+    //[self testCureveLineAnimation];
+    //[self testCureveLineAnimation2];
+    [self testCureveLineAnimation3];
+}
+
+#pragma mark 一、创建UIBezierPath.
+- (void)testPath1 {
+    
+    UIBezierPath *bezierPath = [UIBezierPath bezierPath];
+    
+    //    bezierPath = [UIBezierPath bezierPathWithRect:CGRectMake(100, 100, 200, 300)];
+    
+    //    bezierPath = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(100, 100, 200, 300)];
+    
+    //    bezierPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(100, 100, 200, 300) cornerRadius:10.0];
+    
+    //    bezierPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(100, 100, 200, 300) byRoundingCorners:UIRectCornerAllCorners cornerRadii:CGSizeMake(20, 40)];
+    
+    bezierPath = [UIBezierPath bezierPathWithArcCenter:self.view.center radius:100 startAngle:M_PI_2 endAngle:M_PI * 2 clockwise:YES];
+    
+    bezierPath = [UIBezierPath bezierPathWithCGPath:bezierPath.CGPath];
+    
+    self.shapeLayer.path = bezierPath.CGPath;
+    
+}
+
+#pragma mark -二、路径操作函数
+- (void)testPath2 {
+    UIBezierPath *bezierPath = [UIBezierPath bezierPath];
+    
+    [bezierPath moveToPoint:CGPointMake(100, 300)];
+    
+    //[bezierPath addLineToPoint:CGPointMake(150, 150)];
+    
+    //[bezierPath addCurveToPoint:CGPointMake(300, 300) controlPoint1:CGPointMake(150, 150) controlPoint2:CGPointMake(220, 360)];
+    
+    //[bezierPath addQuadCurveToPoint:CGPointMake(300, 300) controlPoint:CGPointMake(150, 150)];
+    
+    //[bezierPath addArcWithCenter:self.view.center radius:100 startAngle:M_PI_2 endAngle:2 * M_PI clockwise:YES];
+    
+    [bezierPath moveToPoint:CGPointMake(100,300)];
+    [bezierPath addLineToPoint:CGPointMake(150, 50)];
+    [bezierPath addLineToPoint:CGPointMake(220, 80)];
+    //[bezierPath closePath];
+    [bezierPath addLineToPoint:CGPointMake(250, 430)];
+    //[bezierPath closePath];
+    //[bezierPath removeAllPoints];
+    
+    //bezierPath = [bezierPath bezierPathByReversingPath];
+    
+    //[bezierPath applyTransform:CGAffineTransformMakeTranslation(100, 0)];
+    //[bezierPath applyTransform:CGAffineTransformMakeScale(2.0, 1.0)];//对路径中的所有点进行二维形变, 该变化立即生效, 且为永久性改变所有点。
+    
+    NSLog(@"bezierPath:%@",bezierPath);
+    if (bezierPath.isEmpty) {
+        NSLog(@"bezierPath.isEmpty");
+    }
+    NSLog(@"bounds:%@",NSStringFromCGRect(bezierPath.bounds));
+    
+    CGPoint point = CGPointMake(245, 300);
+    if ([bezierPath containsPoint:point]) {
+        NSLog(@"bezierPath.containsPoint:%@",NSStringFromCGPoint(point));
+    }
+    
+    self.shapeLayer.path = bezierPath.CGPath;
+    
+    NSLog(@"%@",[bezierPath points])  ;
+}
+
+- (CAShapeLayer *)shapeLayer {
+    if (!_shapeLayer) {
+        _shapeLayer = [CAShapeLayer layer];
+        _shapeLayer.frame = self.view.layer.bounds;
+        _shapeLayer.backgroundColor = [UIColor clearColor].CGColor;
+        _shapeLayer.lineWidth = 10;
+        _shapeLayer.strokeColor = [UIColor redColor].CGColor;
+        _shapeLayer.fillColor = [UIColor clearColor].CGColor;
+        _shapeLayer.lineCap = kCALineCapButt;
+        _shapeLayer.lineJoin = kCALineJoinMiter;
+        _shapeLayer.miterLimit = 1;
+        _shapeLayer.lineDashPhase = 1;//lineDash：起始位置 //phase 循环数组时跳过的长度
+        _shapeLayer.lineDashPattern = @[@4, @20];//pattern 线段数组 如：CGFloat dash[] = {1,1}; 代表实线和空白交替的长度 及先绘制1个长度再空1个，再绘制一个.....；
+    }
+    return _shapeLayer;
+}
+
+- (void)test3 {
+    UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0 , 110, 110)];
+    [self.view addSubview:view];
+    CAShapeLayer *layer   = [[CAShapeLayer alloc] init];
+    layer.frame = CGRectMake(0, 0 , 110, 110);
+    NSLog(@"%f,%f",layer.frame.size.width,layer.frame.size.height);
+    layer.backgroundColor = [UIColor clearColor].CGColor;
+    UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:layer.frame cornerRadius:4.0f];
+    layer.path = path.CGPath;
+    layer.lineWidth = 1.0f;
+    layer.lineDashPattern = @[@4, @4];
+    layer.fillColor = [UIColor clearColor].CGColor;
+    layer.strokeColor = [UIColor grayColor].CGColor;
+    [view.layer addSublayer:layer];
+}
+
+#pragma mark -曲线动画（CAShapeLayer、UIBezierPath,coreAnimation）
+- (void)testCureveLineAnimation {
+    
+    UIBezierPath *bezierPath = [UIBezierPath bezierPath];
+    [bezierPath moveToPoint:CGPointMake(50, 667 / 2.0)];
+    [bezierPath addLineToPoint:CGPointMake(375 / 2.0, 667 / 2.0)];
+    [bezierPath addLineToPoint:CGPointMake(300, 667 / 2.0)];
+    
+    CABasicAnimation *animation = [CABasicAnimation animation];
+    animation.keyPath = @"strokeEnd";
+    animation.duration = 5;
+    animation.fromValue = @0;
+    animation.toValue = @1;
+    animation.repeatCount = 100;
+    
+    CAShapeLayer *layer = [self createShapeLayer:[UIColor orangeColor]];
+    layer.path = bezierPath.CGPath;
+    layer.lineWidth = 2.0;
+    //设置图形的弧度
+    //    layer.strokeStart = 0;
+    //    layer.strokeEnd = 1;
+    [layer addAnimation:animation forKey:@"strokeEndAnimation"];//注：由于UIBezierPath已经设置路径，所以动画的路径就不需要再次设置，只需要设置起始0与结束1就行，有需要可以设置动画结束后是否需要返回原位置。
+}
+
+- (void)testCureveLineAnimation2 {
+    
+    UIBezierPath *bezierPath = [UIBezierPath bezierPath];
+    //起始点
+    [bezierPath moveToPoint:CGPointMake(50, 667/2)];
+    //结束点、两个控制点
+    [bezierPath addCurveToPoint:CGPointMake(330, 667/2) controlPoint1:CGPointMake(125, 200) controlPoint2:CGPointMake(185, 450)];
+    
+    CABasicAnimation *animation = [CABasicAnimation animation];
+    animation.keyPath = @"strokeEnd";
+    animation.duration = 5;
+    animation.fromValue = @0;
+    animation.toValue = @1;
+    animation.repeatCount = 100;
+    
+    CAShapeLayer *layer = [self createShapeLayer:[UIColor clearColor]];
+    layer.path = bezierPath.CGPath;
+    layer.lineWidth = 2.0;
+    //设置图形的弧度
+    //    layer.strokeStart = 0;
+    //    layer.strokeEnd = 1;
+    [layer addAnimation:animation forKey:@"strokeEndAnimation"];//注：由于UIBezierPath已经设置路径，所以动画的路径就不需要再次设置，只需要设置起始0与结束1就行，有需要可以设置动画结束后是否需要返回原位置。
+}
+
+- (void)testCureveLineAnimation3 {
+    
+    UIBezierPath *bezierPath = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(375/2-100, 667/2-100, 200, 200)];
+    
+    CABasicAnimation *animation = [CABasicAnimation animation];
+    animation.keyPath = @"strokeEnd";
+    animation.duration = 3.0;
+    animation.fromValue = @0;
+    animation.toValue = @1;
+    animation.repeatCount = 100;
+    
+    CAShapeLayer *layer = [self createShapeLayer:[UIColor clearColor]];
+    layer.path = bezierPath.CGPath;
+    layer.lineWidth = 25.0;
+    //设置图形的弧度
+    layer.strokeStart = 0;
+    layer.strokeEnd = 1;
+    [layer addAnimation:animation forKey:@"strokeEndAnimation"];//注：由于UIBezierPath已经设置路径，所以动画的路径就不需要再次设置，只需要设置起始0与结束1就行，有需要可以设置动画结束后是否需要返回原位置。
+}
+
+- (CAShapeLayer *)createShapeLayer:(UIColor *)color
+{
+    CAShapeLayer *layer = [CAShapeLayer layer];
+    //    layer.frame = CGRectMake(0, 0, 50, 50);
+    //设置背景色
+    //    layer.backgroundColor = [UIColor cyanColor].CGColor;
+    //设置描边色
+    layer.strokeColor = [UIColor blackColor].CGColor;
+    //设置填充色
+    layer.fillColor = color.CGColor;
+    [self.view.layer addSublayer:layer];
+    
+    return layer;
+}</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>91D69C32-81D7-4168-94CB-6879082026FB</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Generic</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>CAShape and UIBezierpath</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>CAShape and UIBezierpath</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

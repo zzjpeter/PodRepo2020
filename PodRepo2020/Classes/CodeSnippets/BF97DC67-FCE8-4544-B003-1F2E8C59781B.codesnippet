@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>Add_Property</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>/* value 设置 和 获取都是 id 类型 */
+- (void)&lt;#setMethodName#&gt;:(id)value {
+    objc_setAssociatedObject(self, @selector(&lt;#methodName#&gt;), value, OBJC_ASSOCIATION_ASSIGN);
+}
+
+- (id)&lt;#methodName#&gt; {
+    return objc_getAssociatedObject(self, _cmd);
+}</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>BF97DC67-FCE8-4544-B003-1F2E8C59781B</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>动态添加属性</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>动态添加属性</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

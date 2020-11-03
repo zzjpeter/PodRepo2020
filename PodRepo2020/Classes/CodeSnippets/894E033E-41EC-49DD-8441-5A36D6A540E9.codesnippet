@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>NavigationView_Custom自定义</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>- (void)setupNavigationView:(WXYZ_BasicNavBarView *)navigationView
+{
+    [self hiddenNavigationBarLeftButton];
+    [self setNavigationBarTitle:@""];
+    [self hiddenSeparator];
+    
+    UIButton *closeBtn = ({
+        UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [btn setImage:IMAGECommon(@"close") forState:UIControlStateNormal];
+        [btn addTarget:self action:@selector(closeView) forControlEvents:UIControlEventTouchUpInside];
+        btn;
+    });
+    UILabel *touristL = ({
+        UILabel *label = [UILabel new];
+        label.text = MyLocal(@"游客登录");
+        label.font = kFont(14.0);
+        label.textColor = kCommonLightGrayColor;
+        label.textAlignment = NSTextAlignmentNatural;
+        label.userInteractionEnabled = YES;
+        label;
+    });
+    [touristL addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touristsLogin)]];
+
+    [navigationView addSubview:closeBtn];
+    [navigationView addSubview:touristL];
+    [closeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(kCommonMarginMine);
+        make.centerY.equalTo(self.navigationBar.navTitleLabel);
+        make.size.mas_equalTo(CGSizeMake(28.0, 28.0));
+    }];
+    [touristL mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.mas_equalTo(-kCommonMarginMine);
+        make.centerY.equalTo(self.navigationBar.navTitleLabel);
+        make.height.mas_equalTo(22.0);
+    }];
+}</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>894E033E-41EC-49DD-8441-5A36D6A540E9</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>NavigationView_Custom自定义</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>NavigationView_Custom自定义</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

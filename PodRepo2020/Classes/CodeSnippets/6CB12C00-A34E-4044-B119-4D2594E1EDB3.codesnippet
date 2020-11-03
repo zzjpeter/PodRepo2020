@@ -1,0 +1,548 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>LS_Bounce_RefreshVC</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>//
+//  LS_PersonalMainViewController.m
+//  WXReader
+//
+//  Created by Andrew on 2018/5/15.
+//  Copyright © 2018年 Andrew. All rights reserved.
+//
+
+#import "LS_PersonalMainViewController.h"
+
+#import "LS_PersonalMainHeadView.h"
+#import "WXYZ_BookMallStyleMoreTableViewCell.h"
+
+static BOOL kEnableHeaderBounces = YES;//控制头部是否可拉伸
+
+@interface LS_PersonalMainViewController () &lt;UITableViewDelegate, UITableViewDataSource&gt;
+
+@property (nonatomic, assign) BOOL isLoading;//是否正在加载标识
+@property (nonatomic, strong) NSURLSessionDataTask *task;//当前task
+
+@property (nonatomic, strong) LS_PersonalMainHeadView *headView;
+
+@end
+
+@implementation LS_PersonalMainViewController
+
+-(void)dealloc {
+    NSLog(@"%@ dealloc",NSStringFromClass(self.class));
+    [self removeNoti];
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    [self initialize];
+    [self buildView];
+    [self loadData];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    if (self.viewWillAppear) {
+        [self loadData];
+    }
+    
+    [super viewWillAppear:animated];
+    
+    [self handleNavBarColorState:self.mainTableViewGroup animate:NO];
+    
+    [self setStatusBarDefaultStyle];
+    
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+}
+
+- (void)initialize
+{
+    self.view.backgroundColor = kWhiteColor;
+    
+    [self handleData];
+    
+    [self addNoti];
+    
+    [self setNavigationBar:self.navigationBar];
+}
+
+- (void)setNavigationBar:(WXYZ_BasicNavBarView *)navigationBar {
+
+    [self setNavigationBarTitle:@"标题"];
+
+}
+
+- (void)handleData {
+    
+}
+
+- (void)buildView
+{
+    self.mainTableViewGroup.delegate = self;
+    self.mainTableViewGroup.dataSource = self;
+    [self.view addSubview:self.mainTableViewGroup];
+    
+    [self.mainTableViewGroup mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(0);
+        make.top.mas_equalTo(0);
+        make.width.mas_equalTo(self.view);
+        make.height.mas_equalTo(self.view);
+    }];
+    
+    if(kEnableHeaderBounces){
+        [self.mainTableViewGroup addSubview:self.headView];
+        self.mainTableViewGroup.contentInset = UIEdgeInsetsMake(LS_PersonalMainHeadView.viewHeight, 0, 0, 0);
+        self.headView.top = -LS_PersonalMainHeadView.viewHeight;
+        [self addViewRefresh];
+    }else {
+        [self addViewRefresh];
+        [self.mainTableViewGroup setTableHeaderView:self.headView];
+    }
+    
+    [self.mainTableViewGroup layoutIfNeeded];
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return self.dataSourceArray.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    WXYZ_ProductionModel *t_model = [self.dataSourceArray safeObjectAtIndex:indexPath.row];
+    return [self createMoreStyleCellWithTableView:tableView atIndexPath:indexPath bookModel:t_model];
+}
+
+- (UITableViewCell *)createMoreStyleCellWithTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath bookModel:(WXYZ_ProductionModel *)bookModel
+{
+    @weakify(self)
+    static NSString *cellName = @"WXYZ_BookMallStyleMoreTableViewCell";
+    WXYZ_BookMallStyleMoreTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellName];
+    if (!cell) {
+        cell = [[WXYZ_BookMallStyleMoreTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellName];
+    }
+    cell.bookModel = bookModel;
+    cell.cellDidSelectItemBlock = ^(NSInteger production_id) {
+        @strongify(self)
+        WXYZ_BookMallDetailViewController *vc = [[WXYZ_BookMallDetailViewController alloc] init];
+        vc.production_id = production_id;
+        [self.navigationController pushViewController:vc animated:YES];
+    };
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    return CGFLOAT_MIN;
+}
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+    return CGFLOAT_MIN;
+}
+
+- (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    UIView *headerView = [UIView new];
+    return headerView;
+}
+- (nullable UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
+    UIView *footerView = [UIView new];
+    return footerView;
+}
+
+
+#pragma mark UIScrollViewDelegate
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    
+    [self handleNavBarColorState:scrollView animate:YES];
+    [self handleHeaderBounces:scrollView];
+   
+}
+
+- (void)handleHeaderBounces:(UIScrollView *)scrollView {
+    if(kEnableHeaderBounces) {
+        CGFloat offsetY = scrollView.contentOffset.y;
+        if (offsetY &lt;= -LS_PersonalMainHeadView.viewHeight) {
+            self.headView.top = offsetY;
+            self.headView.height = -offsetY;
+            {
+                CGFloat needRefreshOffset = offsetY + scrollView.contentInset.top;
+                BOOL canRefresh = needRefreshOffset &lt;= -5 &amp;&amp; needRefreshOffset &gt;= -(40+LPiPhoneXMarginTop);
+                if (canRefresh &amp;&amp; scrollView.isTracking) {
+                    [self.headView startAnimation];
+                }
+            }
+        }
+    }
+}
+
+//[self handleNavBarColorState:scrollView animate:NO];
+//[self handleNavBarColorState:scrollView animate:YES];
+- (void)handleNavBarColorState:(UIScrollView *)scrollView animate:(BOOL)animate
+{
+    CGFloat contentOffsetY = scrollView.contentOffset.y;
+    CGFloat alpha = [WXYZ_ColorHelper getAlphaWithContentOffsetY:contentOffsetY];
+    CGFloat rbgColor = [WXYZ_ColorHelper getColorWithContentOffsetY:contentOffsetY];
+    
+    self.navigationBar.backgroundColor = [UIColor.whiteColor colorWithAlphaComponent:alpha];
+    self.navigationBar.navTitleLabel.backgroundColor = UIColor.clearColor;
+    self.navigationBar.navTitleLabel.alpha = alpha;
+    self.navigationBar.navTitleLabel.textColor = kColorRGBA(rbgColor, rbgColor, rbgColor, 1);
+    
+    if (contentOffsetY &gt; 60) {
+        [self setStatusBarDefaultStyle];
+    } else {
+        [self setStatusBarDefaultStyle];
+    }
+}
+
+#pragma mark action
+
+
+#pragma mark setter/getter
+- (LS_PersonalMainHeadView *)headView {
+    if (!_headView) {
+        LS_PersonalMainHeadView *view = ({
+            LS_PersonalMainHeadView *view = [LS_PersonalMainHeadView new];
+            
+            @weakify(self)
+            
+            view.animationBlock = ^(BOOL start) {
+                @strongify(self)
+                if (start) {
+                    [self.mainTableViewGroup.mj_footer resetNoMoreData];
+                    self.mainTableViewGroup.mj_footer.hidden = NO;
+                    [self loadData];
+                }
+            };
+            
+            view;
+        });
+        _headView = view;
+    }
+    return _headView;
+}
+
+#pragma mark requestData
+- (void)addViewRefresh {
+    @weakify(self)
+    
+    [self.mainTableViewGroup addFooterRefreshWithRefreshingBlock:^{
+        @strongify(self)
+        [self loadMoreData];
+    }];
+    
+    if (kEnableHeaderBounces) {
+        return;
+    }
+    [self.mainTableViewGroup addHeaderRefreshWithRefreshingBlock:^{
+        @strongify(self)
+        [self.mainTableViewGroup.mj_footer resetNoMoreData];
+        self.mainTableViewGroup.mj_footer.hidden = NO;
+        [self loadData];
+    }];
+    
+
+}
+
+- (void)stopAnimatingViewRefresh:(BOOL)isRefresh
+{
+    _isLoading = NO;
+    if (isRefresh) {
+        [self.mainTableViewGroup.mj_header endRefreshing];
+        [self.headView stopAnimation];
+        return;
+    }
+    
+    [self.mainTableViewGroup.mj_footer endRefreshing];
+}
+
+- (void)loadData {
+    
+    //reset
+    _isLoading = NO;
+    [self.task cancel];
+    
+    self.currentPageNumber = 1;
+    
+    [self requestData:YES];
+}
+
+- (void)loadMoreData {
+    
+    [self requestData:NO];
+}
+
+- (void)requestData:(BOOL)isRefresh {
+    
+    if (_isLoading) {
+        return;
+    }
+    
+    _isLoading = YES;
+    
+    @weakify(self)
+    
+    NSMutableDictionary *paramsM = [NSMutableDictionary new];
+    [paramsM setValue:@(self.currentPageNumber) forKey:@"page_num"];
+    [paramsM setValue:@"2" forKey:@"channel_id"];
+    
+    self.task = [WXYZ_NetworkRequestManger.sharedManager POST:BookFinish parameters:paramsM success:^(NSURLSessionDataTask * _Nonnull task, NSDictionary * _Nullable response) {
+        @strongify(self)
+        [self stopAnimatingViewRefresh:isRefresh];
+        
+        if(SafeGetIntValue(response[@"error"]) == 0) {
+            
+            LS_CommonModel *model1 = [LS_CommonModel modelWithDictionary:SafeGetDictionaryValue(response[@"data"])];
+            
+            WXYZ_ListModel *model = [WXYZ_ListModel modelWithDictionary:SafeGetDictionaryValue(response[@"data"])];
+            NSArray *temps = model.list;
+            if (self.currentPageNumber == 1) {
+                [self.dataSourceArray removeAllObjects];
+                [self.dataSourceArray addObjectsFromArray:temps];
+            } else {
+                [self.dataSourceArray addObjectsFromArray:temps];
+            }
+            
+            // pageNum处理 和 是否结束刷新
+            if (model.total_page &lt;= model.current_page) {
+                [self.mainTableViewGroup hideRefreshFooter];
+            }else {
+                self.currentPageNumber = (int)(model.current_page + 1);
+            }
+            
+            [self refreshUI];
+            return;
+        }
+        
+        return;
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        [self stopAnimatingViewRefresh:isRefresh];
+    }];
+    
+}
+
+- (void)refreshUI {
+    [self.mainTableViewGroup reloadData];
+}
+
+
+#pragma mark noti
+- (void)addNoti {
+}
+- (void)removeNoti {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+@end
+
+//
+////  LS_PersonalMainHeadView.m
+////  WXReader
+////
+////  Created by Andrew on 2018/6/20.
+////  Copyright © 2018年 Andrew. All rights reserved.
+////
+//
+//#import "LS_PersonalMainHeadView.h"
+//#import "WXYZ_MineUserModel.h"
+//#import "UIButton+Badge.h"
+//
+//#define MenuAvatar_H 68.0
+//
+//@interface LS_PersonalMainHeadView ()
+//
+//@property (nonatomic, strong) UIImageView *bgImageView;
+//
+//@property (nonatomic, strong) UIView *contentView;
+//
+//@property (nonatomic, strong) UIButton *avatarBtn;
+//@property (nonatomic, strong) UILabel *nickNameL;
+//
+//@end
+//
+//@implementation LS_PersonalMainHeadView
+//
+//+(CGFloat)viewHeight {
+//    CGFloat height = PUB_NAVBAR_OFFSET + 47.0 + MenuAvatar_H;
+//    return height;
+//}
+//
+//- (instancetype)init
+//{
+//    if (self = [super init]) {
+//        self.backgroundColor = kWhiteColor;
+//        self.frame = CGRectMake(0, 0, SCREEN_WIDTH,LS_PersonalMainHeadView.viewHeight);
+//        [self createSubViews];
+//    }
+//    return self;
+//}
+//
+//- (void)createSubViews
+//{
+//    UIView *contentView = [UIView new];
+//    [self addSubview:contentView];
+//    [contentView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        //make.edges.equalTo(self);
+//        make.top.equalTo(self);
+//        make.left.equalTo(self);
+//        make.width.mas_equalTo(SCREEN_WIDTH);//消除约束冲突，设置tableView的haderView时width约束为0
+//        make.height.mas_equalTo(self);
+//    }];
+//    
+//    [contentView addSubview:self.bgImageView];
+//    [contentView addSubview:self.activityView];
+//    [contentView addSubview:self.contentView];
+//    [self.bgImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.edges.equalTo(contentView);
+//    }];
+//    [self.activityView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.top.equalTo(contentView).offset(kStatusBarHeight);
+//        make.centerX.equalTo(contentView);
+//    }];
+//    [self.contentView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.right.equalTo(contentView);
+//        make.bottom.equalTo(contentView);
+//        make.height.mas_equalTo(LS_PersonalMainHeadView.viewHeight);
+//    }];
+//    
+//}
+//
+//
+//
+//- (void)avatarSelected
+//{
+//    if (self.avatarSelectedBlock) {
+//        self.avatarSelectedBlock();
+//    }
+//}
+//
+//
+//#pragma mark setter/getter
+//- (UIImageView *)bgImageView {
+//    if (!_bgImageView) {
+//        UIImageView *imageView = ({
+//            UIImageView *imageView = [UIImageView new];
+//            imageView.image = [UIImage imageNamed:@"ls_MineHeader_bg"];
+//            imageView;
+//        });
+//        _bgImageView = imageView;
+//    }
+//    return _bgImageView;
+//}
+//
+//- (UIView *)contentView {
+//    if (!_contentView) {
+//        UIView *view = ({
+//            UIView *contentView = [UIView new];
+//            
+//            [contentView addSubview:self.avatarBtn];
+//            [contentView addSubview:self.nickNameL];
+//            
+//            [self.avatarBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+//                make.left.mas_equalTo(kCommonMarginMine);
+//                make.top.mas_equalTo(PUB_NAVBAR_OFFSET + 47.0);
+//                make.width.mas_equalTo(MenuAvatar_H);
+//                make.height.mas_equalTo(MenuAvatar_H);
+//            }];
+//            [self.nickNameL mas_makeConstraints:^(MASConstraintMaker *make) {
+//                make.left.mas_equalTo(self.avatarBtn.mas_right).offset(kCommonMarginMine);
+//                make.right.mas_lessThanOrEqualTo(-kCommonMarginMine);
+//                make.top.mas_equalTo(self.avatarBtn.mas_top);
+//                make.height.mas_equalTo(MenuAvatar_H);
+//            }];
+//            
+//            contentView;
+//        });
+//        _contentView = view;
+//    }
+//    return _contentView;
+//}
+//
+//- (UIButton *)avatarBtn {
+//    if (!_avatarBtn) {
+//        UIButton *btn =({
+//            btn = [UIButton buttonWithType:UIButtonTypeCustom];
+//            btn.layer.cornerRadius = 35;
+//            btn.clipsToBounds = YES;
+//            [btn setBackgroundImage:HoldUserAvatar forState:UIControlStateNormal];
+//            [btn addTarget:self action:@selector(avatarSelected) forControlEvents:UIControlEventTouchUpInside];
+//            btn;
+//        });
+//        _avatarBtn = btn;
+//    }
+//    return _avatarBtn;
+//}
+//
+//- (UILabel *)nickNameL {
+//    if (!_nickNameL) {
+//        UILabel *label = ({
+//            label = [UILabel new];
+//            label.font = kBoldFont24;
+//            label.backgroundColor = UIColor.clearColor;
+//            label.textColor = kBlackColor;
+//            label.textAlignment = NSTextAlignmentNatural;
+//            label.userInteractionEnabled = YES;
+//            label;
+//        });
+//        _nickNameL = label;
+//    }
+//    return _nickNameL;
+//}
+//
+//#pragma mark 刷新
+//- (UIActivityIndicatorView *)activityView {
+//    if (!_activityView) {
+//        UIActivityIndicatorView *view = ({
+//            UIActivityIndicatorView *view = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+//            view.hidesWhenStopped = YES;
+//            view;
+//        });
+//        _activityView = view;
+//    }
+//    return _activityView;
+//}
+//- (void)startAnimation
+//{
+//    if (self.activityView.isAnimating) {
+//        return;
+//    }
+//    [self.activityView startAnimating];
+//    !self.animationBlock ? : self.animationBlock(YES);
+//}
+//- (void)stopAnimation
+//{
+//    [self.activityView stopAnimating];
+//    !self.animationBlock ? : self.animationBlock(NO);
+//}
+//
+//@end
+</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>6CB12C00-A34E-4044-B119-4D2594E1EDB3</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>LS_Bounce_RefreshVC</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>LS_Bounce_RefreshVC</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

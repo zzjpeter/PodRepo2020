@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>UIAlertControllerStyleActionSheet－－上拉菜单</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>CodeBlock</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>//        UIAlertControllerStyleActionSheet－－上拉菜单
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@"请填写完整的用户名密码" preferredStyle:UIAlertControllerStyleActionSheet];
+        
+        //UIAlertAction
+        UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            
+        }];
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+        UIAlertAction *destructiveAction = [UIAlertAction actionWithTitle:@"警告" style:UIAlertActionStyleDestructive handler:nil];
+        
+
+        [alertController addAction:okAction];
+        [alertController addAction:destructiveAction];
+        [alertController addAction:cancelAction];
+
+        
+        [self presentViewController:alertController animated:YES completion:^{
+        }];
+</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>6A858BE3-7E5A-4B0C-920F-8D4C4B90B228</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>UIAlertControllerStyleActionSheet－－上拉菜单</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

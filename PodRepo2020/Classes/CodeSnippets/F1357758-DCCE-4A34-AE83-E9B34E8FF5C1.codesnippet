@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>Define_</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>系统宏汇集
+__FILE__
+当前文件所在目录
+__DATE__
+“替代文字”是一个含有编译日期的字符串字面值，日期格式为“mm dd yyyy”（例如：“Mar 19 2006”）。如果日期小于10日，就在日的前面放一个空格符。NSLog(@"_DATE_=%s",__DATE__);
+__FUNCTION__
+当前函数名称
+__LINE__
+当前语句在源文件中的行数
+__TIME__
+此字符串字面值包含编译时间，格式为“hh:mm:ss”（范例：“08:00:59”）。
+__STDC__
+整数常量1，表示此编译器遵循ISOC标准。
+__STDC_VERSION__
+如何实现复合C89整部1，则这个宏的值为19940SL；如果实现符合C99，则这个宏的值为199901L；否则数值是未定义
+__STDC_EOBTED__
+(C99)实现为宿主实现时为1,实现为独立实现为0
+__STDC_IEC_559__
+(C99)浮点数实现复合IBC 60559标准时定义为1，否者数值是未定义
+__STDC_IEC_559_COMPLEX__
+(C99)复数运算实现复合IBC 60559标准时定义为1，否者数值是未定义
+__STDC_ISO_10646__
+(C99)定义为长整型常量，yyyymmL表示wchar_t值复合ISO 10646标准及其指定年月的修订补充，否则数值未定义</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>F1357758-DCCE-4A34-AE83-E9B34E8FF5C1</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>IOS开发之_常用宏定义和讲解</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

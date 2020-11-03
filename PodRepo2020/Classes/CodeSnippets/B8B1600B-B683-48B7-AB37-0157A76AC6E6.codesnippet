@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>aBarButtonItem</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>        let rightBarButton = UIBarButtonItem(title: "自定义", style: .plain, target: self, action: #selector(nextButtonClick))
+        navigationItem.rightBarButtonItem = rightBarButton
+    }
+    
+    @objc func nextButtonClick() {
+        let next = ViewController2()
+        next.title = "自定义"
+        navigationController?.pushViewController(next, animated: true)
+    }</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>B8B1600B-B683-48B7-AB37-0157A76AC6E6</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Swift</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>aBarButtonItem</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>aBarButtonItem</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>0</integer>
+</dict>
+</plist>

@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>animation_Core</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>#pragma mark -CoreAnimation
+/*
+ 三大动画:(不需要交互的时候可以选择以下动画)
+ CAAnimationGroup——动画组
+ CAKeyframeAnimation——关键帧动画
+ 转场动画——CATransition
+ 核心动画只是修改了控件的图形树，换句话说就是只是修改了他的显示，并没有改变控件的真实位置！！！也就是说在动画的过程中点击控件是不能跟用户进行交互的，切记切记！！！当然，点击控件的起始位置是可以的。
+ */
+- (void)touchesBegan:(NSSet&lt;UITouch *&gt; *)touches withEvent:(UIEvent *)event
+{
+    //[self test];
+    //[self test2];
+    //[self test3];
+    //[self test4];
+    //[self test5];
+    //[self test6];
+    //[self test7];
+    //[self test8];
+    //[self test9];
+    [self test10];
+}
+
+#pragma mark -CABasicAnimation 基本动画
+- (void)test {
+
+    CABasicAnimation *anim = [CABasicAnimation animation];//创建动画
+    //    设置动画对象
+    //keyPath决定了执行怎样的动画,调用layer的哪个属性来执行动画 position:平移
+    anim.keyPath = @"position";
+    //    包装成对象
+    anim.fromValue = [NSValue valueWithCGPoint:CGPointMake(0, 0)];
+    anim.toValue = [NSValue valueWithCGPoint:CGPointMake(200, 300)];
+    anim.duration = 2.0;
+    //    让图层保持动画执行完毕后的状态  执行完毕以后不要删除动画
+    anim.removedOnCompletion = NO;
+    anim.fillMode = kCAFillModeForwards;//    保持最新的状态
+    
+    //    添加动画
+    [self.redView.layer addAnimation:anim forKey:nil];
+}
+
+- (void)test2 {
+    CABasicAnimation *anim = [CABasicAnimation animation];
+    anim.keyPath = @"position.y";
+    anim.toValue = @300;
+    anim.duration = 2.0;
+    anim.removedOnCompletion = NO;
+    anim.fillMode = kCAFillModeForwards;
+    [self.redView.layer addAnimation:anim forKey:nil];
+}
+#pragma mark -CAKeyframeAnimation 关键帧动画
+- (void)test3 {
+    CAKeyframeAnimation *anim = [CAKeyframeAnimation animation];
+    anim.keyPath = @"position";
+    NSValue *v1 = [NSValue valueWithCGPoint:CGPointMake(100, 0)];
+    NSValue *v2 = [NSValue valueWithCGPoint:CGPointMake(200, 200)];
+    NSValue *v3 = [NSValue valueWithCGPoint:CGPointMake(300, 0)];
+    NSValue *v4 = [NSValue valueWithCGPoint:CGPointMake(400, 0)];
+    anim.values = @[v1,v2,v3,v4];
+    //anim.keyTimes = @[@0.1,@0.2,@0.3,@1.0];
+    anim.duration = 2.0;
+    anim.removedOnCompletion = NO;
+    anim.fillMode = kCAFillModeForwards;
+    [self.redView.layer addAnimation:anim forKey:nil];
+}
+
+- (void)test4 {
+    CAKeyframeAnimation *anim = [CAKeyframeAnimation animation];
+    anim.keyPath = @"position";
+    anim.removedOnCompletion = NO;
+    anim.fillMode = kCAFillModeForwards;
+    anim.duration = 2.0;
+    CGMutablePathRef path = CGPathCreateMutable();
+    CGPathAddEllipseInRect(path, NULL, CGRectMake(100, 100, 300, 300));
+    //CGPathAddArc(path, NULL, 100, 100, 100, 0, M_PI_2, NO);
+    anim.path = path;
+    CGPathRelease(path);//释放路径(带Create的函数创建的对象都需要手动释放,否则会内存泄露)
+    [self.redView.layer addAnimation:anim forKey:nil];
+}
+
+- (void)test5 {
+    CAKeyframeAnimation *anim = [CAKeyframeAnimation animation];
+    anim.keyPath = @"transform.rotation";
+    anim.values = @[@(DEGREES_TO_RADIANS(-5)),@(DEGREES_TO_RADIANS(5)),@(DEGREES_TO_RADIANS(-5))];
+    anim.repeatCount = MAXFLOAT;
+    //anim.autoreverses = YES;
+    [self.redView.layer addAnimation:anim forKey:nil];
+}
+
+- (void)test6 {
+    
+    CALayer *firstLayer = [CALayer layer];
+    firstLayer.frame = CGRectMake(100, 288, 89, 40);
+    firstLayer.backgroundColor = [UIColor blueColor].CGColor;
+    firstLayer.contents = (__bridge id _Nullable)([UIImage imageNamed:@"gift"].CGImage);
+    [self.view.layer addSublayer:firstLayer];
+    
+    //[NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(update) userInfo:nil repeats:YES];
+    
+    CAKeyframeAnimation *anim = [CAKeyframeAnimation animation];
+    anim.keyPath = @"position";
+    
+    UIBezierPath *path = [UIBezierPath bezierPath];
+    [path moveToPoint:CGPointMake(100, 200)];
+    [path addLineToPoint:CGPointMake(350, 200)];
+    [path addLineToPoint:CGPointMake(350, 500)];
+    [path addQuadCurveToPoint:CGPointMake(100, 200) controlPoint:CGPointMake(150, 700)];
+    
+    anim.path = path.CGPath;
+    anim.duration = 5;
+    anim.repeatCount = MAXFLOAT;
+    anim.calculationMode = @"cubicPaced";
+    anim.rotationMode = @"autoReverse";
+    [firstLayer addAnimation:anim forKey:nil];
+    
+}
+
+#pragma mark -CATransition 转场动画
+- (void)test7 {
+    CATransition *anim = [CATransition animation];
+    anim.type = @"cube";//转场类型
+    anim.duration = 0.5;//动画执行时间
+    anim.subtype = kCATransitionFromRight;
+    [self.redView.layer addAnimation:anim forKey:nil];
+}
+
+- (void)test8 {
+    
+    UISwipeGestureRecognizer *leftSwipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipe:)];
+    leftSwipe.direction = UISwipeGestureRecognizerDirectionLeft;
+    [self.redView addGestureRecognizer:leftSwipe];
+    
+    UISwipeGestureRecognizer *rightSwipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipe:)];
+    rightSwipe.direction = UISwipeGestureRecognizerDirectionRight;
+    [self.redView addGestureRecognizer:rightSwipe];
+    
+}
+- (void)swipe:(UISwipeGestureRecognizer *)swipe {
+    //转场代码与转场动画必须得在同一个方法当中.
+    
+    NSString *subtype = nil;
+    switch (swipe.direction) {
+        case UISwipeGestureRecognizerDirectionLeft:
+        {
+            self.redView.backgroundColor = [UIColor redColor];
+            subtype = @"fromRight";
+        }
+            break;
+        case UISwipeGestureRecognizerDirectionRight:
+        {
+            self.redView.backgroundColor = [UIColor blueColor];
+            subtype = @"fromLeft";
+        }
+            break;
+        default:
+            break;
+    }
+    //添加动画
+    CATransition *anim = [CATransition animation];
+    anim.type = @"cube";
+    anim.subtype = subtype;
+    anim.duration = 0.5;
+    //动画从哪个点开始
+    //anim.startProgress = 0.2;
+    //anim.endProgress = 0.3;
+    [self.redView.layer addAnimation:anim forKey:nil];
+}
+#pragma mark -CAAnimationGroup——动画组
+- (void)test9 {
+    CAAnimationGroup *group = [CAAnimationGroup animation];
+    
+    CABasicAnimation *translate = [CABasicAnimation animation];
+    translate.keyPath = @"position.y";
+    translate.toValue = @500;
+    
+    CABasicAnimation *rotate =[CABasicAnimation animation];
+    rotate.keyPath = @"transform.rotation";
+    rotate.toValue = @(M_PI);
+    
+    CABasicAnimation *scale = [CABasicAnimation animation];
+    scale.keyPath = @"transform.scale";
+    scale.toValue = @(0.0);
+    
+    group.animations = @[translate, rotate, scale];
+    group.duration = 2.0;
+    group.removedOnCompletion = NO;
+    group.fillMode = kCAFillModeForwards;
+    [self.redView.layer addAnimation:group forKey:nil];
+}
+
+
+#pragma mark -帧动画
+/*
+ 这里讲的帧动画是指UIImageView自带的动画。顺带跟大家讲下怎么将一个git动态图里面的图片取出来，并加以显示。
+ */
+
+- (void)test10 {
+    
+    NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:@"https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1555578404271&amp;di=0eda4c51f44e1a8871ea475fdf49fef9&amp;imgtype=0&amp;src=http%3A%2F%2Fphotocdn.sohu.com%2F20160314%2Fmp63389847_1457956272691_11.gif"]];
+    NSArray *images = [self getImageArrayWithGifData:data];
+    
+    self.imageView.animationImages = images;
+    self.imageView.animationDuration = 3.0;
+    self.imageView.animationRepeatCount = MAXFLOAT;
+    [self.imageView startAnimating];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self.imageView stopAnimating];
+    });
+}
+
+- (NSArray&lt;UIImage *&gt; *)getImageArrayWithGifData:(NSData *)data {
+    
+    NSMutableArray *images = [NSMutableArray new];
+    if (!data) {
+        NSLog(@"图片不存在");
+        return nil;
+    }
+    
+    CGImageSourceRef source = CGImageSourceCreateWithData((__bridge CFDataRef  _Nonnull)data, NULL);
+    size_t count = CGImageSourceGetCount(source);
+    if (count &lt;= 1) {
+        [images addObject:[[UIImage alloc] initWithData:data]];
+    }else {
+        for (size_t i = 0; i &lt; count; i++) {
+            CGImageRef image = CGImageSourceCreateImageAtIndex(source, i, NULL);
+            [images addObject:[UIImage imageWithCGImage:image scale:[UIScreen mainScreen].scale orientation:UIImageOrientationUp]];
+            CGImageRelease(image);
+        }
+    }
+    CFRelease(source);
+    
+    return images;
+}
+
+
+- (void)update {
+    NSLog(@"%@##%@",NSStringFromClass([self class]),NSStringFromSelector(_cmd));
+}
+</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>7FEA0393-371D-48DB-B9CA-344AF809DFC5</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Generic</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>animation_Core</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>animation_核心动画</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

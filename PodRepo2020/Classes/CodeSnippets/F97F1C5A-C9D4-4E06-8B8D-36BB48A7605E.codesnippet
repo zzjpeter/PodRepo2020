@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>ASwitch_LSProuctType</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>switch (self.productType) {
+    case LS_ProductTypeBook: {
+        break;
+    }
+    case LS_ProductTypeComic: {
+        break;
+    }
+    case LS_ProductTypeAudioBook: {
+        break;
+    }
+    default:
+        break;
+}</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>F97F1C5A-C9D4-4E06-8B8D-36BB48A7605E</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>ASwitch_LSProuctType</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>ASwitch_LSProuctType</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

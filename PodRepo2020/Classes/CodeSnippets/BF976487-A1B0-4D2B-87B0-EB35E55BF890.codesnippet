@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>CustomView_Code</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>/*
+ 1.为什么要在initWithFrame:方法而不是在init方法？
+ 因为使用纯代码的方式创建自定义类，在以后使用的时候可能使用init方法创建，也有可能使用initWithFrame:方法创建，但是无论哪种方式，最后都会调用到initWithFrame:方法。在这个方法中创建子控件，可以保证无论哪种方式都可以成功创建。
+ 
+ 2.为什么要在initWithFrame:方法里面只是将子控件加到view而不设置尺寸？
+ 前面已经说过，(init和initWithFrame:)两种方式最后都会调用到initWithFrame:方法。如果使用init方法创建，那么这个view的frame有可能是不确定的：
+ 所以我们应该保证view的frame设置完才会设置它的子控件的尺寸。
+ 在layoutSubviews方法中就可以达到这个目的。第一次view__将要显示__的时候会调用这个方法，之后当view的尺寸（不是位置）改变时，会调用这个方法。
+*/
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self initialize];
+    }
+    return self;
+}
+
+#pragma mark 初始化方法
+-(void)initialize{
+    
+    NSLog(@"%s",__func__);
+    self.backgroundColor = [UIColor redColor];
+}
+
+//layoutSubviews方法中就可以达到这个目的。第一次view__将要显示__的时候会调用这个方法，之后当view的尺寸（不是位置）改变时，会调用这个方法。
+-(void)layoutSubviews{
+    [super layoutSubviews];
+    
+    //setting subViews Frame 设置子控件的frame
+    NSLog(@"layoutSubViews view.frame:%@",NSStringFromCGRect(self.frame));
+    
+}
+
+-(void)dealloc{
+    NSLog(@"%@ dealloc",NSStringFromClass([self class]));
+}
+
+
+
+/*
+// Only override drawRect: if you perform custom drawing.
+// An empty implementation adversely affects performance during animation.
+- (void)drawRect:(CGRect)rect {
+    // Drawing code
+}
+*/</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>BF976487-A1B0-4D2B-87B0-EB35E55BF890</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Generic</string>
+	<key>IDECodeSnippetSummary</key>
+	<string></string>
+	<key>IDECodeSnippetTitle</key>
+	<string>自定义控件View_纯代码</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

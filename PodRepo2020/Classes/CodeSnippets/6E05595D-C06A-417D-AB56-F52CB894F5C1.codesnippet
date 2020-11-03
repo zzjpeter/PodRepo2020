@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>Thread_</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>-(void)create{
+    /*
+     //    （一）NSThread的使用
+     
+     1.线程创建和启动
+     //    NSThread 有两种直接创建方式：第一个是实例方法，第二个是类方法
+     //    - (id)initWithTarget:(id)target selector:(SEL)selector object:(id)argument
+     //    + (void)detachNewThreadSelector:(SEL)aSelector toTarget:(id)aTarget withObject:(id)anArgument
+     //    参数的意义：
+     //    selector ：线程执行的方法，这个selector只能有一个参数，而且不能有返回值。
+     //    target  ：selector消息发送的对象
+     //    argument:传输给target的唯一参数，也可以是nil
+     //    第一种方式会直接创建线程并且开始运行线程，第二种方式是先创建线程对象，然后再运行线程操作，在运行线程操作前可以设置线程的优先级等线程信息
+     
+     不显式创建线程的方法：
+     用NSObject的类方法  performSelectorInBackground:withObject: 创建一个线程：
+     [Obj performSelectorInBackground:@selector(doSomething) withObject:nil];
+     
+     
+     2.线程间通信
+     线程下载完图片后怎么通知主线程更新界面呢？
+     [self performSelectorOnMainThread:@selector(updateUI:) withObject:image waitUntilDone:YES];
+     performSelectorOnMainThread是NSObject的方法，除了可以更新主线程的数据外，还可以更新其他线程的比如：performSelector:onThread:withObject:waitUntilDone:
+     
+     线程在运行过程中，可能需要与其它线程进行通信。我们可以使用 NSObject 中的一些方法：
+     在应用程序主线程中做事情：
+     performSelectorOnMainThread:withObject:waitUntilDone:
+     performSelectorOnMainThread:withObject:waitUntilDone:modes:
+     
+     在指定线程中做事情：
+     performSelector:onThread:withObject:waitUntilDone:
+     performSelector:onThread:withObject:waitUntilDone:modes:
+     
+     在当前线程中做事情：
+     performSelector:withObject:afterDelay:
+     performSelector:withObject:afterDelay:inModes:
+     
+     取消发送给当前线程的某个消息
+     cancelPreviousPerformRequestsWithTarget:
+     cancelPreviousPerformRequestsWithTarget:selector:object:
+     
+     
+     3.线程同步
+     如果没有线程同步的lock，卖票数可能是-1.加上lock之后线程同步保证了数据的正确性。
+     上面例子我使用了两种锁，一种NSCondition ，一种是：NSLock。 NSCondition我已经注释调了。
+     线程的顺序执行
+     他们都可以通过[ticketsCondition signal]; 发送信号的方式，在一个线程唤醒另外一个线程的等待。
+     
+     其他同步
+     我们可以使用指令 @synchronized 来简化 NSLock的使用，这样我们就不必显示编写创建NSLock,加锁并解锁相关代码。
+     
+     还有其他的一些锁对象，比如：循环锁NSRecursiveLock，条件锁NSConditionLock，分布式锁NSDistributedLock等等，可以自己看官方文档学习
+     
+     用NSCodition同步执行的顺序
+     NSCodition 是一种特殊类型的锁，我们可以用它来同步操作执行的顺序。它与 mutex 的区别在于更加精准，等待某个 NSCondtion 的线程一直被 lock，直到其他线程给那个 condition 发送了信号。下面我们来看使用示例：
+     某个线程等待着事情去做，而有没有事情做是由其他线程通知它的。
+     [cocoaCondition lock];
+     while (timeToDoWork &lt;= 0)
+     [cocoaCondition wait];//wait
+     
+     timeToDoWork--;
+     // Do real work here.
+     [cocoaCondition unlock];
+     
+     其他线程发送信号通知上面的线程可以做事情了：
+     [cocoaCondition lock];
+     timeToDoWork++;
+     [cocoaCondition signal];//signal
+     [cocoaCondition unlock];
+     
+     RunLoop
+     说到 NSThread 就不能不说起与之关系相当紧密的 NSRunLoop。Run loop 相当于 win32 里面的消息循环机制，它可以让你根据事件/消息（鼠标消息，键盘消息，计时器消息等）来调度线程是忙碌还是闲置。
+     系统会自动为应用程序的主线程生成一个与之对应的 run loop 来处理其消息循环。在触摸 UIView 时之所以能够激发 touchesBegan/touchesMoved 等等函数被调用，就是因为应用程序的主线程在 UIApplicationMain 里面有这样一个 run loop 在分发 input 或 timer 事件。
+     */
+    [NSThread detachNewThreadSelector:@selector(doSomeThing:) toTarget:self withObject:nil];
+    
+    NSThread *myThread = [[NSThread alloc]initWithTarget:self selector:@selector(doSomeThing1:) object:@"111"];
+    [myThread start];
+    
+    [self performSelectorInBackground:@selector(doSomeThing2:) withObject:@"隐式创建线程"];
+    
+    /*
+     //取消线程
+     - (void)cancel;
+     
+     //启动线程
+     - (void)start;
+     
+     //判断某个线程的状态的属性
+     @property (readonly, getter=isExecuting) BOOL executing;
+     @property (readonly, getter=isFinished) BOOL finished;
+     @property (readonly, getter=isCancelled) BOOL cancelled;
+     
+     //设置和获取线程名字
+     -(void)setName:(NSString *)n;
+     -(NSString *)name;
+     
+     //获取当前线程信息
+     + (NSThread *)currentThread;
+     
+     //获取主线程信息
+     + (NSThread *)mainThread;
+     
+     //使当前线程暂停一段时间，或者暂停到某个时刻
+     + (void)sleepForTimeInterval:(NSTimeInterval)time;
+     + (void)sleepUntilDate:(NSDate *)date;
+     */
+}
+</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>6E05595D-C06A-417D-AB56-F52CB894F5C1</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>NSThread详解_线程创建和启动_同步_通信</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

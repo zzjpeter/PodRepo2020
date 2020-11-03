@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>ATextField</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>func aTextField() -&gt; UITextField {
+        let aTextField = UITextField()
+        view.addSubview(aTextField)
+        aTextField.snp.makeConstraints { (make) in
+            make.top.equalTo(220)
+            make.left.equalTo(0)
+            make.width.equalToSuperview()
+            make.height.equalTo(40)
+        }
+        aTextField.backgroundColor = UIColor.white
+        aTextField.tintColor = UIColor.red
+        aTextField.text = ""
+        aTextField.font = UIFont.systemFont(ofSize: 14)
+        aTextField.textColor = UIColor.black
+        aTextField.placeholder = "请输入..."
+        aTextField.backgroundColor = UIColor.white
+        //aTextField.borderStyle = UITextField.BorderStyle.roundedRect
+        //aTextField.autocorrectionType = UITextAutocorrectionType.no
+        //aTextField.returnKeyType = UIReturnKeyType.done
+        //aTextField.clearButtonMode = UITextField.ViewMode.whileEditing
+        //aTextField.keyboardType = UIKeyboardType.default
+        //aTextField.isSecureTextEntry = false
+        //aTextField.leftViewMode = .always
+        //aTextField.rightViewMode = .always
+        //let leftButton = UIButton(type: .infoDark)
+        //leftButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+        //aTextField.leftView = leftButton
+        //let rightButton = UIButton(type: .contactAdd)
+        //rightButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+        //aTextField.rightView = rightButton
+        //aTextField.addTarget(self, action: #selector(textFieldTextDidChange), for: .valueChanged) //swift中无效 得注册通知才行监听文本变化
+    aTextField.delegate = self
+        return aTextField
+    }
+    
+    func addNoti() {
+        NotificationCenter.default.addObserver(self, selector: #selector(textFieldTextDidChange), name: UITextField.textDidChangeNotification, object:nil)
+//        NotificationCenter.default.addObserver(forName: UITextField.textDidChangeNotification, object: nil, queue: OperationQueue.main) { (noti) in
+//            self.textFieldTextDidChange(noti: noti)
+//        }
+    }
+    func removeNoti() {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc func textFieldTextDidChange(noti: Notification){
+        //print(#file,#line,#function)
+        if let aTextFiled = noti.object as? UITextField {
+            if aTextFiled === textField {
+                if let text = aTextFiled.text {
+                    print("textField" + text)
+                }
+            }
+        }
+    }</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>04BCB5CE-EE69-44A9-A7FB-34C85B1A713F</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Swift</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>ATextField</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>ATextField</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>VC_Fbee</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>#pragma mark - Lifecycle
+//创建view的正确姿势 i：重写init方法，并在其中addsubview ii：重写layoutSubviews方法，并在其中添加约束
+
+-(void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    FbeeLog(@"%@ dealloc",NSStringFromClass(self.class));
+}
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+}
+
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    //[[NSNotificationCenter defaultCenter] postNotificationName:Notification_ShowTabbar object:nil];
+}
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    //[[NSNotificationCenter defaultCenter] postNotificationName:Notification_HiddeTabbar object:nil];
+}
+
+- (void)viewDidLoad {
+    
+    [super viewDidLoad];
+    // Do any additional setup after loading the view.
+    
+    //setting UI
+    self.titleLabel.text = NSLocalizedString(@"seachorCreate",nil);
+    self.largeTitle.hidden = NO;
+    
+    [self buildView];
+    
+    //    [self hiddeBack];
+    [self bringTitleToFront];
+    
+    //setting Data
+    
+}
+
+-(void)buildView
+{
+    [self setNavigationView:self.navigationView];
+    
+    [self setLargeTitle:self.largeTitle];
+    
+}
+
+#pragma mark -设置导航栏(高NavBarHeight。子控件 左边返回按钮。中间标题 底部一根线)
+- (void)setNavigationView:(UIToolbar *)navigationView{
+    //navigationView.alpha = 1.0;
+    
+}
+
+#pragma mark -设置大标题(高NavBarHeight + 50。子控件 左边返回按钮 左边底部大标题)
+- (void)setLargeTitle:(LargeTitle *)largeTitle{
+    
+    //    UILabel *title = [UILabel makeLabel:^(TTLabelExtend *make) {
+    //        make.frame = CGRectMake(15, 0, IPHONEWIDTH, 45);
+    //        make.bottom = self.largeTitle.height - 5;
+    //        make.addText(NSLocalizedString(@"seachorCreate",nil));
+    //        make.addFont([UIFont boldSystemFontOfSize:34]);
+    //        make.addTextColor(UIColorFromRGB(0x473C51));
+    //    }];
+    //    [largeTitle addSubview:title];
+    
+    [largeTitle setTitle:NSLocalizedString(@"seachorCreate",nil)];
+    [largeTitle setTitleColor:UIColorFromRGB(0x473C51)];
+}
+
+
+#pragma mark - Public
+//- (void)ClassPublicMethod {}  用类名开头
+
+
+#pragma mark - Private
+//- (void)privateMethod {}  直接用功能命名方法
+
+
+#pragma mark - actions
+//按钮点击，touchBegan等方法
+
+
+//#pragma mark - 系统delegate
+//#pragma mark - UITextFieldDelegate
+//#pragma mark - UITableViewDataSource
+//#pragma mark - UITableViewDelegate
+//#pragma mark - UIScrollViewDelegate等。
+#pragma mark - 自定义delegate
+
+
+
+#pragma mark - Private set/get
+//所有的view都写成属性，用懒加载的形式进行创建。然后只有在添加到父视图的时候，用self.view的形式表示，代表创建，其他情况下用_view，省去走懒加载的方法
+</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>DBBDF36D-56F9-4978-A701-D56E77FAEF8E</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Generic</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>VC_Fbee创建VC的模版</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>VC_Fbee创建VC的模版</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

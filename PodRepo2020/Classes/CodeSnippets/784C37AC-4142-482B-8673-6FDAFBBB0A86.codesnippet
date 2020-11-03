@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>ScreenSetting</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>#pragma mark -iOS强制横或者竖屏实现 （注意infoplist文件中的设置Supported interface orientations代表应用可以支持的屏幕方向,只有支持的方向,程序中才可以设置,否则无效或者崩溃）
+#pragma mark -如果VieController 是放在UINavigationController或者UITabBarController中，需要重写它们的方向控制方法。
+// UINavigationController：
+//- (BOOL)shouldAutorotate
+//{
+//    return [self.topViewController shouldAutorotate];
+//}
+//
+//- (UIInterfaceOrientationMask)supportedInterfaceOrientations
+//{
+//    return [self.topViewController supportedInterfaceOrientations];
+//}
+
+//// UITabBarController:
+//- (BOOL)shouldAutorotate
+//{
+//    return [self.selectedViewController shouldAutorotate];
+//}
+//
+//- (UIInterfaceOrientationMask)supportedInterfaceOrientations
+//{
+//    return [self.selectedViewController supportedInterfaceOrientations];
+//}
+- (void)viewWillAppear:(BOOL)animated{
+    
+    [super viewWillAppear:animated];
+    
+    [self landscapAction:nil];
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    
+    [self portraitAction:nil];
+}
+
+// 强制横屏
+- (void)landscapAction:(id)sender {
+    [self interfaceOrientation:UIInterfaceOrientationLandscapeRight];
+}
+
+// 强制竖屏
+- (void)portraitAction:(id)sender {
+    [self interfaceOrientation:UIInterfaceOrientationPortrait];
+}
+
+- (void)interfaceOrientation:(UIInterfaceOrientation)orientation
+{
+    if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
+        SEL selector             = NSSelectorFromString(@"setOrientation:");
+        NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[UIDevice instanceMethodSignatureForSelector:selector]];
+        [invocation setSelector:selector];
+        [invocation setTarget:[UIDevice currentDevice]];
+        int val                  = orientation;
+        [invocation setArgument:&amp;val atIndex:2];
+        [invocation invoke];
+    }
+}
+</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>784C37AC-4142-482B-8673-6FDAFBBB0A86</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>iOS强制横或者竖屏实现</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

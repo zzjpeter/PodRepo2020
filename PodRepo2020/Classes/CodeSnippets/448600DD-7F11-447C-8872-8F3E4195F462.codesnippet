@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>AShapeLayer</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>CAShapeLayer *layer = ({
+    CAShapeLayer *layer = [CAShapeLayer layer];
+    layer.strokeColor = UIColor.redColor.CGColor;
+    layer.fillColor = UIColor.clearColor.CGColor;
+    layer.lineWidth = 3.0;
+    layer.lineCap = @"round";
+    layer.path = [UIBezierPath bezierPath].CGPath;//需要设置path 无需设置frame
+    layer;
+});
+//    @weakify(self)
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        @strongify(self)
+//        layer.path = [UIBezierPath bezierPathWithArcCenter:self.rewardIconImageView.center
+//                                                               radius:(self.rewardIconImageView.height - 5) / 2
+//                                                           startAngle:- M_PI_2 endAngle:M_PI_2
+//                                                            clockwise:YES].CGPath;
+//    });</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>448600DD-7F11-447C-8872-8F3E4195F462</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>AShapeLayer</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>AShapeLayer</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

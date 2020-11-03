@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>aSpeechRecognizer</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>//    SFSpeechRecognizer.requestAuthorization { (state) in
+//        print(state)
+//        if state == .authorized {
+//            let audioPath = Bundle.main.path(forResource: "sound1", ofType: "mp3")
+//            let _ = self.aSpeechRecognizer(path: audioPath!)
+//        }
+//    }
+    func aSpeechRecognizer(path: String) -&gt; SFSpeechRecognizer? {
+        let aSpeechRecognizer = SFSpeechRecognizer()//语音识别器
+        let url = URL(fileURLWithPath: path)
+        let request = SFSpeechURLRecognitionRequest(url: url)
+        aSpeechRecognizer?.recognitionTask(with: request, resultHandler: { (result, error) in
+            if error == nil {
+                if result != nil {
+                    print(result?.bestTranscription.formattedString as Any)
+                }
+            }
+        })
+        return aSpeechRecognizer
+    }</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>D1DC7DC5-0715-4D33-8664-447294FB65FF</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Swift</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>aSpeechRecognizer</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>aSpeechRecognizer</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>0</integer>
+</dict>
+</plist>

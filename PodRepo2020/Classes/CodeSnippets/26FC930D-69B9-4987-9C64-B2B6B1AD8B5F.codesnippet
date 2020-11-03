@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>aView</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>    func aView() -&gt; UIView {
+        let aView = UIView()
+        view.addSubview(aView)
+        aView.snp.makeConstraints { (make) in
+            make.center.equalToSuperview()
+            make.size.equalTo(CGSize(width: 200, height: 200))
+        }
+
+        aView.backgroundColor = UIColor.clear
+        
+        aView.layer.masksToBounds = false
+        aView.layer.cornerRadius = 100
+        aView.layer.borderWidth = 1
+        aView.layer.borderColor = UIColor.red.cgColor
+        aView.layer.shadowColor = UIColor.red.cgColor
+        aView.layer.shadowOffset = CGSize(width: 10, height: 10)
+        aView.layer.shadowOpacity = 0.45
+        aView.layer.shadowRadius = 5.0
+
+        aView.layoutIfNeeded()
+        let aGradientLayer = aView.layer.sublayers?.last
+        aGradientLayer?.frame = aView.bounds
+        
+        let gradientLayer = CAGradientLayer()
+        let fromColor = UIColor.green.cgColor
+        let minColor = UIColor.red.cgColor
+        let toColor = UIColor.blue.cgColor
+        gradientLayer.colors = [fromColor, minColor, toColor]
+        gradientLayer.startPoint = CGPoint(x: 0, y: 0)
+        gradientLayer.endPoint = CGPoint(x: 1, y: 1)
+        gradientLayer.locations = [0, 0.3, 1]
+        aView.layer.addSublayer(gradientLayer)
+        
+        return aView
+    }</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>26FC930D-69B9-4987-9C64-B2B6B1AD8B5F</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Swift</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>aView</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>aView</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

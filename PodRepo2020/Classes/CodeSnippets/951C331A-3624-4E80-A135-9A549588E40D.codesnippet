@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>LPRequestDemo</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>/*
+ static NSString *kSimpleProfileUrl = @"v2/simple_profile";
+ typedef void(^Block)(BOOL success, NSDictionary *response, NSError *error, NSURLSessionDataTask *task);
+ @property (nonatomic, copy) void(^block)(BOOL success, NSDictionary *response, NSError *error, NSURLSessionDataTask *task);
+ + (void)requestSimpleProfile:(void(^)(BOOL success, NSDictionary *response, NSError *error, NSURLSessionDataTask *task))block;
+ 
+ */
++ (void)requestSimpleProfile:(void(^)(BOOL success, NSDictionary *response, NSError *error, NSURLSessionDataTask *task))block {
+    
+    //    NSMutableDictionary *params = [NSMutableDictionary new];
+    //    [params setValue:&lt;#@"xxx"#&gt; forKey:&lt;#@"xxx"#&gt;];
+    
+    [LPHTTPClient GET:kSimpleProfileUrl parameters:nil onSuccess:^(NSURLSessionDataTask *task, id response) {
+        block(YES, response, nil, task);
+    } onFailure:^(NSURLSessionDataTask *task, NSError *error) {
+        block(NO, nil, error, task);
+    }];
+}
+
+- (void)request {
+    [LPGroupHelper requestSimpleProfile:^(BOOL success, NSDictionary * _Nonnull response, NSError * _Nonnull error, NSURLSessionDataTask * _Nonnull task) {
+        if (success) {
+            
+            if(SafeGetIntValue(response[@"error"]) == 0) {
+                
+                NSDictionary *data = SafeGetDictionaryValue(response[@"data"]);
+                
+                return;
+            }
+            
+            //[Toast show:SafeGetStringValue(response[@"msg"])];
+            return ;
+        }
+        if (error) {
+            //NSLog(@"error: %@",error.description);
+            //[Toast show:error.description];
+        }
+    }];
+}</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>951C331A-3624-4E80-A135-9A549588E40D</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>LPRequestDemo</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>LPRequestDemo</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

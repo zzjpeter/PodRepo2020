@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>NetType</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>ClassImplementation</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>#define BAKit_ShowAlertWithMsg(msg) UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"温馨提示" message:msg preferredStyle:UIAlertControllerStyleAlert];\
+UIAlertAction *sureAction = [UIAlertAction actionWithTitle:@"确 定" style:UIAlertActionStyleDefault handler:nil];\
+[alert addAction:sureAction];\
+[self presentViewController:alert animated:YES completion:nil];
+#pragma mark - 网络类型判断
+- (void)ba_netType
+{
+//    BAWeak;
+    [BANetManager ba_startNetWorkMonitoringWithBlock:^(BANetworkStatus status) {
+        NSString *msg;
+        switch (status) {
+            case 0:
+            {
+                msg = @"未知网络";
+                BAKit_ShowAlertWithMsg(msg);
+            }
+                break;
+            case 1:
+            {
+                msg = @"没有网络";
+                BAKit_ShowAlertWithMsg(msg);
+            }
+                break;
+            case 2:
+            {
+                msg = @"您的网络类型为：手机 3G/4G 网络";
+                BAKit_ShowAlertWithMsg(msg);
+            }
+                break;
+            case 3:
+            {
+                msg = @"您的网络类型为：wifi 网络";
+                /*! wifi 网络下请求网络：可以在父类写此方法，具体使用demo，详见：https://github.com/boai/BABaseProject */
+                BAKit_ShowAlertWithMsg(msg);
+            }
+                break;
+                
+            default:
+                break;
+        }
+    }];
+}
+
+#pragma mark - 网络状态监测
+/*!
+ *  开启网络监测
+ */
++ (void)ba_startNetWorkMonitoringWithBlock:(BANetworkStatusBlock)networkStatus
+{
+    /*! 1.获得网络监控的管理者 */
+    AFNetworkReachabilityManager *manager = [AFNetworkReachabilityManager sharedManager];
+    /*! 当使用AF发送网络请求时,只要有网络操作,那么在状态栏(电池条)wifi符号旁边显示  菊花提示 */
+    [AFNetworkActivityIndicatorManager sharedManager].enabled = YES;
+    /*! 2.设置网络状态改变后的处理 */
+    [manager setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
+        /*! 当网络状态改变了, 就会调用这个block */
+        switch (status)
+        {
+            case AFNetworkReachabilityStatusUnknown:
+                NSLog(@"未知网络");
+                networkStatus ? networkStatus(BANetworkStatusUnknown) : nil;
+                break;
+            case AFNetworkReachabilityStatusNotReachable:
+                NSLog(@"没有网络");
+                networkStatus ? networkStatus(BANetworkStatusNotReachable) : nil;
+                break;
+            case AFNetworkReachabilityStatusReachableViaWWAN:
+                NSLog(@"手机自带网络");
+                networkStatus ? networkStatus(BANetworkStatusReachableViaWWAN) : nil;
+                break;
+            case AFNetworkReachabilityStatusReachableViaWiFi:
+                NSLog(@"wifi 网络");
+                networkStatus ? networkStatus(BANetworkStatusReachableViaWiFi) : nil;
+                break;
+        }
+    }];
+    [manager startMonitoring];
+}</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>42623E92-0388-498B-9166-2F252D06AE17</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>网络类型判断</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

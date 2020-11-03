@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>ASwitch_LSProuctTypeUrl</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>    NSString *url = @"";
+    switch (self.productType) {
+        case LS_ProductTypeBook: {
+            url = BookMemberMonthly;
+            break;
+        }
+        case LS_ProductTypeComic: {
+            url = ComicMemberMonthly;
+            break;
+        }
+        case LS_ProductTypeAudioBook: {
+            url = BookMemberMonthly;
+            break;
+        }
+        default:
+            break;
+    }
+//NSString *production_id = [WXYZ_UtilsHelper formatStringWithInteger:self.production_id];</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>C89830C6-B14A-40A6-B84D-ECFFBC3D2F88</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>ASwitch_LSProuctTypeUrl</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>ASwitch_LSProuctTypeUrl</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

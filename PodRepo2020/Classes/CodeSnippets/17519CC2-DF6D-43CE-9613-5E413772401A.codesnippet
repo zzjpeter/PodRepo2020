@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>AGradientView</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>        LPGradientView *view = ({
+            LPGradientView * view = [LPGradientView new];
+            view.startPoint = CGPointMake(0, 0);
+            view.endPoint = CGPointMake(1, 1);
+            view.colors = @[(__bridge id)UIColorFromRGB(0XB07DFF).CGColor,
+                                  (__bridge id)UIColorFromRGB(0XFF5D5D).CGColor];
+            view.clipsToBounds = YES;
+            view.layer.cornerRadius = 0.0;
+            view.userInteractionEnabled = YES;
+            view;
+        });</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>17519CC2-DF6D-43CE-9613-5E413772401A</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>AGradientView</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>AGradientView</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

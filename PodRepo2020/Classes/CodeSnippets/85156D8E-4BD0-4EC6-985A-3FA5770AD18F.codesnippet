@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>isMainThread</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>    if ([NSThread isMainThread]) {
+        
+    } else {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+        });
+    }</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>85156D8E-4BD0-4EC6-985A-3FA5770AD18F</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>isMainThread UI必须主线程执行否则会报警告或者崩溃</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>isMainThread</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

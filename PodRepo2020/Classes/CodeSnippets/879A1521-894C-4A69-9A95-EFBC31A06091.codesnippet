@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>Window</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    // Override point for customization after application launch.
+    
+    //UIWindow实现窗口的切换
+    self.window =[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.window.backgroundColor = [UIColor whiteColor];
+    UIViewController *LoginView = [[UIViewController alloc] init];
+    LoginView.view.backgroundColor = [UIColor clearColor];
+    UINavigationController *navControl =[[UINavigationController alloc] initWithRootViewController:LoginView];
+    self.window.rootViewController = navControl;
+    
+    UIViewController *LockView = [[UIViewController alloc] init];
+    LockView.view.backgroundColor = [UIColor clearColor];
+    self.LockWindow =[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.LockWindow.backgroundColor = [UIColor yellowColor];
+    //设置高的优先级，保证窗口在最上方
+    self.LockWindow.windowLevel = UIWindowLevelAlert + 2;
+    self.LockWindow.rootViewController = LockView;
+    
+    
+    UIButton *btn = [ZCommonUtils createButtonWithFrame:CGRectMake(0, 0, 100, 100) ImageName:nil Target:self Action:@selector(hiddenCurrentWindow) Title:@"隐藏当前窗口"];
+    btn.backgroundColor = [UIColor greenColor];
+    [LockView.view addSubview:btn];
+    
+    
+    if ([self isFirstTimeRun]) {
+        //修改为不再是第一次运行
+        [self setFirstTimeRun:NO];
+        //显示主窗口
+        self.window.hidden = NO;
+        [self.window makeKeyAndVisible];
+    } else {
+        self.LockWindow.hidden = NO;
+        [self.LockWindow makeKeyAndVisible];
+    }
+    
+
+    return YES;
+}
+
+- (BOOL)isFirstTimeRun{
+    return NO;
+}
+
+- (void)hiddenCurrentWindow{
+    //窗口隐藏：
+    
+    //隐藏解锁窗口
+    [self.LockWindow resignKeyWindow];
+    self.LockWindow.hidden=YES;
+}
+</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>879A1521-894C-4A69-9A95-EFBC31A06091</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>UIWindow实现窗口的切换与隐藏demo1</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

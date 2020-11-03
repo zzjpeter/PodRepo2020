@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>pragma_clang_警告</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>/*
+ 1.方法弃用警告  "-Wdeprecated-declarations"
+ 2.不兼容指针类型  "-Wincompatible-pointer-types"
+ 3.循环引用警告  "-Warc-retain-cycles"
+ 4.未使用变量警告 "-Wunused-variable"
+ 5.忽略内存泄漏  "-Warc-performSelector-leaks"
+ 6.忽略未使用default "-Wcovered-switch-default"
+ 7.忽略参数非空检查 "-Wnonnull"
+ 8.忽略没有实现协议的方法 "-Wprotocol"
+ 9.忽略没有实现已声明的方法 "-Wincomplete-implementation"
+ 10.方法弃用实现警告  "-Wdeprecated-implementations"
+ */
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+
+#pragma clang diagnostic pop</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>3EF54A34-724B-4782-9E52-4F37C4ED1B83</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>pragma_clang_警告</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>pragma_clang_警告</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

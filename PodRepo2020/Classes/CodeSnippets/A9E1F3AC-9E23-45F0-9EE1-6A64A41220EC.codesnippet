@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>YYLabel_Demo_ALL展开、收起、刷新</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>#pragma mark 简介展示全文、收起
+- (YYLabel *)contentLabel {
+    if (!_contentLabel) {
+        YYLabel *label = ({
+            label = [YYLabel new];
+            label.backgroundColor = UIColor.clearColor;
+            label.size = CGSizeMake(kScreenWidth - 2 * kCommonMarginMine, CGFLOAT_MAX);
+            label.preferredMaxLayoutWidth = kScreenWidth - 2 * kCommonMarginMine;//设置最大宽度,设置完才能有换行功能
+            label.text = @"";
+            label.font = kFont14;
+            label.textColor = kCommonGrayColor;
+            label.numberOfLines = 0;
+            label.textAlignment = NSTextAlignmentNatural;
+            label.textVerticalAlignment = YYTextVerticalAlignmentTop;
+            label;
+        });
+        _contentLabel = label;
+    }
+    return _contentLabel;
+}
+
++ (void)calculateHeightWithYYLabel:(YYLabel *)label isNeedExpanded:(BOOL)isNeedExpanded {
+    [self calculateHeightWithYYLabel:label isNeedExpanded:isNeedExpanded maxLines:4];
+}
++ (void)calculateHeightWithYYLabel:(YYLabel *)label isNeedExpanded:(BOOL)isNeedExpanded maxLines:(NSInteger)maxLines
+{
+    NSString *text = label.text;
+    if (IsEmptyOrNull(text)) {
+        [label sizeToFit];
+        return;
+    }
+    
+    NSMutableAttributedString *attStr = [[NSMutableAttributedString alloc] initWithString:text];
+    attStr.font = label.font;
+    attStr.color = label.textColor;
+    attStr.lineSpacing = 6.0;
+    attStr.alignment = NSTextAlignmentNatural;
+    
+    YYTextContainer *textContainer = [YYTextContainer containerWithSize:CGSizeMake(label.width, CGFLOAT_MAX)];
+    YYTextLayout *textLayout = [YYTextLayout layoutWithContainer:textContainer text:attStr];
+    
+    label.attributedText = textLayout.text;
+    label.height = textLayout.textBoundingSize.height;
+    
+    if (textLayout.rowCount &lt;= maxLines) {
+        return;
+    }
+    
+    if (isNeedExpanded) {
+        
+        [self addPackupAttributedString:label];
+        
+    }else {
+        
+        textContainer.maximumNumberOfRows = maxLines;
+        [self addMoreTruncateAttributedString:label];
+        
+    }
+    
+    textLayout = [YYTextLayout layoutWithContainer:textContainer text:label.attributedText];
+    
+    label.attributedText = textLayout.text;
+    label.height = textLayout.textBoundingSize.height;
+    
+    
+}
+
++ (void)addMoreTruncateAttributedString:(YYLabel *)label
+{
+    if (IsEmptyOrNull(label.attributedText.string)) {
+        return;
+    }
+    
+    NSString *moreStr = [NSString stringWithFormat:@"...%@",@"更多"];
+    NSMutableAttributedString *attStr = [[NSMutableAttributedString alloc] initWithString:moreStr];
+    attStr.font = label.font;
+    attStr.color = label.textColor;
+    
+    YYLabel *moreLabel = [YYLabel new];
+    
+    //注意：事件添加代码必须在label.attributedText赋值之前执行，否则该设置无效【range会不对】
+    NSDictionary *userInfo = @{@"type": @"点击 Expand"};
+    @weakify(self)
+    [attStr setTextHighlightRange:attStr.rangeOfAll color:UIColor.blueColor backgroundColor:UIColor.clearColor userInfo:userInfo tapAction:^(UIView * _Nonnull containerView, NSAttributedString * _Nonnull text, NSRange range, CGRect rect) {
+        @strongify(self)
+        YYTextHighlight *highlight = [text attribute:YYTextHighlightAttributeName atIndex:range.location];
+        NSLog(@"text:%@",text.string);
+        NSLog(@"userInfo:%@",highlight.userInfo);
+        
+        [self refreshContentLabel:label isNeedExpanded:YES needRefresh:YES];
+        
+    } longPressAction:nil];
+    
+    moreLabel.attributedText = attStr;
+    [moreLabel sizeToFit];
+    
+    NSMutableAttributedString *truncationToken = [NSMutableAttributedString attachmentStringWithContent:moreLabel contentMode:UIViewContentModeBottom attachmentSize:moreLabel.size alignToFont:attStr.font alignment:YYTextVerticalAlignmentCenter];
+    
+    label.truncationToken = truncationToken;
+    
+}
+
++ (void)addPackupAttributedString:(YYLabel *)label {
+    
+    if (IsEmptyOrNull(label.attributedText.string)) {
+        return;
+    }
+    NSString *packupStr = [NSString stringWithFormat:@"%@",@"收起"];
+    NSMutableAttributedString *attStr = [[NSMutableAttributedString alloc] initWithString:packupStr];
+    attStr.font = label.font;
+    attStr.color = label.textColor;
+    
+    //注意：事件添加代码必须在label.attributedText赋值之前执行，否则该设置无效【range会不对】
+    NSDictionary *userInfo = @{@"type": @"点击pack up"};
+    @weakify(self)
+    [attStr setTextHighlightRange:attStr.rangeOfAll color:UIColor.blueColor backgroundColor:UIColor.clearColor userInfo:userInfo tapAction:^(UIView * _Nonnull containerView, NSAttributedString * _Nonnull text, NSRange range, CGRect rect) {
+        @strongify(self)
+        YYTextHighlight *highlight = [text attribute:YYTextHighlightAttributeName atIndex:range.location];
+        NSLog(@"text:%@",text.string);
+        NSLog(@"userInfo:%@",highlight.userInfo);
+        
+        [self refreshContentLabel:label isNeedExpanded:NO needRefresh:YES];
+        
+    } longPressAction:nil];
+    
+    NSMutableAttributedString *attStrM = [[NSMutableAttributedString alloc] initWithAttributedString:label.attributedText];
+    [attStrM appendAttributedString:attStr];
+    
+    label.attributedText = attStrM;
+    
+}
+#pragma mark 数据刷新控制展开、收起（需要自己根据需要重写）
++ (void)refreshContentLabel:(YYLabel *)yyLabel isNeedExpanded:(BOOL)isNeedExpanded needRefresh:(BOOL)needRefresh{
+    yyLabel.width = SCREEN_WIDTH - 2 * kCommonMarginMine;
+    [self.class calculateHeightWithYYLabel:yyLabel isNeedExpanded:isNeedExpanded];
+    [yyLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.height.mas_equalTo(yyLabel.height);
+    }];
+    if (needRefresh) {
+        NSDictionary *info = @{@"content":yyLabel, @"isNeedExpanded":@(isNeedExpanded)};
+        [[NSNotificationCenter defaultCenter] postNotificationName:NSStringFromClass(self.class) object:info];
+    }
+}
+
+#pragma mark noti
+- (void)addNoti {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(needRefresh:) name:NSStringFromClass(self.class) object:nil];
+}
+- (void)removeNoti {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+//@property (nonatomic, copy) void(^didTapExpended)(BOOL isNeedExpanded);
+- (void)needRefresh:(NSNotification *)note
+{
+    NSDictionary *info = note.object;
+    if ([info isKindOfClass:NSDictionary.class]) {
+        if ([self.contentLabel isEqual:info[@"content"]]) {
+            BOOL isNeedExpanded = SafeGetBOOLValue(info[@"isNeedExpanded"]);
+            self.bookModel.isNeedExpanded = isNeedExpanded;
+            !self.didTapExpended ? : self.didTapExpended(isNeedExpanded);
+        }
+    }
+}</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>A9E1F3AC-9E23-45F0-9EE1-6A64A41220EC</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>YYLabel_Demo_ALL展开、收起、刷新</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>YYLabel_Demo_ALL展开、收起、刷新</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

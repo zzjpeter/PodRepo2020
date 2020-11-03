@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>Define_</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>        //IOS开发之_Swift常用宏定义和讲解
+        #file     // __FILE__ 打印当前文件路径，c字符串
+        #line     // __LINE__ 打印当前行号，整数
+        #function //__FUNCTION__ 打印当前函数或方法</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>B116F0F4-5C72-4D27-9B99-C704CDE3C353</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Swift</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>IOS开发之_Swift常用宏定义和讲解</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>IOS开发之_Swift常用宏定义和讲解</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

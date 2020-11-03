@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>AddChildViewConroller_demo</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>    ExampleController *VC = [[ExampleController alloc]init];
+    VC.view.frame = self.view.bounds;
+    [self addChildViewController:VC];//1
+    [self.view addSubview:VC.view];//2
+    [VC didMoveToParentViewController:self];//3</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>6713B9FE-BA92-4DB7-8B25-EB9B898CFB1B</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>AddChildViewConroller_demo</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>AddChildViewConroller_demo</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>aProgressHub</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>    override func touchesBegan(_ touches: Set&lt;UITouch&gt;, with event: UIEvent?) {
+        let hub = MBProgressHUD.showAdded(to: view, animated: true)
+        hub.label.text = "Loading..."
+        let _ = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(hideLoading), userInfo: nil, repeats: false)
+    }
+    
+    @objc func hideLoading() {
+        MBProgressHUD.hide(for: view, animated: true)
+    }</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>07082E07-068A-42BA-967D-48EBC9C319B6</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Swift</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>aProgressHub</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>aProgressHub</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>0</integer>
+</dict>
+</plist>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>AButton_All</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>UIButton *btn = ({
+            UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+                
+            [btn setImage:IMAGE(@"homepage_user_video") forState:UIControlStateNormal];
+            [btn setTitle:MyLocal(@"video chat") forState:UIControlStateNormal];
+            btn.titleLabel.font = [UIFont lp_systemFontOfSize:16.0 weight:UIFontWeightRegular];
+            [btn setTitleColor:UIColorFromRGB(0xFFFFFF) forState:UIControlStateNormal];
+            btn.backgroundColor = UIColorFromRGB(0xFFFFFF);
+            
+    //    if ([LPRTLHelper isRTL]) {
+    //        [btn setImageEdgeInsets:UIEdgeInsetsMake(0, 3, 0, 0)];
+    //    }
+    //    else {
+    //        [btn setImageEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 3)];
+    //    }
+    //    //offset 移动距离 leadingOffset:距左边距距离 margin image和title间距
+    //    CGFloat leadingOffset = 10;
+    //    CGFloat margin = 10;
+    //    if(leadingOffset &gt; 0 || margin &gt; 0) {//需要先设置btn的宽度
+    //        btn.width = (SCREEN_WIDTH / 3.0);
+    //        CGFloat offset = (btn.width - btn.intrinsicContentSize.width) * 0.5;
+    //        if (offset &gt; leadingOffset) {
+    //            CGFloat realOffset = offset -leadingOffset;
+    //            [btn setImageEdgeInsets:UIEdgeInsetsMake(0, -realOffset, 0, realOffset)];
+    //            [btn setTitleEdgeInsets:UIEdgeInsetsMake(0, -(realOffset - margin), 0, (realOffset - margin))];
+    //        }
+    //    }
+            
+            btn.layer.cornerRadius = 22.0;
+            [btn addTarget:self action:@selector(videoButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+            //btn.adjustsImageWhenHighlighted = NO;
+            
+            btn;
+        });</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>B5E34FBE-D2C2-4EA4-8941-A5110DB027A8</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>AButton_All</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>AButton_All</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

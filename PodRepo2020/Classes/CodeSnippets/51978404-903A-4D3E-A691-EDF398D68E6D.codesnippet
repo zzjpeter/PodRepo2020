@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>StatusBar_</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>/*
+ 
+ 总结：在Info.plist中设置View controller-based status bar appearance为NO时可以使用[[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:NO];该方法进行状态栏的显示和隐藏,iOS9以前使用的方法。
+    iOS9以后使用,Use -[UIViewController prefersStatusBarHidden]这是iOS7之后苹果在UIViewController里添加的新方法，这么做的目的可以让开发者更加灵活的自定义每个ViewController的状态栏。View controller-based status bar appearance的值为YES才会生效。而且如果不设置View controller-based status bar appearance它的值默认为YES。
+ 
+ ***********************开始****************************
+ ***************iOS9以前的状态栏隐藏与显示 和 设置状态栏样式************
+ View controller-based status bar appearance为NO
+ [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:NO];//设置状态栏的显示与隐藏
+ [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];//设置状态栏的样式
+ 
+ ****************iOS9之后的状态栏隐藏与显示 和 设置状态栏样式*************
+ View controller-based status bar appearance为YES 默认值
+ 苹果推荐在具体的viewController中Use -[UIViewController prefersStatusBarHidden]--//设置状态栏的显示与隐藏
+ - (BOOL)prefersStatusBarHidden{
+ return YES;
+ }
+ 苹果推荐在具体的viewController中Use -[UIViewController preferredStatusBarStyle]--//设置状态栏的样式
+ - (UIStatusBarStyle)preferredStatusBarStyle{
+ return UIStatusBarStyleLightContent;
+ }
+ 系统给我们提供了一个函数- (UIViewController *)childViewControllerForStatusBarStyle 解决viewController在嵌套在UINavigationController中使用时,viewController中使用- (UIStatusBarStyle)preferredStatusBarStyle;函数设置并不生效的问题。
+ 
+ childViewControllerForStatusBarHidden函数,使用原理同上
+ 
+ preferredStatusBarUpdateAnimation函数，这个函数返回了动画效果。动画效果只有在prefersStatusBarHidden
+ 函数返回值变化的时候才会展示，同时要通过调用
+ [self setNeedsStatusBarAppearanceUpdate]函数来重绘状态栏
+ 
+ 调用demo＃＃＃＃＃＃
+ if ([self respondsToSelector:@selector(setNeedsStatusBarAppearanceUpdate)]) {
+     //调用隐藏方法
+     [self prefersStatusBarHidden];
+     [self performSelector:@selector(setNeedsStatusBarAppearanceUpdate)];
+ 
+ }
+ ＃＃＃＃＃＃＃＃＃＃＃＃＃
+ 
+ ************************结束*********************************
+ 
+ ##!!注意：我们通常使用的viewController都是嵌套在UINavigationController中使用的，此时在viewController中使用
+ - (UIStatusBarStyle)preferredStatusBarStyle;函数会发现设置并没有生效。
+ 
+ 系统给我们提供了一个函数- (UIViewController *)childViewControllerForStatusBarStyle，可以解决这个问题，后面会讲。
+ 
+ 状态栏背景色
+ iOS7以后默认情况下状态栏的背景为透明的，一种办法是我们自己写一个UIView作为背景添加到状态栏下面，这样就可以随意设置状态栏的颜色了。
+ 另一种方法就是通过设置navigationBar的setBarTintColor颜色来改变状态栏颜色
+ 
+ UIViewController中其他有关状态栏的函数
+ 
+1. preferredStatusBarUpdateAnimation函数 该函数是用来设置状态栏显示、消失时的动画类型，动画类型有：默认为UIStatusBarAnimationFade，当状态栏隐藏、显示状态发生改变的时候，该函数的返回值就会发挥作用
+ - (UIStatusBarAnimation)preferredStatusBarUpdateAnimation
+ NS_AVAILABLE_IOS(7_0) __TVOS_PROHIBITED; // Defaults to UIStatusBarAnimationFade
+ 
+
+2. childViewControllerForStatusBarStyle函数
+ 这个函数的返回值默认返回nil，此时系统就会调用当前viewControllerA的preferredStatusBarStyle函数；如果返回值是另一个viewControllerB那么系统就会调用viewControllerB的preferredStatusBarStyle函数。
+ 
+ 运用这个函数就可以解决嵌套UINavigationController设置样式无效的问题。
+ 
+ 所以我们要自己创建一个继承于UINavigationcontroller的NavigationController，在这个子类中重写childViewControllerForStatusBarStyle函数
+ - (UIViewController *)childViewControllerForStatusBarStyle{
+ return self.topViewController;
+ }
+ 这样navigationController中的childViewControllerForStatusBarStyle函数会返回navigationController中最上层的viewController，那么viewController中的preferredStatusBarStyle函数的设置就会被系统获知
+ 
+3. childViewControllerForStatusBarHidden函数
+ - (nullable UIViewController *)childViewControllerForStatusBarHidden
+ 
+ NS_AVAILABLE_IOS(7_0) __TVOS_PROHIBITED;
+ childViewControllerForStatusBarHidden函数的使用原理同上，不再赘述。
+ 
+4. preferredStatusBarUpdateAnimation函数
+ 
+ 解释一下为什么嵌套UINavigationController的viewController的preferredStatusBarStyle函数设置无效：
+ 在我们嵌套了UINavigationController的时候，我们的
+ AppDelegate.window.rootViewController
+ 通常是我们创建的navigationController，这时首先会调用的是navigationController中的childViewControllerForStatusBarStyle函数，因为默认返回nil，那么接下来就会调用navigationController本身的preferredStatusBarStyle函数，所以我们在viewController中通过preferredStatusBarStyle函数设置的状态栏样式就不会被调用发现，所以也就无效了。
+ 
+ 这个函数返回了动画效果。动画效果只有在prefersStatusBarHidden
+ 函数返回值变化的时候才会展示，同时要通过调用
+ [self setNeedsStatusBarAppearanceUpdate]函数来重绘状态栏
+ 
+ 
+ 
+ //详解
+ 注意：让我们先来看看// Setting statusBarHidden does nothing if your application is using the default UIViewController-based status bar system.这个注释提示，苹果提示开发者如果使用的是系统基础的状态栏样式你的这些设置是不生效的，在接下来要介绍的通过Info.plist隐藏状态栏同样要注意这件事。
+ 在Info.plist中添加一个View controller-based status bar appearance设置选项，设置为NO这样就可以使用上边的方法了
+ 
+ 很不幸iOS9之后苹果已经不推荐使用这些方法了，这些方法能用但是会报警告。
+ 
+ 那么这些方法被禁用以后，如何操作呢？注释里已经提示Use -[UIViewController prefersStatusBarHidden]这是iOS7之后苹果在UIViewController里添加的新方法，这么做的目的可以让开发者更加灵活的自定义每个ViewController的状态栏。
+ 
+ - (BOOL)prefersStatusBarHidden{
+ return YES;
+ }
+ 
+ 
+ */
+</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>51978404-903A-4D3E-A691-EDF398D68E6D</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>iOS状态栏详解</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

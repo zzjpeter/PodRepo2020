@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>XibView_custom</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>/**
+从自定义的xib中加载view 
+    1.如果仅仅是加载view显示，外面不做任何修改，可以直接使用[[NSBundle mainBundle]loadNibNamed:owner:options].firstObject方法,这种方式仅仅适用于只有一个视图并且没有任何其他交互绑定.
+    
+    2.如果加载的view 不仅是显示，还要有交互绑定事件，那么就可以将该自定义视图xib文件customView.xib与建立的customview类进行绑定使用，同时必须在类的.m文件中重写init方法，进行xibview的加载，并添加到该类(self）上。
+        [注意一点：其实啊，一个view.xib是可以有多个控件对象的，如view，button，label且他们是通过[[NSBundle mainBundle]loadNibNamed:owner:options]方法获取(的数组中)，在该方法获取的数组中的顺序与xib文件中的先后顺序一致]
+ 
+ */
+
+
+#define mainScreenWidth   [UIScreen mainScreen].bounds.size.width
+#define mainScreenHeight   [UIScreen mainScreen].bounds.size.height
+
+#import "CustomView.h"
+
+@implementation CustomView
+
+-(instancetype)initWithFrame:(CGRect)frame{
+    
+    if (self = [super initWithFrame:frame]) {
+        
+#if 0
+#pragma mark --直接赋值 OK使用 xib的UI更新也很方便
+        //        self = [[[NSBundle mainBundle] loadNibNamed:@"CustomView" owner:self options:nil] firstObject];
+        //        self.frame = frame;
+        
+#elif 1
+#pragma mark --本质是直接赋值，只是作了封装，代码更健壮而已
+        //提示 在init方法之外是无法对self进行赋值的 系统编译器不允许(应该是为了安全性考虑的)
+        self = [self loadReturnXibView];
+        self.frame = frame;
+        
+#elif 0
+#pragma mark --该方法只能 用于UI展示，对于UI修改非常不便
+        //[self baseInit];
+#endif
+        
+        //更新xib绘制的UI--必须在xib加载完成之后，才可以拿到xib上的控件，进行控件的UI更新(如设置圆角，颜色，尺寸等)
+        [self upDateUI];
+    }
+    return self;
+    
+}
+
+
+#pragma mark --因为在init方法之外是无法对self进行赋值的 所以改进baseInit加载方法，给它一个返回值
+- (id)loadReturnXibView{
+    
+    NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"CustomView" owner:self options:nil];
+    UIView *view = nil;
+    for (id object in objects) {
+        if ([object isKindOfClass:[UIView class]]) {
+            view = object;
+            break;
+        }
+    }
+    
+    if (view != nil) {
+        view.translatesAutoresizingMaskIntoConstraints = YES;
+        
+        return view;
+    }
+    
+    return nil;
+}
+
+
+#pragma mark --因为在init方法之外是无法对self进行赋值的 因而这里，退而求其次的使用了 addsubView 而不是直接赋值，导致的问题是 视图的层次与我们想要的不一样了，至于展示UI则没什么问题。
+- (void)baseInit{
+    
+    NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"CustomView" owner:self options:nil];
+    UIView *view = nil;
+    for (id object in objects) {
+        if ([object isKindOfClass:[UIView class]]) {
+            view = object;
+            break;
+        }
+    }
+    
+    if (view != nil) {
+        view.translatesAutoresizingMaskIntoConstraints = YES;
+        
+#warning 提示 在init方法之外是无法对self进行赋值的 因而这里，退而求其次的使用的 addsubView 而不是直接赋值，导致的问题是 视图的层次与我们想要的不一样了，至于展示UI则没什么问题。
+        //提示 在init方法之外是无法对self进行赋值的 因而这里，退而求其次的使用的 addsubView 而不是直接赋值，导致的问题是 视图的层次与我们想要的不一样了，至于展示UI则没什么问题。
+        //        self = (CustomView *)view;
+        //        self = [[[NSBundle mainBundle] loadNibNamed:@"CustomView" owner:self options:nil] firstObject];
+        
+        [self addSubview:view];
+        
+    }
+    
+}
+
+#pragma mark --使用xibview 更新UI必须等到 所有控件加载完毕以后，才可以，因为啊，初始化未加载完毕时，控件可能还不存在呢
+- (void)upDateUI{
+    
+    
+    self.layer.borderWidth = 1.0;
+    self.layer.borderColor = [UIColor grayColor].CGColor;
+    
+    self.imageView.layer.cornerRadius = CGRectGetWidth(self.imageView.frame)/2.0;
+    self.imageView.layer.masksToBounds = YES;
+    [self.myBtn setTitle:@"updatedUI" forState:UIControlStateNormal];
+}
+</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>301842FB-1F08-4CDE-B149-A9A8650F06DC</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>自定义的通告Xib加载的view</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

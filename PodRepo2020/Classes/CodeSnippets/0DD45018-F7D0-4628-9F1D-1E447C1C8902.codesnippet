@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>ASwitch</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>UISwitch *switchh = ({
+    UISwitch *view = [[UISwitch alloc] init];
+    view.backgroundColor = UIColor.clearColor;
+    view.layer.cornerRadius = 31.0/2.0;
+    view.onTintColor = UIColor.greenColor;
+    view.thumbTintColor = UIColor.whiteColor;
+    [view addTarget:self action:@selector(onSwitchStateChange:) forControlEvents:UIControlEventValueChanged];
+    view;
+});</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>0DD45018-F7D0-4628-9F1D-1E447C1C8902</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>ASwitch</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>ASwitch</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

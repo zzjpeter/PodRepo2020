@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>ZFPlayer_tableView</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>//@property (nonatomic, strong) ZFPlayerController *player;
+//@property (nonatomic, strong) ZFPlayerControlView *controlView;
+//@property (nonatomic, strong) NSMutableArray *urls;
+#pragma mark -####列表播放####
+- (void)configPlayer{
+    
+    ZFAVPlayerManager *playerManager = [[ZFAVPlayerManager alloc] init];
+    // player的tag值必须在cell里设置
+    self.player = [ZFPlayerController playerWithScrollView:self.tableView playerManager:playerManager containerViewTag:100];
+    self.player.controlView = self.controlView;
+    self.player.assetURLs = self.urls;
+    self.player.shouldAutoPlay = NO;
+    // 1.0是完全消失的时候
+    self.player.playerDisapperaPercent = 1.0;
+    
+    @weakify(self)
+    self.player.orientationWillChange = ^(ZFPlayerController * _Nonnull player, BOOL isFullScreen) {
+        @strongify(self)
+        [self setNeedsStatusBarAppearanceUpdate];
+        [UIViewController attemptRotationToDeviceOrientation];
+        self.tableView.scrollsToTop = !isFullScreen;
+    };
+    
+    self.player.playerDidToEnd = ^(id  _Nonnull asset) {
+        @strongify(self)
+        [self.player stopCurrentPlayingCell];
+    };
+    
+}
+- (ZFPlayerControlView *)controlView {
+    if (!_controlView) {
+        _controlView = [ZFPlayerControlView new];
+    }
+    return _controlView;
+}
+
+#pragma mark -列表播放建议实现
+- (BOOL)shouldAutorotate {
+    /// 如果只是支持iOS9+ 那直接return NO即可，这里为了适配iOS8
+    return self.player.shouldAutorotate;
+}
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
+    if (self.player.isFullScreen &amp;&amp; self.player.orientationObserver.fullScreenMode == ZFFullScreenModeLandscape) {
+        return UIInterfaceOrientationMaskLandscape;
+    }
+    return UIInterfaceOrientationMaskPortrait;
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    if (self.player.isFullScreen) {
+        return UIStatusBarStyleLightContent;
+    }
+    return UIStatusBarStyleDefault;
+}
+
+- (BOOL)prefersStatusBarHidden {
+    return self.player.isStatusBarHidden;
+}
+
+- (UIStatusBarAnimation)preferredStatusBarUpdateAnimation {
+    return UIStatusBarAnimationSlide;
+}
+
+#pragma mark - UIScrollViewDelegate 列表播放必须实现
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    [scrollView zf_scrollViewDidEndDecelerating];
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+    [scrollView zf_scrollViewDidEndDraggingWillDecelerate:decelerate];
+}
+
+- (void)scrollViewDidScrollToTop:(UIScrollView *)scrollView {
+    [scrollView zf_scrollViewDidScrollToTop];
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    [scrollView zf_scrollViewDidScroll];
+}
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    [scrollView zf_scrollViewWillBeginDragging];
+}
+
+#pragma mark -列表播放cell建议定义的代理，作用：为player指定播放数据源（url）
+#pragma mark - ZFTableViewCellDelegate
+- (void)zf_playTheVideoAtIndexPath:(NSIndexPath *)indexPath {
+    [self playTheVideoAtIndexPath:indexPath scrollToTop:NO];
+}
+#pragma mark - private method 指定的cell播放数据源
+/// play the video
+//作用：为player指定播放数据源（url）
+- (void)playTheVideoAtIndexPath:(NSIndexPath *)indexPath scrollToTop:(BOOL)scrollToTop {
+    ZFTableViewCellLayout *layout = self.dataSource[indexPath.row];
+    //[self.player playTheIndexPath:indexPath scrollToTop:scrollToTop];//默认从从assetURLs中取对应的url（前提需要设置self.player.assetURLs = self.urls;）（适合单一的纯视频cell【设置简单统一设置即可】）
+    [self.player playTheIndexPath:indexPath assetURL:[NSURL URLWithString:layout.data.video_url] scrollToTop:scrollToTop];//设置指定的Url（适合混合型cell【有视频cell和非视频cell】）
+    [self.controlView showTitle:layout.data.title
+    coverURLString:layout.data.thumbnail_url
+    fullScreenMode:layout.isVerticalVideo?ZFFullScreenModePortrait:ZFFullScreenModeLandscape];
+}
+</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>DB5411A5-81E4-4C87-900E-13F810A4A930</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Generic</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>ZFPlayer_tableView</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

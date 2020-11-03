@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>StatusBar__</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>****************iOS9之后的状态栏隐藏与显示 和 设置状态栏样式*************
+View controller-based status bar appearance为YES 默认值
+苹果推荐在具体的viewController中Use -[UIViewController prefersStatusBarHidden]--//设置状态栏的显示与隐藏
+- (BOOL)prefersStatusBarHidden{
+    return YES;
+}
+苹果推荐在具体的viewController中Use -[UIViewController preferredStatusBarStyle]--//设置状态栏的样式
+- (UIStatusBarStyle)preferredStatusBarStyle{
+    return UIStatusBarStyleLightContent;
+}
+系统给我们提供了一个函数- (UIViewController *)childViewControllerForStatusBarStyle 解决viewController在嵌套在UINavigationController中使用时,viewController中使用- (UIStatusBarStyle)preferredStatusBarStyle;函数设置并不生效的问题。
+
+- (UIViewController *)childViewControllerForStatusBarStyle{
+    return self.topViewController;
+}
+
+childViewControllerForStatusBarHidden函数,使用原理同上
+
+preferredStatusBarUpdateAnimation函数，这个函数返回了动画效果。动画效果只有在prefersStatusBarHidden
+函数返回值变化的时候才会展示，同时要通过调用
+[self setNeedsStatusBarAppearanceUpdate]函数来重绘状态栏
+
+调用demo＃＃＃＃＃＃
+if ([self respondsToSelector:@selector(setNeedsStatusBarAppearanceUpdate)]) {
+    //调用隐藏方法
+    [self prefersStatusBarHidden];
+    [self performSelector:@selector(setNeedsStatusBarAppearanceUpdate)];
+    
+}
+＃＃＃＃＃＃＃＃＃＃＃＃＃
+
+************************结束*********************************</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>33EC12F9-EAA9-453E-86AD-E8928DB03568</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>状态栏设置demo</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

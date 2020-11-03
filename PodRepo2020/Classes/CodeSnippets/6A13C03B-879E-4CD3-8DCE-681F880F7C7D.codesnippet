@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>Task_background后台任务开启</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>    __block UIBackgroundTaskIdentifier bgTaskID;
+    bgTaskID = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^ {
+        //不管有没有完成，结束 background_task 任务
+        if (bgTaskID != UIBackgroundTaskInvalid) {
+            [[UIApplication sharedApplication] endBackgroundTask:bgTaskID];
+            bgTaskID = UIBackgroundTaskInvalid;
+        }
+    }];</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>6A13C03B-879E-4CD3-8DCE-681F880F7C7D</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>Task_background后台任务开启</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>Task_background后台任务开启</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

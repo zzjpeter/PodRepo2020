@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>aLayout</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>    func setupLayout() {
+        
+        bearImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        bearImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100).isActive = true
+        bearImageView.widthAnchor.constraint(equalToConstant: 200).isActive = true
+        bearImageView.heightAnchor.constraint(equalToConstant: 200).isActive = true
+        
+        descriptionTextView.topAnchor.constraint(equalTo: bearImageView.bottomAnchor, constant: 120).isActive = true
+        descriptionTextView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        descriptionTextView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        descriptionTextView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
+        
+    }</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>B4BE7FAF-C36E-4974-BD04-9AC0A5C177D7</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Swift</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>aLayout</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>aLayout</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>0</integer>
+</dict>
+</plist>

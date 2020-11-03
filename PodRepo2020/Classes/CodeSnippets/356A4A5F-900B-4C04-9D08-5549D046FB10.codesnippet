@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>ATimer_DPGCD</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>DPGCDTimer *timer = ({
+    DPGCDTimer *timer = [[DPGCDTimer alloc] init];
+    timer.timerStopBlock = ^{
+        
+    };
+    timer.timerStartBlock = ^{
+        
+    };
+    timer.timerRunFloatBlock = ^(NSUInteger runTimes, CGFloat currentTime) {
+        
+    };
+    //1.关闭gcd定时器
+    [timer stopTimer];
+    //2.启动gcdTimer  倒计时时长、计时间隔、开启定时器时是否立即进行运行回调、运行回调
+    [timer initTimerWithTimeDuration:CGFLOAT_MAX interval:0.2 immediatelyCallBack:YES timerRunBlock:nil];
+    timer;
+});</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>356A4A5F-900B-4C04-9D08-5549D046FB10</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>ATimer_DPGCD</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>ATimer_DPGCD</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

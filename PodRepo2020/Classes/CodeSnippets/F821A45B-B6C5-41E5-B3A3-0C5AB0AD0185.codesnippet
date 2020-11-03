@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>aButton</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>    func aButton() -&gt; UIButton {
+        let aButton = UIButton(type: .custom)
+        view.addSubview(aButton)
+        aButton.snp.makeConstraints { (make) in
+            make.top.equalTo(100)
+            make.centerX.equalToSuperview()
+            make.size.equalTo(CGSize(width: 100, height: 50))
+        }
+        
+        aButton.setBackgroundImage(UIImage(named: ""), for: .normal)
+        aButton.backgroundColor = UIColor.clear
+        aButton.setTitle("测试", for: .normal)
+        aButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
+        aButton.setTitleColor(UIColor.black, for: .normal)
+        aButton.setImage(UIImage(named: "tab1"), for: .normal)//(25,23)
+        aButton.addTarget(self, action: #selector(buttonClick), for: .touchUpInside)
+        //aButton.setTitle("测试", for: .highlighted)
+        //aButton.setTitleColor(UIColor.white, for: .highlighted)
+        //aButton.setImage(UIImage(named: "selectTab1"), for: .highlighted)
+        //aButton.tintColor = UIColor.blue
+        //1.
+        //let titleWidth = aButton.titleLabel!.intrinsicContentSize.width
+        //aButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: titleWidth, bottom: 0, right: 0)
+        //2.
+        //aButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: -titleWidth)
+        //3.
+        //aButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: titleWidth, bottom: 0, right: -titleWidth)
+        
+        //let imageWidth = aButton.currentImage!.size.width
+        //aButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: imageWidth)
+        //aButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: -imageWidth, bottom: 0, right: 0)
+        //aButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: -imageWidth, bottom: 0, right: imageWidth)
+        
+        //aButton.adjustsImageWhenDisabled = false
+        //aButton.adjustsImageWhenHighlighted = false
+        
+        return aButton
+    }
+    
+    @objc func buttonClick(sender: UIButton) {
+        print("button.imageView:%@",sender.imageView as Any)
+        print("button.title:%@",sender.titleLabel as Any)
+    }</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>F821A45B-B6C5-41E5-B3A3-0C5AB0AD0185</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Swift</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>aButton</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>aButton</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

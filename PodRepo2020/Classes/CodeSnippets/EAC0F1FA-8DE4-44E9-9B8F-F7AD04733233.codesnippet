@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>aCollectionView</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>//UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout 
+    func aCollectionView() -&gt; UICollectionView {
+        let aCollectionView = UICollectionView(frame: CGRect(x: 0, y: 0, width: 0, height: 0), collectionViewLayout:aFlowLayout())
+        view.addSubview(aCollectionView)
+        aCollectionView.snp.makeConstraints { (make) in
+            make.edges.equalTo(view)
+        }
+        aCollectionView.backgroundColor = UIColor.white
+        aCollectionView.dataSource = self
+        aCollectionView.delegate = self
+        aCollectionView.allowsSelection = true; // default is true
+        aCollectionView.allowsMultipleSelection = false; // default is false
+        aCollectionView.showsHorizontalScrollIndicator = false;// default true
+        aCollectionView.showsVerticalScrollIndicator = true;// default true
+        aCollectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: NSStringFromClass(UICollectionViewCell.self))
+        aCollectionView.register(UICollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: UICollectionView.elementKindSectionHeader)
+        aCollectionView.register(UICollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: UICollectionView.elementKindSectionFooter)
+        return aCollectionView
+    }
+    
+    func aFlowLayout() -&gt; UICollectionViewFlowLayout {
+        let aFlowLayout = UICollectionViewFlowLayout()
+        aFlowLayout.scrollDirection = UICollectionView.ScrollDirection.vertical;
+        aFlowLayout.minimumInteritemSpacing = 0;
+        aFlowLayout.minimumLineSpacing = 0;
+        aFlowLayout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0);
+        aFlowLayout.sectionFootersPinToVisibleBounds = false;//默认值为false
+        aFlowLayout.sectionHeadersPinToVisibleBounds = false;//默认值为false
+        return aFlowLayout
+    }
+    
+    func numberOfSections(in collectionView: UICollectionView) -&gt; Int {
+        return 1
+    }
+
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -&gt; Int {
+        return 1
+    }
+
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -&gt; UICollectionViewCell {
+        
+        let aCell = collectionView.dequeueReusableCell(withReuseIdentifier: NSStringFromClass(UICollectionViewCell.self), for: indexPath)
+        aCell.backgroundColor = UIColor.yellow
+        return aCell
+        
+        //return UICollectionViewCell()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("indexPath \(indexPath)")
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -&gt; CGSize {
+        let width = collectionView.frame.size.width
+        let height = 44.0
+        return CGSize(width: CGFloat(width), height: CGFloat(height))
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -&gt; UICollectionReusableView {
+        if kind == UICollectionView.elementKindSectionHeader {
+            let sectionHeader = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: UICollectionView.elementKindSectionHeader, for: indexPath)
+            return sectionHeader;
+        }
+        if kind == UICollectionView.elementKindSectionFooter {
+            let sectionFooter = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: UICollectionView.elementKindSectionFooter, for: indexPath)
+            return sectionFooter;
+        }
+        return UICollectionReusableView()
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -&gt; CGSize {
+        return CGSize(width: CGFloat.leastNormalMagnitude, height: CGFloat.leastNormalMagnitude)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -&gt; CGSize {
+        return CGSize(width: CGFloat.leastNormalMagnitude, height: CGFloat.leastNormalMagnitude)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -&gt; UIEdgeInsets {
+        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+    }
+    
+    //设置每个item滚动方向上的 最小间距
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -&gt; CGFloat {
+        return 0
+    }
+    
+    //设置每个item与滚动方向垂直方向上的 最小间距
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -&gt; CGFloat {
+        return 0
+    }</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>EAC0F1FA-8DE4-44E9-9B8F-F7AD04733233</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Swift</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>aCollectionView</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>aCollectionView</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

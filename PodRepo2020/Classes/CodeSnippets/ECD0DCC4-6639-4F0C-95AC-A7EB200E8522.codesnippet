@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>VC_Sawa</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>//#import "LPBlurNavigationBarView.h"
+//@property (nonatomic, strong) LPBlurNavigationBarView *navigationBarView;
+#pragma mark Lifecycle
+-(void)dealloc
+{
+    NSLog(@"%@##%@",NSStringFromClass([self class]),NSStringFromSelector(_cmd));
+}
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+}
+
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+}
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+}
+
+- (void)viewDidLoad {
+    
+    [super viewDidLoad];
+    // Do any additional setup after loading the view.
+    
+    self.view.backgroundColor = UIColor.whiteColor;
+    self.title = MyLocal(@"Say Hi to Others");
+    
+    [self buildView];
+    [self loadData];
+}
+
+- (void)buildView
+{
+    [self.view addSubview:self.navigationBarView];
+}
+
+- (void)loadData
+{
+    
+}
+
+
+#pragma mark Public
+
+
+#pragma mark Private
+
+
+#pragma mark setter/getter
+- (LPBlurNavigationBarView *)navigationBarView {
+    if (!_navigationBarView) {
+        LPBlurNavigationBarView *view = [LPBlurNavigationBarView blurNaivgationBarView];
+        _navigationBarView = view;
+        view.line.hidden = YES;
+        [view addTitleLabelWithTitle:MyLocal(@"Say Hi to Others")];
+        [view addLeftBtnWithImage:@"sawa_navi_back_black" target:self action:@selector(leftButtonClick:)];
+        UIButton *rightButton = [view addRightBtnWithTitle:MyLocal(@"new_group_save") target:self action:@selector(rightButtonClick:)];
+        [rightButton setTitleColor:UIColorFromRGB(0x00D2F5) forState:UIControlStateNormal];
+    }
+    return _navigationBarView;
+}
+
+
+#pragma mark actions
+- (void)leftButtonClick:(UIButton *)button
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+- (void)rightButtonClick:(UIButton *)button
+{
+    
+}
+
+#pragma mark 系统delegate
+#pragma mark UITextFieldDelegate
+#pragma mark UITableViewDataSource
+#pragma mark UITableViewDelegate
+#pragma mark UIScrollViewDelegate
+#pragma mark 自定义delegate</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>ECD0DCC4-6639-4F0C-95AC-A7EB200E8522</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>VC_Sawa</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>VC_Sawa</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

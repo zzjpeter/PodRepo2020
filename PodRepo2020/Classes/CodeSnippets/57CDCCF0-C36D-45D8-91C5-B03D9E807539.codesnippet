@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>Animation_Start_Stop</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>//@property (nonatomic, strong) UIActivityIndicatorView *activityView;
+//@property (nonatomic, copy) void(^animationBlock)(BOOL start);
+//- (void)startAnimation;
+//- (void)stopAnimation;
+- (UIActivityIndicatorView *)activityView {
+    if (!_activityView) {
+        UIActivityIndicatorView *view = ({
+            UIActivityIndicatorView *view = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+            view.hidesWhenStopped = YES;
+            view;
+        });
+        _activityView = view;
+    }
+    return _activityView;
+}
+- (void)startAnimation
+{
+    if (self.activityView.isAnimating) {
+        return;
+    }
+    [self.activityView startAnimating];
+    !self.animationBlock ? : self.animationBlock(YES);
+}
+- (void)stopAnimation
+{
+    [self.activityView stopAnimating];
+    !self.animationBlock ? : self.animationBlock(NO);
+}</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>57CDCCF0-C36D-45D8-91C5-B03D9E807539</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>Animation_Start_Stop</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>Animation_Start_Stop</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

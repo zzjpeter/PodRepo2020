@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>Kvc</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>/*
+ 一,KVC字典转模型
+ 1.KVC 中经常使用的就是字典转模型
+ // NSObject(NSKeyValueCoding) NSObject的分类
+ - (void)setValuesForKeysWithDictionary:(NSDictionary *)keyedValues;
+ 
+ 二,KVC模型转字典
+ 1.KVC模型转字典
+ KVC模型转字典，参数是属性名称的数组。
+ // keys是属性名称的数组
+ - (NSDictionary *)dictionaryWithValuesForKeys:(NSArray *)keys;
+ 
+ 三,KVC的大招
+ 1.KVC设置对象属性及取值
+ - (void)setValue:(id)value forKey:(NSString *)key;
+ - (id)valueForKey:(NSString *)key;
+ 
+ 2.KVC间接设置对象属性 (KVC对 对象的私有属性 进行访问)
+ 在运行的时候，KVC可以间接设置对象的属性，不管对象属性是否在.h中公开，当然这违背面向对象设计的开闭原则，严重不建议在程序开发中使用。
+ 
+ 四,KVC核心动画
+ KVC最经典的应用——核心动画
+ 通过KVC设置动画的KeyPath，在实例化动画的时候，指定图层的可动画属性。
+ 
+ 
+ KVC 就是 key value coding: 间接通过字符串类型的key取出对应的属性值
+ 
+ KVC的价值
+ 1.可以访问私有成员变量的值
+ 2.可以间接修改私有成员变量的值（替换系统自带的导航栏、tabbar）
+ 举个例子：我现在要替换系统自带的tabbar,但是，系统的是“ readonly”的。解决方法是：KVC。
+ // 替换系统的tabbar
+ [self setValue:[[MyTabBar alloc] init] forKeyPath:@"tabBar"];
+ 
+ 我们点击@"tabBar" 进去之后会发现：是readonly 属性的。
+ @property(nonatomic,readonly) UITabBar *tabBar NS_AVAILABLE_IOS(3_0);
+ // Provided for -[UIActionSheet showFromTabBar:]. Attempting to modify the contents of the tab bar directly will throw an exception.
+ 
+ 进一步了解
+ 
+ keyPath包含了key的功能
+ key:只能访问当前对象的属性
+ keyPath:能利用.运算符一层一层往内部访问属性
+ 
+ 那么怎么样才能一次性解决掉这个问题呢？---用KVC
+ 
+ 使用KVC 的步骤非常简单，要记住！就是重写2个方法而已！
+ 重写2个方法：
+ 
+ -(void)setValue:(id)value forUndefinedKey:(NSString *)key{ }
+ 
+ -(id)valueForUndefinedKey:(NSString *)key{
+    return nil;
+ }
+ 么怎么样才能一次性解决掉这个问题呢？---用KVC
+ 
+ 使用KVC 的步骤非常简单，要记住！就是重写2个方法而已！
+ 重写2个方法：
+ 
+ -(void)setValue:(id)value forUndefinedKey:(NSString *)key{ }
+ 
+ -(id)valueForUndefinedKey:(NSString *)key{
+ return nil;
+ }
+ 下面是常见使用：
+ 
+ KVC的前提是保证 模型里的属性要和JSON 解析的值一致！
+ 上面的模型属性里有一个和json解析不一样的字段，descriptionStr;//现在和json，key不一致 ，json解析的是description。
+ 不一致的原因是模型的属性尽量不要和系统的关键字一致！所以，我们模型要避开关键字。那么问题来了，我们怎么设置值一致呢？
+ 很简单！！！只需在重写的方法里替换就OK啦！
+ 
+ -(void)setValue:(id)value forUndefinedKey:(NSString *)key{
+ 
+ //找到和属性不一致名字的key，然后赋值给self的属性
+ if ([key isEqualToString:@"description"]) {
+ 
+ // self.descriptionStr = value; // 不推荐使用
+ [self setValue:value forKey:@"descriptionStr"]; // 推荐
+ }
+ }
+ 例如：id、description等等系统关键字就可以用这种方法做了。
+ 上面是解决关键字，也就是属性名字和系统关键字有冲突！！！，下面介绍的，也是开发中经常遇到的问题：就是对于处理“类型”，就用下面的方法：
+ 
+ 类型？
+ 这就是类型：服务器返回有“引号”和没引号，分别代表 NSString 和NSNumber
+ 
+ 看有没有引号.png
+ 这个对KVC 也有影响，下面我带大家 处理类型！！！
+ 事实上，在企业服务器开发人员把 NSString修改成 NSNumber 类型或其它类型，他们通常是不会主动告诉你的！这是你之前可以成功运行的APP突然崩溃！这你又得花费很多时间去查找！为了避免此问题和如何处理，请看下面：
+ 重写方法：
+ - (void)setValue:(id)value forKey:(NSString *)key{}
+ 这里就以 NSNumber 为例子：
+ 
+ - (void)setValue:(id)value forKey:(NSString *)key
+ {
+ // 服务器是 NSNumber ，模型表里是 NSString类型，所以，要处理
+ if ([value isKindOfClass:[NSNumber class]]) {
+ 
+ // NSNumber--&gt; NSString
+ [self setValue:[NSString stringWithFormat:@"%@",value] forKey:key];
+ 
+ }else{
+ [super setValue:value forKey:key];
+ }
+ }
+ 总结：使用KVC时，最好重写2个方法 和 一个处理 类型的方法；
+ 
+ 下面再次回顾上面的方法使用：
+ 
+ #pragma mark ---- 一定要实现下面的两个方法！(属性名字用这个方法)
+ 
+// 利用kvc解析json，一定要实现下面的两个方法！(属性名字用这个方法)
+-(void)setValue:(id)value forUndefinedKey:(NSString *)key{
+    //找到和属性不一致名字的key，然后赋值给self的属性
+    if ([key isEqualToString:@"description"]) {
+        
+        // self.descriptionStr = value; // 不推荐使用
+        [self setValue:value forKey:@"descriptionStr"]; // 推荐
+    }
+}
+-(id)valueForUndefinedKey:(NSString *)key{
+    return nil;
+}
+
+#pragma mark --- 对于处理“类型”，就用下面的方法
+// 处理特殊 ----（类型）例如：NSNumber--&gt; NSString
+- (void)setValue:(id)value forKey:(NSString *)key
+{
+    // price 服务器是 NSNumber
+    // 服务器是 NSNumber ，模型表里是 NSString类型，所以，要处理
+    if ([value isKindOfClass:[NSNumber class]]) {
+        
+        // NSNumber--&gt; NSString
+        [self setValue:[NSString stringWithFormat:@"%@",value] forKey:key];
+        
+    }else{
+        [super setValue:value forKey:key];
+    }
+}
+ */
+
+#pragma mark -#####放在model中#####
+#pragma mark -KVC字典转模型
+- (instancetype)initWithDict:(NSDictionary *)dict{
+    
+    if ([super init] == self) {
+        //字典转模型
+        [self setValuesForKeysWithDictionary:dict];
+    }
+    return self;
+}
+
+//#pragma mark -KVC字典转模型 防止model中存在未定义的key导致的错误
+//-(void)setValue:(id)value forUndefinedKey:(NSString *)key{
+//    
+//    //找到和属性不一致名字的key，然后赋值给self的属性
+//    if ([key isEqualToString:@"gradeStr"]) {
+//        
+//        // self.descriptionStr = value; // 不推荐使用
+//        [self setValue:value forKey:@"grade"]; // 推荐
+//    }
+//}
+
+//总结：使用KVC时，最好重写2个方法 和 一个处理 类型的方法；
+#pragma mark ---- 一定要实现下面的两个方法！(属性名字用这个方法)
+// 利用kvc解析json，一定要实现下面的两个方法！(属性名字用这个方法)
+-(void)setValue:(id)value forUndefinedKey:(NSString *)key{
+    //找到和属性不一致名字的key，然后赋值给self的属性
+    if ([key isEqualToString:@"description"]) {
+        
+        // self.descriptionStr = value; // 不推荐使用
+        [self setValue:value forKey:@"descriptionStr"]; // 推荐
+    }
+}
+-(id)valueForUndefinedKey:(NSString *)key{
+    return nil;
+}
+#pragma mark --- 对于处理“类型”，就用下面的方法
+// 处理特殊 ----（类型）例如：NSNumber--&gt; NSString
+- (void)setValue:(id)value forKey:(NSString *)key
+{
+    // price 服务器是 NSNumber
+    // 服务器是 NSNumber ，模型表里是 NSString类型，所以，要处理
+    if ([value isKindOfClass:[NSNumber class]]) {
+        
+        // NSNumber--&gt; NSString
+        [self setValue:[NSString stringWithFormat:@"%@",value] forKey:key];
+        
+    }else{
+        [super setValue:value forKey:key];
+    }
+}
+
+#pragma mark -#####放在VC中#####
+#pragma mark -KVC字典转模型
+- (void)test_kvc_dicToModel{
+    
+    NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"zzj",@"name",@24,@"age",nil];
+    
+    [dic addEntriesFromDictionary:@{@"height":@1.81}];
+    
+    KVOModel *model = [[KVOModel alloc]initWithDict:dic];
+    NSLog(@"model:%@,model.name:%@--height:%.2f--age:%zd",model,model.name,((NSNumber *)[model valueForKey:@"height"]).floatValue,((NSNumber *)[model valueForKey:@"age"]).integerValue);
+    
+    NSLog(@"age:%zd",model.age);
+    
+    // keys是属性名称的数组
+    NSDictionary *newDic = [model dictionaryWithValuesForKeys:@[@"name",@"age",@"height"]];
+    NSLog(@"newDic:%@",newDic);
+}
+
+#pragma mark -kvc给对象的属性进行赋值
+- (void)test_kvc_property{
+    
+    KVOModel *model = [[KVOModel alloc]init];
+    model.age = 24;
+    [model setValue:@"zzj" forKey:@"name"];//kvc赋值
+    [model setValue:@1.80 forKey:@"height"];//KVC间接设置对象属性
+    
+    NSLog(@"model.name:%@--height:%.2f--age:%zd",[model valueForKey:@"name"],((NSNumber *)[model valueForKey:@"height"]).floatValue,((NSNumber *)[model valueForKey:@"age"]).integerValue);//kvc取值
+    
+    // keys是属性名称的数组
+    NSDictionary *newDic = [model dictionaryWithValuesForKeys:@[@"name",@"age",@"height"]];
+    NSLog(@"newDic:%@",newDic);
+}
+
+#pragma mark -KVC字典转模型－－字典存在在model中未定义的key
+- (void)test_kvc_dicToModelHasUndefinedKey{
+    
+    NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"zzj",@"name",@24,@"age",@1.81,@"height",nil];
+    
+    [dic addEntriesFromDictionary:@{@"grade":@"大四"}];
+    
+    KVOModel *model = [[KVOModel alloc]initWithDict:dic];//字典存在在model中未定义的key 程序会报错崩溃
+    //reason: '[&lt;KVOModel 0x608000027b60&gt; setValue:forUndefinedKey:]: this class is not key value coding-compliant for the key grade.'
+    //所以必须实现 重写2个方法：
+    /*
+     -(void)setValue:(id)value forUndefinedKey:(NSString *)key{
+     //此处可以根据具体需要做处理
+     }
+     -(id)valueForUndefinedKey:(NSString *)key{
+     return nil;
+     }
+     */
+}
+
+#pragma mark -KVC最经典的应用 核心动画
+-(void)touchesBegan:(NSSet&lt;UITouch *&gt; *)touches withEvent:(UIEvent *)event{
+    
+    //KVC最经典的应用 核心动画
+    //CAKeyframeAnimation path/values
+    CAKeyframeAnimation *animation1 = [CAKeyframeAnimation animationWithKeyPath:@"position"];//位置
+    animation1.path = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(50, 50, 250, 250)].CGPath;
+    
+    //CABasicAnimation  fromValue/toValue
+    CABasicAnimation *animation2 = [CABasicAnimation animationWithKeyPath:@"transform.rotation"];//旋转
+    animation2.toValue = @(M_PI * 2);
+    
+    CAKeyframeAnimation *animation3 = [CAKeyframeAnimation animationWithKeyPath:@"transform.scale"];//缩放
+    animation3.values = @[@0.5, @1, @1.5];
+    
+    CAAnimationGroup *group = [[CAAnimationGroup alloc]init];
+    group.animations = @[animation1,animation2,animation3];
+    
+    group.duration = 2.0;
+    group.repeatCount = CGFLOAT_MAX;
+    
+    [self.animationView.layer addAnimation:group forKey:nil];
+}
+</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>E0F9576C-009C-4ED8-BB6C-01DD8AFCE0C0</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>KVC详解1.访问私有属性2.kvc字典转模型</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

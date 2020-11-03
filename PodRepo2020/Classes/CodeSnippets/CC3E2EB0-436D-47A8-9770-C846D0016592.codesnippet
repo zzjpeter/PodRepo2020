@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>AYYLabel</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>YYLabel *label = ({
+    label = [YYLabel new];
+    label.size = CGSizeMake(kScreenWidth, CGFLOAT_MAX);
+    label.preferredMaxLayoutWidth = kScreenWidth;//设置最大宽度,设置完才能有换行功能
+    label.text = @"";
+    label.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightRegular];
+    label.textColor = UIColor.blackColor;
+    label.numberOfLines = 0;
+    label.textAlignment = NSTextAlignmentNatural;
+    label.textVerticalAlignment = YYTextVerticalAlignmentTop;
+    label;
+});</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>CC3E2EB0-436D-47A8-9770-C846D0016592</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>AYYLabel</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>AYYLabel</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

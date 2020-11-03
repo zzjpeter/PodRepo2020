@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>String_containChinese</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>- (BOOL)isHasChineseWithStr:(NSString *)strFrom {
+    
+    for (int i=0; i&lt;strFrom.length; i++) {
+        
+        NSRange range =NSMakeRange(i, 1);
+        
+        NSString * strFromSubStr=[strFrom substringWithRange:range];
+        
+        const char *cStringFromstr = [strFromSubStr UTF8String];
+        
+        if (strlen(cStringFromstr)==3) {
+            
+            //汉字
+            
+            return YES;
+            
+        } else if (strlen(cStringFromstr)==1) {
+            
+            //字母
+        }
+    }
+    return NO;
+}</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>0F4B9E58-95F9-4CCE-B2DD-CDA9579AAC92</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>字符串是否包含中文</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

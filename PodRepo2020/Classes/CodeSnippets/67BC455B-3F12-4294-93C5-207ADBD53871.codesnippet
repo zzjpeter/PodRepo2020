@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>Test</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>#pragma mark -期望实际上是异步测试，当测试异步方法时，因为结果并不是立刻获得，所以我们可以设置一个期望，期望是有时间限定的的，fulfill表示满足期望。异步测试除了使用 expectationWithDescription以外，还可以使用 expectationForPredicate和expectationForNotification,
+#pragma mark -expectationWithDescription
+- (void)testAsynExample {
+    
+    // 1. 创建期望
+    XCTestExpectation *exp = [self expectationWithDescription:@"这里可以是操作出错的原因描述。。。"];
+    
+    NSOperationQueue *queue = [[NSOperationQueue alloc]init];
+    [queue addOperationWithBlock:^{
+        
+        //模拟：这个异步操作需要2秒后才能获取结果，比如一个异步网络请求
+        sleep(2);
+        
+        //模拟：获取的异步操作后，获取结果，判断异步方法的结果是否正确
+        XCTAssertEqual(@"a", @"a");
+        
+        //2. 如果断言没问题，就调用fulfill宣布测试满足
+        [exp fulfill];
+    }];
+    
+    //3. 设置延迟多少秒后，如果没有满足测试条件就报错
+    [self waitForExpectationsWithTimeout:3 handler:^(NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"Timeout Error: %@", error);
+        }
+    }];
+}
+#pragma mark -expectationForPredicate
+//利用谓词计算，button是否正确的获得了backgroundImage，如果正确20秒内正确获得则通过测试，否则失败。
+- (void)testThatBackgroundImageChanges {
+    
+    UIButton *button = [[UIButton alloc]init];
+    XCTAssertNil([button backgroundImageForState:UIControlStateNormal]);
+    NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(UIButton  * _Nonnull button, NSDictionary&lt;NSString *,id&gt; * _Nullable bindings) {
+        return [button backgroundImageForState:UIControlStateNormal] != nil;
+    }];
+    
+    [self expectationForPredicate:predicate
+              evaluatedWithObject:button
+                          handler:nil];
+    [self waitForExpectationsWithTimeout:20 handler:nil];
+}
+#pragma mark -expectationForNotification
+//expectationForNotification 方法 ,该方法监听一个通知,如果在规定时间内正确收到通知则测试通过
+- (void)testAsynExample1 {
+    [self expectationForNotification:(@"监听通知的名称xxx") object:nil handler:nil];
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"监听通知的名称xxx" object:nil];
+    
+    //设置延迟多少秒后，如果没有满足测试条件就报错
+    [self waitForExpectationsWithTimeout:3 handler:nil];
+}
+</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>67BC455B-3F12-4294-93C5-207ADBD53871</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>test_3中期望的demo代码expectationWithDescription Predicate Notification</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

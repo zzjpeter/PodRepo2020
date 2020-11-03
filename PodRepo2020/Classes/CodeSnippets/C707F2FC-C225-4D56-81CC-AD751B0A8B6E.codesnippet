@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>aSwitch</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>    func aSwitch() -&gt; UISwitch {
+        let aSwitch = UISwitch()
+        view.addSubview(aSwitch);
+        aSwitch.snp.makeConstraints { (make) in
+            make.left.equalTo(100)
+            make.top.equalTo(50)
+            make.width.equalTo(100)
+            make.height.equalTo(100)
+        }
+        aSwitch.thumbTintColor = UIColor.white
+        aSwitch.onTintColor = UIColor.green
+        aSwitch.tintColor = UIColor.blue
+        aSwitch.addTarget(self, action: #selector(switchClick), for: .valueChanged)
+        return aSwitch
+    }
+    
+    @objc func switchClick(aSwithch: UISwitch) {
+        print(aSwithch.isOn)
+    }</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>C707F2FC-C225-4D56-81CC-AD751B0A8B6E</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Swift</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>aSwitch</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>aSwitch</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

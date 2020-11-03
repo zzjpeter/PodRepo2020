@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>PointInside_定制事件响应范围</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>//定制事件响应范围
+- (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event {
+    if (CGRectContainsPoint(self.sayHiButton.frame, point)) {
+        return YES;
+    }
+    return NO;
+}
+//改变图片的点击范围
+- (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event {
+    
+    // 控件范围宽度多40，高度20
+    CGRect bounds = CGRectInset(self.bounds, -20, -20);
+    NSLog(@"point = %@",NSStringFromCGPoint(point));
+    UIBezierPath *path1 = [UIBezierPath bezierPathWithRect:CGRectMake(-20, 0, 40, 120)];
+    UIBezierPath *path2 = [UIBezierPath bezierPathWithRect:CGRectMake(self.frame.size.width - 20, 0, 40, 120)];
+    if (([path1 containsPoint:point] || [path2 containsPoint:point])&amp;&amp; CGRectContainsPoint(bounds, point)){
+        //如果在path区域内，返回YES
+        return YES;
+    }
+    return NO;
+}
+//扩大按钮的点击范围
+- (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent*)event {
+    CGRect bounds = self.bounds;
+     bounds = CGRectInset(bounds, -10, -10);
+   // CGRectContainsPoint  判断点是否在矩形内
+    return CGRectContainsPoint(bounds, point);
+}</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>FE987D69-8905-430C-B7FB-B722EC301CC9</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>PointInside_定制事件响应范围</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>PointInside_定制事件响应范围</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

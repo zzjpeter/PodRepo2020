@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>aTableView</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>    //UITableViewDataSource, UITableViewDelegate
+    func aTableView() -&gt; UITableView {
+        let aTableView = UITableView(frame: CGRect(x: 0, y: 0, width: 0, height: 0), style: .grouped)
+        view.addSubview(aTableView)
+        aTableView.snp.makeConstraints { (make) in
+            make.edges.equalTo(view)
+        }
+        aTableView.backgroundColor = UIColor.white
+        aTableView.dataSource = self
+        aTableView.delegate = self
+        aTableView.register(UITableViewCell.self, forCellReuseIdentifier: NSStringFromClass(UITableViewCell.self))
+        return aTableView
+    }
+
+    func numberOfSections(in tableView: UITableView) -&gt; Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -&gt; Int {
+        return 1
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -&gt; UITableViewCell {
+        
+        let aCell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(UITableViewCell.self), for: indexPath)
+        aCell.textLabel?.text = "这个是标题~"
+        aCell.detailTextLabel?.text = "这里是内容了油~"
+        aCell.imageView?.image = UIImage(named:"bean")
+        return aCell
+        
+        //return UITableViewCell()
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("indexPath \(indexPath)")
+    }
+    
+//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -&gt; CGFloat {
+//        return 44.0
+//    }
+
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -&gt; CGFloat {
+        return CGFloat.leastNormalMagnitude
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -&gt; CGFloat {
+        return CGFloat.leastNormalMagnitude
+    }
+
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -&gt; UIView? {
+        let view = UIView()
+        return view
+    }
+
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -&gt; UIView? {
+        let view = UIView()
+        return view
+    }</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>72527FF9-24DD-4A9B-B611-37978E6841E7</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Swift</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>aTableView</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>aTableView</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

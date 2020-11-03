@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>Map_demo</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>/*
+#import "CLLocation+Sino.h"
+#import &lt;MapKit/MapKit.h&gt;
+&lt;MKMapViewDelegate,CLLocationManagerDelegate&gt;
+typedef void(^LatitudeAndLongitude)(CLLocationDegrees latitude,CLLocationDegrees longitude);
+typedef void(^Address)(NSString *address);
+typedef void(^Failure)(NSError *error);
+@property (nonatomic, strong) MKMapView * mapView;;
+@property (nonatomic, strong) CLLocationManager * locationManager;
+*/
+// 获取当前位置
+- (void)getCurrentLocation:(LatitudeAndLongitude)latitudeAndLongitude
+                   address:(Address)address
+                   failure:(Failure)failure {
+    self.latitudeAndLongitude = latitudeAndLongitude;
+    self.address = address;
+    self.failure = failure;
+    
+    //请求地图授权状态和开启权限授权
+    __weak typeof(self) weakSelf = self;
+    [self requestAuthorizationStatusLocationServiceWithBlock:^(BOOL locationIsOpen) {
+        if (!locationIsOpen) {
+            [weakSelf.locationManager requestWhenInUseAuthorization];
+        }
+    }];
+    [self.locationManager startUpdatingLocation];
+}
+// 开启地图应用并导航到指定地理坐标位置
++ (void)navigateFromLocation:(MKMapItem *)location toLocation:(MKMapItem *)toLocation
+{
+    if ([location isKindOfClass:[MKMapItem class]]
+        || [toLocation isKindOfClass:[MKMapItem class]]) {
+        return;
+    }
+    
+    // 创建一个地图应用
+    //MKMapItem *currentLocation =[MKMapItem mapItemForCurrentLocation];
+    //MKMapItem *toLocation = [[MKMapItem alloc] initWithPlacemark:[[MKPlacemark alloc] initWithCoordinate:CLLocationCoordinate2DMake(latitude, longitude) addressDictionary:nil]];
+    //MKMapItem * mapItem = [[MKMapItem alloc] initWithPlacemark:mkmark];
+    
+    NSDictionary * options = @{MKLaunchOptionsDirectionsModeKey:MKLaunchOptionsDirectionsModeDriving,MKLaunchOptionsShowsTrafficKey:@(YES)};
+    [MKMapItem openMapsWithItems:@[location,toLocation] launchOptions:options];
+}
+// 开启地图并定位到指定位置
++ (void)navigateToLocation:(MKMapItem *)location
+{
+    if ([location isKindOfClass:[MKMapItem class]]) {
+        return;
+    }
+    
+    // 创建一个地图应用
+    //MKMapItem *currentLocation =[MKMapItem mapItemForCurrentLocation];
+    //MKMapItem *toLocation = [[MKMapItem alloc] initWithPlacemark:[[MKPlacemark alloc] initWithCoordinate:CLLocationCoordinate2DMake(latitude, longitude) addressDictionary:nil]];
+    //MKMapItem * mapItem = [[MKMapItem alloc] initWithPlacemark:mkmark];
+    
+    NSDictionary * options = @{MKLaunchOptionsMapTypeKey:@(MKMapTypeStandard),MKLaunchOptionsShowsTrafficKey:@(YES)};
+    // 开启一个地图应用
+    [location openInMapsWithLaunchOptions:options];
+}
+
+- (void)buildView{
+    
+    [self addSubview:self.mapView];
+    self.mapView.frame = self.bounds;
+    
+    //指定地图的显示区域
+    //MKCoordinateSpan span = MKCoordinateSpanMake(0.01, 0.01);// 设置坐标跨度
+    //[self.mapView setRegion:MKCoordinateRegionMake(CLLocationCoordinate2DMake(3.066256, 104.041462), span) animated:YES];// 设置地图的显示区域
+    
+    //请求地图授权状态和开启权限授权
+     __weak typeof(self) weakSelf = self;
+     [self requestAuthorizationStatusLocationServiceWithBlock:^(BOOL locationIsOpen) {
+         if (!locationIsOpen) {
+             [weakSelf.locationManager requestWhenInUseAuthorization];
+         }
+     }];
+     [self.locationManager startUpdatingLocation];
+}
+
+- (void)testMap {
+    
+    // 地理信息编码/反编码对象【地理编码和逆地理编码 一次只能执行一个】
+    CLGeocoder * geoCoder = [[CLGeocoder alloc] init];
+    // 地理信息正向编码(地名转换成经纬度)
+    if (1) {
+        NSString *placeStr =@"青羊宫";
+        [geoCoder geocodeAddressString:placeStr completionHandler:^(NSArray *placemarks, NSError *error) {
+            for (CLPlacemark *pMark in placemarks) {// 对编码结果进行迭代
+                NSData *data = [NSJSONSerialization dataWithJSONObject:pMark.addressDictionary options:NSJSONWritingPrettyPrinted error:nil];
+                NSString * str = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                NSLog(@"地理编码#%@",str);
+            }
+        }];
+    }else {
+        // 反编码地理信息(将经纬度转换为地名)
+        CLLocation *loc = [[CLLocation alloc] initWithLatitude:30.662056 longitude:104.041462];
+        [geoCoder reverseGeocodeLocation:loc completionHandler:^(NSArray *placemarks, NSError *error) {
+            CLPlacemark * pMark = [placemarks firstObject];
+            NSLog(@"地址编码%@",pMark);
+            MKPlacemark * mkmark = [[MKPlacemark alloc] initWithPlacemark:pMark];
+        }];
+    }
+}
+
+//创建定位管理器对象
+- (CLLocationManager *)locationManager {
+    if (!_locationManager) {
+        CLLocationManager *locationManager = ({
+            
+            locationManager = [[CLLocationManager alloc] init];// 创建定位管理器对象
+            locationManager.desiredAccuracy = kCLLocationAccuracyBest;// 设置定位温度
+            locationManager.distanceFilter = 5;// 设置距离过滤器
+            locationManager.delegate = self;
+            //[locationManager requestWhenInUseAuthorization];// 授权一直开启定位服务
+            //[locationManager startUpdatingLocation];// 开启定位服务(开始更新位置信息)
+            
+            locationManager;
+        });
+        _locationManager = locationManager;
+    }
+    return _locationManager;
+}
+// 创建地图对象
+- (MKMapView *)mapView {
+    if (!_mapView) {
+        MKMapView *mapView = ({
+            mapView = [MKMapView new];// 创建地图对象
+            mapView.delegate = self;
+            mapView.showsUserLocation = YES;// 显示用户位置
+            mapView.userTrackingMode = MKUserTrackingModeNone;
+            mapView.mapType = MKMapTypeStandard;
+            //MKCoordinateSpan span = MKCoordinateSpanMake(0.01, 0.01);// 设置坐标跨度
+            //[mapView setRegion:MKCoordinateRegionMake(CLLocationCoordinate2DMake(3.066256, 104.041462), span) animated:YES];// 设置地图的显示区域
+            mapView;
+        });
+        _mapView = mapView;
+    }
+    return _mapView;
+}
+//获取地图权限状态
+- (void)requestAuthorizationStatusLocationServiceWithBlock:(void(^)(BOOL locationIsOpen))returnBlock
+{
+    if ([CLLocationManager locationServicesEnabled])
+    {
+        CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
+        switch (status) {
+            case kCLAuthorizationStatusNotDetermined:
+                NSLog(@"定位服务授权状态是:用户没有决定是否使用定位服务");
+                returnBlock(NO);
+                break;
+            case kCLAuthorizationStatusRestricted:
+                returnBlock(NO);
+                NSLog(@"定位服务授权状态是受限制的");
+                break;
+            case kCLAuthorizationStatusDenied:
+                
+                NSLog(@"定位服务授权状态已经被用户明确禁止，或者在设置里的定位服务中关闭");
+                break;
+            case kCLAuthorizationStatusAuthorizedAlways:
+                returnBlock(YES);
+                NSLog(@"定位服务授权状态已经被用户允许在任何状态下获取位置信息");
+                break;
+            case kCLAuthorizationStatusAuthorizedWhenInUse:
+                NSLog(@"定位服务授权状态仅被允许在使用应用程序的时候");
+                returnBlock(YES);
+                break;
+            default:
+                break;
+        }
+    }else
+    {
+        NSLog(@"定位服务不可用");
+    }
+}
+
+#pragma mark - CLLocationManagerDelegate
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
+    if (error) {
+        !self.failure ? : self.failure(error);
+    }
+}
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray&lt;CLLocation *&gt; *)locations
+{
+    CLLocation *newLocation = locations.firstObject;
+    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+    [geocoder reverseGeocodeLocation:newLocation completionHandler:^(NSArray *placemarks, NSError *error){
+        if (placemarks.count &gt; 0){
+            
+            CLPlacemark *placemark = [placemarks objectAtIndex:0];
+            
+            CLLocationDegrees latitude=placemark.location.coordinate.latitude;
+            CLLocationDegrees longitude=placemark.location.coordinate.longitude;
+            
+            NSString *city = [NSString stringWithFormat:@"%@%@",placemark.administrativeArea ? placemark.administrativeArea : @"",placemark.locality ? placemark.locality : @""];
+            
+            NSString *adress = [NSString stringWithFormat:@"%@ %@ %@ %@",placemark.country,city,placemark.name,placemark.thoroughfare];
+            
+            !self.latitudeAndLongitude ? : self.latitudeAndLongitude(latitude,longitude);
+            !self.address ? : self.address(adress);
+            
+            
+        }
+        else if (error == nil &amp;&amp; placemarks.count == 0)
+        {
+            !self.failure ? : self.failure(error);
+        }
+        else if (error != nil)
+        {
+            !self.failure ? : self.failure(error);
+        }
+    }];
+    
+    [manager stopUpdatingLocation];
+}
+
+#pragma mark - MKMapViewDelegate
+- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id&lt;MKAnnotation&gt;)annotation
+{
+    if ([annotation isKindOfClass:[CustomAnnotation class]]) {
+        
+        MKAnnotationView *annotationView =[self.mapView dequeueReusableAnnotationViewWithIdentifier:NSStringFromClass([CustomAnnotation class])];
+        
+        if (!annotationView) {
+            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:NSStringFromClass([CustomAnnotation class])];
+            annotationView.canShowCallout = NO;
+            annotationView.calloutOffset = CGPointMake(0, 1);
+            annotationView.leftCalloutAccessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"88"]];
+        }
+        
+        annotationView.annotation = annotation;
+        annotationView.image = ((CustomAnnotation *)annotation).image;
+        
+        return annotationView;
+        
+    } else {
+        return nil;
+    }
+}
+
+#pragma mark 定制地图大头针设置
+- (void)testCustomAnnotationPins{
+    
+    NSMutableArray *arrayM = [NSMutableArray new];
+    
+    CustomAnnotation *annotation = [[CustomAnnotation alloc] init];
+    CLLocationCoordinate2D location1 = CLLocationCoordinate2DMake(40, 116);
+    annotation.coordinate = location1;
+    annotation.title = @"BeiJing";
+    annotation.subtitle = @"Myhome";
+    annotation.image = [UIImage imageNamed:@"test"];
+    
+    [arrayM addObject:annotation];
+    
+    self.annotationPins = arrayM;
+}
+
+- (void)setAnnotationPins:(NSMutableArray *)annotationPins {
+    
+    _annotationPins = annotationPins;
+    [self.mapView addAnnotations:annotationPins];
+}</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>33F62107-675C-4CA2-8E5F-54788F1C22D8</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>Map_demo</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>Map_demo</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

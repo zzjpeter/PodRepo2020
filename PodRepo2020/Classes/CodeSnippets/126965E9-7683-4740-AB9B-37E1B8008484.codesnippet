@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>Noti_Keyboard_LSDemo</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>#pragma mark noti
+/*
+ //vc
+@property (nonatomic, strong) NSIndexPath *currentEditCellIndexPath;
+ cell.didBeginEditingBlock = ^{
+     @strongify(self)
+     self.currentEditCellIndexPath = indexPath;
+ };
+ //cell
+ @property (nonatomic, copy) void(^didBeginEditingBlock)(void);
+ - (void)textFieldDidBeginEditing:(UITextField *)textField {
+     !self.didBeginEditingBlock ? : self.didBeginEditingBlock();
+ }
+*/
+- (void)addNoti {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+}
+- (void)removeNoti {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+- (void)keyboardWillShow:(NSNotification *)noti
+{
+    CGRect keyboardFrame = [[[noti userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    NSTimeInterval duration = [noti.userInfo[UIKeyboardAnimationDurationUserInfoKey] floatValue];
+    
+    UITableViewCell *cell = [self.mainTableViewGroup cellForRowAtIndexPath:self.currentEditCellIndexPath];
+    CGRect rect = [self.mainTableViewGroup convertRect:cell.frame toView:nil];
+    NSLog(@"cell rect %@", NSStringFromCGRect(rect));
+    
+    CGFloat bottomMargin = (kScreenHeight - CGRectGetMaxY(rect));
+    CGFloat offset = bottomMargin &lt; keyboardFrame.size.height ? bottomMargin - keyboardFrame.size.height : 0;
+    [UIView animateWithDuration:duration animations:^{
+        [self.mainTableViewGroup mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(self.view);
+            make.size.equalTo(self.view);
+            make.bottom.mas_equalTo(offset);
+        }];
+        [self.mainTableViewGroup layoutIfNeeded];
+    }];
+}
+
+- (void)keyboardWillHide:(NSNotification *)noti
+{
+    self.currentEditCellIndexPath = nil;//reset
+    NSTimeInterval duration = [noti.userInfo[UIKeyboardAnimationDurationUserInfoKey] floatValue];
+    [UIView animateWithDuration:duration animations:^{
+        [self.mainTableViewGroup mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(self.view);
+            make.size.equalTo(self.view);
+            make.bottom.mas_equalTo(0);
+        }];
+        [self.mainTableViewGroup layoutIfNeeded];
+    }];
+}</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>126965E9-7683-4740-AB9B-37E1B8008484</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>Noti_Keyboard_LSDemo</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>Noti_Keyboard_LSDemo</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

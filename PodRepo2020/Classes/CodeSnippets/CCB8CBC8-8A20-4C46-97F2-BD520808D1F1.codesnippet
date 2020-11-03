@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>view_custom全屏弹框卡片simple</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>/*
+ - (void)showInView:(UIView *)view;
+ - (void)showInView:(UIView *)view
+ declineAction:(nullable void(^)(void))declineAction
+ acceptAction:(nullable void(^)(void))acceptAction
+ viewDidDismissAction:(nullable void(^)(void))viewDidDismissAction;
+ - (void)dismissView:(void(^)(void))complete;
+ */
+#define kDistanceToHeight (228)
+
+@interface LS_RewardAlertView ()
+
+@property (nonatomic, strong) UIView *backView;
+@property (nonatomic, strong) UIView *contentView;
+//@property (nonatomic, strong) UIVisualEffectView *effectView;
+
+//事件 根据需要实现
+@property (nonatomic, copy) void(^declineAction)(void);
+@property (nonatomic, copy) void(^acceptAction)(void);
+@property (nonatomic, copy) void(^viewDidDismissAction)(void);
+
+@end
+
+@implementation LS_RewardAlertView
+
+- (void)dealloc{
+    NSLog(@"%@##%@",NSStringFromClass([self class]),NSStringFromSelector(_cmd));
+}
+
+- (instancetype)init
+{
+    if (self = [super init]) {
+        [self initialize];
+        [self buildView];
+    }
+    return self;
+}
+
+- (void)initialize
+{
+}
+
+- (void)buildView
+{
+    [self addSubview:self.backView];
+    [self addSubview:self.contentView];
+    [self.backView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.leading.trailing.top.bottom.equalTo(self);
+    }];
+    [self setupContenView:self.contentView];
+}
+
+#pragma mark 此处根据需要定制UI
+- (void)setupContenView:(UIView *)contentView;
+{
+    [contentView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.leading.trailing.equalTo(self);
+        make.height.mas_equalTo(kDistanceToHeight);
+        make.top.equalTo(self.mas_bottom);
+    }];
+}
+
+#pragma mark 显示、隐藏
+#pragma mark public
+- (void)showInView:(UIView *)view
+{
+    [self showInView:view declineAction:nil acceptAction:nil viewDidDismissAction:nil];
+}
+
+- (void)showInView:(UIView *)view
+     declineAction:(nullable void(^)(void))declineAction
+      acceptAction:(nullable void(^)(void))acceptAction
+viewDidDismissAction:(nullable void(^)(void))viewDidDismissAction {
+    
+    self.frame = view.bounds;
+    [view addSubview:self];
+    
+    self.declineAction = declineAction;
+    self.acceptAction = acceptAction;
+    self.viewDidDismissAction = viewDidDismissAction;
+    
+    [self resetContentView:YES];
+    self.backView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.0];
+    [self layoutIfNeeded];
+    
+    [UIView animateWithDuration:0.2 animations:^{
+        self.backView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.4];
+        [self resetContentView:NO];
+        [self layoutIfNeeded];
+    }];
+}
+
+- (void)dismissView:(void(^)(void))complete
+{
+    [self backViewTapGesture:complete];
+}
+#pragma mark private
+- (void)backViewTapGesture
+{
+    [self backViewTapGesture:nil];
+}
+- (void)backViewTapGesture:(void(^)(void))complete
+{
+    [UIView animateWithDuration:0.2 animations:^{
+        self.backView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.0];
+        [self resetContentView:YES];
+        [self layoutIfNeeded];
+    } completion:^(BOOL finished) {
+        !complete ? : complete();
+        !self.viewDidDismissAction ? : self.viewDidDismissAction();
+        [self removeFromSuperview];
+    }];
+}
+
+#pragma mark 布局
+- (void)resetContentView:(BOOL)isHide
+{
+    if (isHide) {
+        return;
+    }
+}
+
+#pragma mark - setter/getter
+- (UIView *)backView
+{
+    if (!_backView) {
+        UIView *view = ({
+            UIView *view = [UIView new];
+            view;
+        });
+        _backView = view;
+        [self addGestureForView:view action:@selector(backViewTapGesture)];
+    }
+    return _backView;
+}
+
+- (UIView *)contentView
+{
+    if (!_contentView) {
+        UIView *view = ({
+            UIView *view = [UIView new];
+            view.backgroundColor = UIColor.whiteColor;
+            view.layer.cornerRadius = 12.0;
+            view.layer.masksToBounds = YES;
+            view;
+        });
+        _contentView = view;
+    }
+    return _contentView;
+}
+
+#pragma mark action
+- (void)addGestureForView:(UIView *)info action:(nullable SEL)action{
+    info.userInteractionEnabled = YES;
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:action];
+    [info addGestureRecognizer:tap];
+}
+</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>CCB8CBC8-8A20-4C46-97F2-BD520808D1F1</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>view_custom全屏弹框卡片simple</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>view_custom全屏弹框卡片simple</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

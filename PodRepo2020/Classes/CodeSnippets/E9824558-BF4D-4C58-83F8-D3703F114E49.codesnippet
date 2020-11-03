@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>SC_Cell</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>-(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
+    self =  [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if(self){
+        self.backgroundColor = [UIColor clearColor];
+        [self buildView];
+    }
+    return self;
+}
+
+#pragma mark -创建subViews
+- (void)buildView{
+    
+}
+
+#pragma makr -布局subViews
+- (void)layoutWithData:(id)data context:(JRTableViewCellLayoutContext *)context{
+    [super layoutWithData:data context:context];
+    if(!IS(&lt;#Model#&gt;,data)){
+        //QN_ASSERT(NO, )
+        JR_W(@"data type wrong is not NYGMyComment,%@",data);
+    }
+}
+
+#pragma makr -计算cell高度
++ (CGFloat)heightForData:(id)data width:(CGFloat)width context:(JRTableViewCellLayoutContext *)context{
+    if(!IS(&lt;#Model#&gt;,data)){
+        JR_W(@"data type wrong is not NYGMyComment,%@",data);
+        return 0;
+    }
+    return 44.0;
+}</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>E9824558-BF4D-4C58-83F8-D3703F114E49</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Generic</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>SC_Cell</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

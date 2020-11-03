@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>aCoreData</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>//MARK:必须在appdelegate中实现
+//    lazy var persistentContainer: NSPersistentContainer = {
+//        let container = NSPersistentContainer(name: "DataModel")
+//        container.loadPersistentStores { description, error in
+//            if let error = error {
+//                fatalError("Unable to load persistent stores: \(error)")
+//            }
+//        }
+//        return container
+//    }()
+//    
+//    func saveContext(backgroundContext: NSManagedObjectContext? = nil) {
+//        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+//        let viewContext = appDelegate.persistentContainer.viewContext
+//        let context = backgroundContext ?? viewContext
+//        guard context.hasChanges else { return }
+//        do {
+//            try context.save()
+//        } catch let error as NSError {
+//            print("Error: \(error), \(error.userInfo)")
+//        }
+//    }
+    
+    //MARK:增、删、改、查的类方法 参考
+    //MARK:1.增
+    static func add(entityName: String, commonModel: CommonModel) {
+        //1.获取总代理和托管对象总管
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let context = appDelegate.persistentContainer.viewContext
+        //2.建立一个entity
+        let entity = NSEntityDescription.entity(forEntityName: entityName, in: context)//实体
+        let model = NSManagedObject(entity: entity!, insertInto: context)//插入的model
+        //let model = NSEntityDescription.insertNewObject(forEntityName: entityName, into: context)//实体和插入的model
+        //3.属性设值(自定义的对应table)
+        translateObject(from: commonModel, to: model)
+        //持久化到本地
+        do {
+            try context.save()
+            showAlert(message: "保存成功", error: nil)
+        } catch  {
+            showAlert(message: "保存失败", error: error)
+        }
+    }
+    
+    //MARK:2.删
+    static func delete(entityName: String, commonModel: CommonModel) {
+        //1.获取总代理和托管对象总管
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let context = appDelegate.persistentContainer.viewContext
+        //2.建立一个获取的请求
+        let fetchRequest = NSFetchRequest&lt;NSFetchRequestResult&gt;(entityName: entityName)
+        //删除条件
+        let predicate: NSPredicate = NSPredicate.init(format: "name = %@", commonModel.name)
+        fetchRequest.predicate = predicate
+        do {
+            //3.执行请求
+            let fetchedResults = try context.fetch(fetchRequest) as? [NSManagedObject]
+            if let results = fetchedResults {
+                for result in results {
+                    context.delete(result)
+                }
+            }
+        } catch  {
+            showAlert(message: "删除失败", error: error)
+        }
+        //持久化到本地
+        do {
+            try context.save()
+            showAlert(message: "保存成功", error: nil)
+        } catch  {
+            showAlert(message: "保存失败", error: error)
+        }
+    }
+    
+    //MARK:3.改
+    static func update(entityName: String, commonModel: CommonModel) {
+        //1.获取总代理和托管对象总管
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let context = appDelegate.persistentContainer.viewContext
+        //2.建立一个获取的请求
+        let fetchRequest = NSFetchRequest&lt;NSFetchRequestResult&gt;(entityName: entityName)
+        //修改条件
+        let predicate: NSPredicate = NSPredicate.init(format: "name = %@", commonModel.name)
+        fetchRequest.predicate = predicate
+        do {
+            //3.执行请求
+            let fetchedResults = try context.fetch(fetchRequest) as? [NSManagedObject]
+            if let results = fetchedResults {
+                for result in results {
+                    result.setValue("newName3", forKey: "name")
+                }
+            }
+        } catch  {
+            showAlert(message: "修改失败", error: error)
+        }
+        //持久化到本地
+        do {
+            try context.save()
+            showAlert(message: "保存成功", error: nil)
+        } catch  {
+            showAlert(message: "保存失败", error: error)
+        }
+    }
+    
+    //MARK:4.查
+    static func search(entityName: String) -&gt; [CommonModel] {
+        var datas:[CommonModel] = []
+        //1.获取总代理和托管对象总管
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let context = appDelegate.persistentContainer.viewContext
+        //2.建立一个获取的请求
+        let fetchRequest = NSFetchRequest&lt;NSFetchRequestResult&gt;(entityName: entityName)
+        //查询条件
+        //let predicate: NSPredicate = NSPredicate.init(format: "date &gt; %ld", 0)
+        //fetchRequest.predicate = predicate
+        //let nameSort = NSSortDescriptor.init(key: "name", ascending: true)
+        //fetchRequest.sortDescriptors = [nameSort]
+        do {
+            //3.执行请求
+            let fetchedResults = try context.fetch(fetchRequest) as? [NSManagedObject]
+            if let results = fetchedResults {
+                for result in results {
+                    guard let model = translateData(from: result) else { return datas }
+                    datas.append(model)
+                }
+            }
+        } catch  {
+            print(error)
+            fatalError("查询失败")
+        }
+        return datas
+    }
+    
+    //MARK: to 模型转换
+    static func translateData(from: NSManagedObject) -&gt; (CommonModel?) {
+        //属性取值(自定义的对应table)
+        if let name = from.value(forKey: "name") as? String,
+           let cityname = from.value(forKey: "cityname") as? String,
+           let image = from.value(forKey: "image") as? Data,
+           let date = from.value(forKey: "date") as? Int {
+            return CommonModel(name: name, cityname: cityname, image: image, date: date)
+        }
+        return nil
+    }
+    
+    static func translateObject(from commonModel: CommonModel ,to model: NSManagedObject){
+        //属性取值(自定义的对应table)
+        model.setValue(commonModel.name, forKey: "name")
+        model.setValue(commonModel.cityname, forKey: "cityname")
+        model.setValue(commonModel.image, forKey: "image")
+        model.setValue(commonModel.date, forKey: "date")
+    }
+    
+    static func showAlert(message: String, error: Error?) {
+        print("\(message)\(String(describing: error))")
+    }</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>30E14387-B365-4948-B0A5-26E10A159764</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Swift</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>aCoreData</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>aCoreData</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>0</integer>
+</dict>
+</plist>

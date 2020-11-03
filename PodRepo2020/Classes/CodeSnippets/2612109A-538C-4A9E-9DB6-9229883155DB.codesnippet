@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>CustomView_Xib</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>
+/*
+ 使用xib方式
+ 使用xib的方式可以省去initWithFrame:和layoutSubviews中添加子控件和设置子控件尺寸的步骤，还有在view controller里面设置view的frame，因为添加子控件和设置子控件的尺寸以及整个view的尺寸在xib中就已经完成。（注意整个view的位置还没有设置，需要在控制器里面设置。）
+ */
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self loadXibView];
+    }
+    return self;
+}
+
+-(void)loadXibView{
+    
+    NSArray *objects = [[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:self options:nil];
+    UIView *view = objects.firstObject;
+    
+    if (view != nil) {
+        view.translatesAutoresizingMaskIntoConstraints = YES;
+        [self addSubview:view];
+    }
+    
+}
+
+- (void)loadXibView1{
+    UINib *nib = [UINib nibWithNibName:NSStringFromClass([self class]) bundle:nil];
+    NSArray *objects = [nib instantiateWithOwner:self options:nil];
+    UIView *view = objects.firstObject;
+    
+    if (view != nil) {
+        view.translatesAutoresizingMaskIntoConstraints = YES;
+        [self addSubview:view];
+    }
+}
+
+//该方法只会在loadNibNamed加载Xib后执行
+- (instancetype)initWithCoder:(NSCoder *)coder
+{
+    self = [super initWithCoder:coder];
+    if (self) {
+        NSLog(@"%s",__func__);
+    }
+    return self;
+}
+
+-(void)awakeFromNib{
+    [super awakeFromNib];
+    
+    //此时 xib已经加载完成 可以做初始化处理了
+    [self initialize];
+}
+
+#pragma mark 初始化方法
+-(void)initialize{
+
+    NSLog(@"%s",__func__);
+    self.backgroundColor = [UIColor yellowColor];
+}
+
+-(void)dealloc{    
+    NSLog(@"%@ dealloc",NSStringFromClass([self class]));
+}
+
+
+/*
+// Only override drawRect: if you perform custom drawing.
+// An empty implementation adversely affects performance during animation.
+- (void)drawRect:(CGRect)rect {
+    // Drawing code
+}
+*/</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>2612109A-538C-4A9E-9DB6-9229883155DB</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Generic</string>
+	<key>IDECodeSnippetSummary</key>
+	<string></string>
+	<key>IDECodeSnippetTitle</key>
+	<string>自定义控件View_Xib</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

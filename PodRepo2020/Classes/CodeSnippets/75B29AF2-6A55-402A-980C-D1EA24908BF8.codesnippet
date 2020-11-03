@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>Xib_详解</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>加载顺序：loadView --&gt;viewDidLoad --&gt; awakeFromNib --&gt;  viewWillAppear
+
+//xib和nib的加载VC或View顺序，无论如何都是先从xib或nib中进行加载，然后再到相应的关联类中进行加载，最终显示出来。从storyBoard中加载要注意指定id(Identifier)。原理与从xib或nib中加载一样。先从storyBoard中进行加载，再到相应的关联类中进行加载，最终显示出来。storyboard中的instantiateViewControllerWithIdentifier:和instantiateInitialViewController是storyboard的两个实例vc的方法。前者实例化指定id的vc，后者默认实例化入口vc
+
+
+／／特别注意一点，就是如果不从自定义的xib或者nib文件，启动程序加载window和根视图控制器，则系统默认是从main.stroyboard启动加载。我们的app delegate 类就是这么干的，记住设置General－&gt;Deployment Info-&gt;Main Interface 为相应的xib或storyboard文件名，否则会加载失败，系统默认
+最初是main.storyboard,反正就是在启动程序之前，一定要设置好Main Interface的值，否则常会出现'Application windows are expected to have a root view controller at the end of application launch’或者是 setValue forUndifineKey: 错误loaded the "Empty" nib but the view outlet was not set.
+
+
+总结：通过测试说明，使用xib或storyBoard构建项目,并使用了AutoLayout之后，当需要为视图添加动画,或者手动更改视图的frame的时候,就需要修改约束。1.但是不知道为什么修改约束，似乎没有动画效果。(注意：通过修改约束实现动画效果,最好在修改约束的前后 都调用layoutIfNeed就可以实现控件的动画效果[原则上只需要修改约束后调用layoutIfNeed就行，但是如果约束还没有生效 就修改了约束 会导致约束只是一次性设置，而不是基于前一次的变更(渐变)])2.使用直接修改frame，似乎对约束的值没有改变，且修改frame的size无效，但是修改frame的origin是可以的。
+
+#pragma mark  --在以加载xib或nib文件的方式加载view的时候，initWithCoder 会被系统自动调用 。 结合allocWithZone分析测试可得，－－调用顺序大概是：（allocWithZone会在调用了alloc方法后被系统自动调用，一种用zone来分配内存的方式。在系统调用了默认的（此处应注意）allocWithZone方法之后，系统会自动调用initWithCoder方法（至于怎么调用的initWithCoder，我不太清楚，总之可能是默认的allocWithZone方法使的系统自己自动调用initWithCoder，完成调用功能）。）
+
+/**
+ *
+ *综合3，4可知，view 使用[[NSBundle mainBundle] loadNibNamed:@"CustomView" owner:self options:nil].firstObject 方式加载xib或nib文件
+ viewController 使用[[CustomViewController alloc]initWithNibName:@"CustomViewController" bundle:nil];方式加载xib或nib文件
+ *
+ */
+
+&lt;#ShowViewController#&gt; *showVc = [[&lt;#ShowViewController#&gt; alloc]initWithNibName:@"&lt;#ShowViewController#&gt;" bundle:nil];
+
+&lt;#CustomView#&gt; *cV = [[NSBundle mainBundle] loadNibNamed:@"&lt;#CustomView#&gt;" owner:self options:nil].firstObject;
+
+&lt;#XibView#&gt;* customView = [[&lt;#XibView#&gt; alloc] init];
+
+UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"&lt;#StoryboardName#&gt;" bundle:nil];
+NSLog(@"%@", storyboard);
+&lt;#StoryboardOneViewController#&gt; *vc = [storyboard instantiateViewControllerWithIdentifier:@"&lt;#StoryboardOneViewController#&gt;"];
+&lt;#StoryboardOneViewController#&gt; *vc = [storyboard instantiateInitialViewController];
+
+
+
+/**
+ 从自定义的xib中加载view
+ 1.如果仅仅是加载view显示，外面不做任何修改，可以直接使用[[NSBundle mainBundle]loadNibNamed:owner:options].firstObject方法,这种方式仅仅适用于只有一个视图并且没有任何其他交互绑定.
+ 
+ 2.如果加载的view 不仅是显示，还要有交互绑定事件，那么就可以将该自定义视图xib文件customView.xib与建立的customview类进行绑定使用，同时必须在类的.m文件中重写init方法，进行xibview的加载，并添加到该类(self）上。
+ [注意一点：其实啊，一个view.xib是可以有多个控件对象的，如view，button，label且他们是通过[[NSBundle mainBundle]loadNibNamed:owner:options]方法获取(的数组中)，在该方法获取的数组中的顺序与xib文件中的先后顺序一致]
+ 
+ */
+
+
+#define mainScreenWidth   [UIScreen mainScreen].bounds.size.width
+#define mainScreenHeight   [UIScreen mainScreen].bounds.size.height
+
+@implementation XibView
+
+- (instancetype)initWithFrame:(CGRect)frame{
+    self = [super initWithFrame:frame];
+    if (self) {
+        
+        [self baseInit];
+        
+        // [self upDateUI];
+        
+    }
+    return self;
+}
+
+
+- (void)baseInit{
+    
+    NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"XibView" owner:self options:nil];
+    UIView *view = nil;
+    for (id object in objects) {
+        if ([object isKindOfClass:[UIView class]]) {
+            view = object;
+            break;
+        }
+    }
+    
+    if (view != nil) {
+        view.translatesAutoresizingMaskIntoConstraints = YES;
+        
+        //注意了：这里是使用的 addsubView 作为子视图进行添加
+        //－－因而在初始化完毕之前，视图的控件可能还不存在，所以跟新UI是无效的。
+        //---使用xibview 更新UI必须等到 所有控件加载完毕以后，才可以，因为啊，初始化未加载完毕时，控件可能还不存在呢. 在加载视图完毕后的按钮点击事件中更新UI是OK的。
+        [self addSubview:view];
+        
+    }
+    
+}
+
+
+#pragma mark --使用xibview 更新UI必须等到 所有控件加载完毕以后，才可以，因为啊，初始化未加载完毕时，控件可能还不存在呢
+- (void)upDateUI{
+    
+    
+    self.firstView.layer.cornerRadius = CGRectGetWidth(self.firstView.frame)/2.0;
+    self.firstView.layer.masksToBounds = YES;
+    [self.button setTitle:@"updatedUI" forState:UIControlStateNormal];
+}
+</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>75B29AF2-6A55-402A-980C-D1EA24908BF8</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>xib详解2017_9</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>aTextView</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>func aTextView() -&gt; UITextView {
+        let aTextView = UITextView()
+        view.addSubview(aTextView)
+        aTextView.snp.makeConstraints { (make) in
+            make.top.equalTo(220)
+            make.left.equalTo(0)
+            make.width.equalToSuperview()
+            make.height.equalTo(40)
+        }
+        aTextView.backgroundColor = UIColor.darkGray
+        aTextView.text = "";
+        aTextView.font = UIFont.systemFont(ofSize: 14);
+        aTextView.textColor = UIColor.black;
+        aTextView.textAlignment = NSTextAlignment.natural;
+        aTextView.isScrollEnabled = true;
+        aTextView.isEditable = true;
+        aTextView.keyboardType = UIKeyboardType.default;
+        aTextView.returnKeyType = UIReturnKeyType.default;
+        aTextView.keyboardAppearance = UIKeyboardAppearance.default;
+        aTextView.dataDetectorTypes = UIDataDetectorTypes.all;
+        aTextView.delegate = self
+        return aTextView
+    }
+    
+    
+//    func textViewShouldBeginEditing(_ textView: UITextView) -&gt; Bool {
+//        return true
+//    }
+//
+//    func textViewShouldEndEditing(_ textView: UITextView) -&gt; Bool {
+//        return true
+//    }
+//
+//    func textViewDidBeginEditing(_ textView: UITextView) {
+//    }
+//
+//    func textViewDidEndEditing(_ textView: UITextView) {
+//    }
+//
+//    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -&gt; Bool {
+//        return true
+//    }
+
+    func textViewDidChange(_ textView: UITextView) {
+        print("textView:\(textView.text ?? "")")
+    }</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>23AFCC8A-7FC5-4A82-A303-D8090E51F06E</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Swift</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>aTextView</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>aTextView</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

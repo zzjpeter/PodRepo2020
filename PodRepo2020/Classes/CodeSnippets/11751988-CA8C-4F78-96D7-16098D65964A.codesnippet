@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>DeviceToken_hexStr</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>- (void)printDeviceToken:(NSData *)deviceToken {
+    NSString *deviceTokenHexStr = @"";
+    if (@available(iOS 13.0, *)) {
+        // iOS 13，可以通过如下方式获取hexstring
+        NSUInteger dataLength = deviceToken.length;
+        if (dataLength == 0) {
+            return;
+        }
+        const unsigned char *dataBuffer = (const unsigned char *)deviceToken.bytes;
+        NSMutableString *hexTokenString  = [NSMutableString stringWithCapacity:(dataLength * 2)];
+        for (int i = 0; i &lt; dataLength; ++i) {
+            [hexTokenString appendFormat:@"%02x", dataBuffer[i]];
+        }
+        deviceTokenHexStr = hexTokenString;
+        
+    } else {
+        //iOS 13以下，可以通过如下方式获取hexstring
+        NSString *hexTokenString = [[deviceToken description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"&lt;&gt;"]];
+        hexTokenString = [hexTokenString stringByReplacingOccurrencesOfString:@" " withString:@""];
+        deviceTokenHexStr = hexTokenString;
+    }
+    NSLog(@"push DeviceToken token:%@", deviceTokenHexStr);
+}</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>11751988-CA8C-4F78-96D7-16098D65964A</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>DeviceToken_hexStr</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>DeviceToken_hexStr</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

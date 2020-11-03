@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>BezierPath_demo</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>- (void)drawRect:(CGRect)rect {
+    // Drawing code
+    
+    
+    //[self testPath1];
+    
+    [self testPath2];
+}
+
+
+#pragma mark 一、创建UIBezierPath.
+- (void)testPath1 {
+    
+    UIBezierPath *bezierPath = [UIBezierPath bezierPath];
+    
+    //    bezierPath = [UIBezierPath bezierPathWithRect:CGRectMake(100, 100, 200, 300)];
+    
+    //    bezierPath = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(100, 100, 200, 300)];
+    
+    //    bezierPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(100, 100, 200, 300) cornerRadius:10.0];
+    
+    //    bezierPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(100, 100, 300, 200) byRoundingCorners:UIRectCornerAllCorners cornerRadii:CGSizeMake(30, 20)];//圆弧半径（宽为基准，不超过相连最短边的一半）
+    
+    //    bezierPath = [UIBezierPath bezierPathWithArcCenter:self.center radius:100 startAngle:M_PI_2 endAngle:M_PI * 2 clockwise:YES];
+    
+    bezierPath = [UIBezierPath bezierPathWithCGPath:bezierPath.CGPath];
+    
+    [[UIColor orangeColor] setFill];
+    
+    [[UIColor blueColor] setStroke];
+    
+    [bezierPath stroke];
+    
+}
+
+#pragma mark -二、路径操作函数
+- (void)testPath2 {
+    UIBezierPath *bezierPath = [UIBezierPath bezierPath];
+    
+    [bezierPath moveToPoint:CGPointMake(100, 300)];
+    
+    //[bezierPath addLineToPoint:CGPointMake(150, 150)];
+    
+    //[bezierPath addCurveToPoint:CGPointMake(300, 300) controlPoint1:CGPointMake(150, 150) controlPoint2:CGPointMake(220, 360)];
+    
+    //[bezierPath addQuadCurveToPoint:CGPointMake(300, 300) controlPoint:CGPointMake(150, 150)];
+    
+    //[bezierPath addArcWithCenter:self.center radius:100 startAngle:M_PI_2 endAngle:2 * M_PI clockwise:YES];
+    
+    [bezierPath moveToPoint:CGPointMake(100,300)];
+    [bezierPath addLineToPoint:CGPointMake(150, 50)];
+    [bezierPath addLineToPoint:CGPointMake(220, 80)];
+    //[bezierPath closePath];
+    //[bezierPath addLineToPoint:CGPointMake(250, 430)];
+    //[bezierPath addLineToPoint:CGPointMake(220, 80)];
+    
+    bezierPath.lineWidth = 10;
+    bezierPath.lineCapStyle = kCGLineCapButt;
+    bezierPath.lineJoinStyle = kCGLineJoinMiter;
+    bezierPath.miterLimit = 1.0;
+    //bezierPath.usesEvenOddFillRule = YES;
+    
+    CGFloat pattern[] = {4, 20};
+    [bezierPath setLineDash:pattern count:2 phase:1];
+    /*
+     注：1.pattern 线段数组 如：CGFloat dash[] = {1,1}; 代表实线和空白交替的长度 及先绘制1个长度再空1个，再绘制一个.....；
+     2.count数组长度 count值小于数组实际长度时，方法就会对相应长度的数组元素进行循环，而大于的时候 会有警告，没有效果；
+     3.phase 循环数组时跳过的长度，如pattern为{2,6}，phase为1，则第一个画的元素的位置直接跳过1，从2开始。（对应于pattern中的位置）
+     */
+    
+    [[UIColor orangeColor] setFill];
+    
+    [[UIColor blueColor] setStroke];
+    
+    [bezierPath addClip];
+    
+    [bezierPath addArcWithCenter:bezierPath.currentPoint radius:100 startAngle:M_PI_2 endAngle:M_PI * 2 clockwise:YES];
+    
+    //[bezierPath fill];
+    [bezierPath fillWithBlendMode:kCGBlendModeNormal alpha:0.4];
+    
+    //[bezierPath stroke];
+    [bezierPath strokeWithBlendMode:kCGBlendModeNormal alpha:0.4];
+    
+    
+}
+</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>AD1B5FBC-4DE4-4A73-9A3E-DC7D740FCEE8</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Generic</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>UIBezierPathDemo</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>UIBezierPathDemo</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

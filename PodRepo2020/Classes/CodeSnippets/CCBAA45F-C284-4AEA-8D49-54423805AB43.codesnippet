@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>ReloadApp_软启动app 通过切换rootViewController实现</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>//软启动app 通过切换rootViewController实现
++ (void)reloadApp {
+    AppDelegate *delegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    delegate.tabBarControllerConfig = [[WXYZ_MainTabbarViewController alloc] init];
+    CYLTabBarController *tabBarController = delegate.tabBarControllerConfig.tabBarController;
+    [delegate.window setRootViewController:tabBarController];
+}</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>CCBAA45F-C284-4AEA-8D49-54423805AB43</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>ReloadApp_软启动app 通过切换rootViewController实现</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>ReloadApp_软启动app 通过切换rootViewController实现</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

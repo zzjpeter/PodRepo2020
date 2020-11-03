@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>RegularExpression_Demo</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>- (void)testRegularExpression {
+    
+    NSString *str = @"13227008888";
+    NSString *regex = @"^1[3|4|5|7|8][0-9]{9}$";
+    
+    //1.NSPredicate(验证字符串)
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];//创建谓词对象并设定条件表达式
+    BOOL result = [predicate evaluateWithObject:str];
+    NSLog(@"predicate##result : %@",result ? @"正规手机号码" : @"验证失败");
+    
+    //2.NSString 字符串查找
+    NSRange range = [str rangeOfString:regex options:NSRegularExpressionSearch];
+    if (range.location != NSNotFound) {
+        NSLog(@"str##%@",NSStringFromRange(range));
+    }else{
+    }
+    
+    //3.NSRegularExpression(查找字符串)：
+    NSError *error = nil;
+    NSRegularExpression *regularExpression = [NSRegularExpression regularExpressionWithPattern:regex options:0 error:&amp;error];
+      if (!error) {
+         NSTextCheckingResult *match = [regularExpression firstMatchInString:str options:0 range:NSMakeRange(0, [str length])];
+         if (match) {
+             NSString *result = [str substringWithRange:match.range];
+             NSLog(@"NSRegularExpression##%@",result);
+         }
+     }else{
+         NSLog(@"error -- %@",error);
+     }
+}</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>D064E328-3B90-4881-BAAB-CB9F9BB3C3A2</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>RegularExpression_Demo</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>RegularExpression_Demo</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

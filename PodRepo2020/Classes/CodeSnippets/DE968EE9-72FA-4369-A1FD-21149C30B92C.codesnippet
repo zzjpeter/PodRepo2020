@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>aImageView</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>func aImageView() -&gt; UIImageView {
+        let aImageView = UIImageView()
+        view.addSubview(aImageView)
+        aImageView.snp.makeConstraints { (make) in
+            make.size.equalTo(CGSize(width: 100, height: 100))
+            make.center.equalTo(view)
+        }
+        aImageView.image = UIImage(named: "1")
+        //aImageView.image = UIImage(contentsOfFile: Bundle.main.path(forResource: "1.png", ofType: nil)!)
+        //aImageView.image = UIImage(data: try! Data(contentsOf: URL(string: "https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1603296942876&amp;di=f46ad6b29de5b6c97ad868caa01c9a95&amp;imgtype=0&amp;src=http%3A%2F%2Fa2.att.hudong.com%2F36%2F48%2F19300001357258133412489354717.jpg")!))
+        //aImageView.animationImages = [UIImage(named: "1")!, UIImage(named: "2")!]
+        //aImageView.animationDuration = 2
+        //aImageView.isUserInteractionEnabled = true
+        //let tap = UITapGestureRecognizer(target: self, action: #selector(tapAction))
+        //aImageView.addGestureRecognizer(tap)
+        return aImageView
+    }
+    
+    @objc func tapAction(tap: UITapGestureRecognizer) {
+        if let imageView = tap.view as? UIImageView {
+            if imageView.isAnimating {
+                imageView.stopAnimating()
+                return
+            }
+            imageView.startAnimating()
+        }
+    }</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>DE968EE9-72FA-4369-A1FD-21149C30B92C</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Swift</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>aImageView</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>aImageView</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

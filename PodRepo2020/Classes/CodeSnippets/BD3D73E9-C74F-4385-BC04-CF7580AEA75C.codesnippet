@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>Runtime</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>/*
+ 1.什么是runtime?
+ 
+ runtime是一套底层的C语言API，包含很多强大实用的C语言数据类型和C语言函数，平时我们编写的OC代码，底层都是基于runtime实现的。
+ 
+ 2.runtime有什么作用？
+ 
+ 1.能动态产生一个类，一个成员变量，一个方法
+ 2.能动态修改一个类，一个成员变量，一个方法
+ 3.能动态删除一个类，一个成员变量，一个方法
+ 
+ 3.常用的头文件
+ 
+ #import &lt;objc/runtime.h&gt; 包含对类、成员变量、属性、方法的操作
+ #import &lt;objc/message.h&gt; 包含消息机制
+ 
+ 4.常用方法
+ 
+ class_copyIvarList（）返回一个指向类的成员变量数组的指针
+ class_copyPropertyList（）返回一个指向类的属性数组的指针
+ 注意：根据Apple官方runtime.h文档所示，上面两个方法返回的指针，在使用完毕之后必须free()。
+ 
+ ivar_getName（）获取成员变量名--&gt;C类型的字符串
+ property_getName（）获取属性名--&gt;C类型的字符串
+ -------------------------------------
+ typedef struct objc_method *Method;
+ class_getInstanceMethod（）
+ class_getClassMethod（）以上两个函数传入返回Method类型
+ ---------------------------------------------------
+ method_exchangeImplementations（）交换两个方法的实现
+ 
+ 5.runtime在开发中的用途
+ 1.动态的遍历一个类的所有成员变量，用于字典转模型,归档解档操作
+ 2.可以利用遍历类的属性，来快速的进行归档操作。
+   将从网络上下载的json数据进行字典转模型。
+ 
+ 二、交换方法
+ 通过runtime的method_exchangeImplementations(Method m1, Method m2)方法，可以进行交换方法的实现；一般用自己写的方法（常用在自己写的框架中，添加某些防错措施）来替换系统的方法实现，常用的地方有：
+ */
+
+#pragma mark -1.动态的遍历一个类的所有成员变量，用于字典转模型,归档解档操作
+- (void)test_BianLi_IvalList{
+    /** 利用runtime遍历一个类的全部成员变量
+     1.导入头文件&lt;objc/runtime.h&gt;     */
+    unsigned int count = 0;
+    /** Ivar:表示成员变量类型 */
+    Ivar *ivars = class_copyIvarList([ZPerson class], &amp;count);//获得一个指向该类成员变量的指针
+    for (int i =0; i &lt; count; i ++) {
+        //获得Ivar
+        Ivar ivar = ivars[i];        //根据ivar获得其成员变量的名称---&gt;C语言的字符串
+        const char *name = ivar_getName(ivar);
+        NSString *key = [NSString stringWithUTF8String:name];
+        NSLog(@"ivarList%d----%@",i,key);
+    }
+}
+#pragma mark -2.获取一个类的全部属性：
+- (void)test_BianLi_PropertyList{
+    /** 利用runtime遍历一个类的全部成员变量
+     1.导入头文件&lt;objc/runtime.h&gt;     */
+    unsigned int count = 0;
+    /** objc_property_t:获取指向该类所有属性的指针 */
+    objc_property_t *properties = class_copyPropertyList([ZPerson class], &amp;count);
+    for (int i = 0; i &lt; count ; i++) {
+        //获得
+        objc_property_t property = properties[i];
+        //根据objc_property_t获得其属性的名称---&gt;C语言的字符串
+        const char *name = property_getName(property);
+        NSString *key = [NSString stringWithUTF8String:name];
+        NSLog(@"propertyList%d----%@",i,key);
+    }
+}
+
+#pragma mark -3.可以利用遍历类的属性，来快速的进行归档操作
+/*
+ #pragma mark -在归档 解档时自动调用
+ //注意：归档解档需要遵守&lt;NSCoding&gt;协议，实现以下两个方法
+ // 编码
+ - (void)encodeWithCoder:(NSCoder *)encoder{
+     //归档存储自定义对象
+     unsigned int count = 0;
+     //获得指向该类所有属性的指针
+     //objc_property_t *properties = class_copyPropertyList([ZPerson class], &amp;count);
+     objc_property_t *properties = class_copyPropertyList([self class], &amp;count);
+     for (int i =0; i &lt; count; i ++) {
+     //获得
+     objc_property_t property = properties[i];        //根据objc_property_t获得其属性的名称---&gt;C语言的字符串
+     const char *name = property_getName(property);
+     NSString *key = [NSString   stringWithUTF8String:name];
+     //      编码每个属性,利用kVC取出每个属性对应的数值
+     [encoder encodeObject:[self valueForKeyPath:key] forKey:key];
+    }
+ }
+ 
+ // 解码，实例化
+ - (instancetype)initWithCoder:(NSCoder *)decoder{
+ 
+     if (self = [super init]){
+         //归档存储自定义对象
+         unsigned int count = 0;
+         //获得指向该类所有属性的指针
+         //objc_property_t *properties = class_copyPropertyList([ZPerson class], &amp;count);
+         objc_property_t *properties = class_copyPropertyList([self class], &amp;count);
+         for (int i =0; i &lt; count; i ++) {
+         objc_property_t property = properties[i];        //根据objc_property_t获得其属性的名称---&gt;C语言的字符串
+         const char *name = property_getName(property);
+         NSString *key = [NSString stringWithUTF8String:name];        //解码每个属性,利用kVC取出每个属性对应的数值
+         [self setValue:[decoder decodeObjectForKey:key] forKeyPath:key];
+        }
+    }
+    return self;
+ }
+ */
+- (void)test_EncoderAndDecoder{
+    
+    ZPerson *person = [[ZPerson alloc]init];
+    person.name = @"zzj";
+    person.age = @"24";
+    person.sex = @"男";
+    person.grade = @"一年级";
+    
+    // 1.获取文件路径
+    NSString *documents = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
+    NSString *filePath = [documents stringByAppendingPathComponent:@"person.data"];
+    // 2.编码并保存（归档）
+    [NSKeyedArchiver archiveRootObject:person toFile:filePath];
+    
+    // 读取数据
+    // 3.解档
+    ZPerson *person1 = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
+    NSLog(@"name:%@,age:%@,sex:%@",person1.name,person1.age,person1.sex);
+    NSLog(@"name:%@,age:%@,sex:%@,grade:%@",person1.name,person1.age,person1.sex,person1.grade);
+}
+
+#pragma mark -一.获取列表
+//有时候会有这样的需求，我们需要知道当前类中每个属性的名字（比如字典转模型，字典的Key和模型对象的属性名字不匹配）。我们可以通过runtime的一系列方法获取类的一些信息（包括属性列表，方法列表，成员变量列表，和遵循的协议列表）。
+- (void)getList{
+    
+    unsigned int count;
+    //获取属性列表
+    objc_property_t *propertyList = class_copyPropertyList([self class], &amp;count);
+    for (unsigned int i=0; i&lt;count; i++) {
+        const char *propertyName = property_getName(propertyList[i]);
+        NSLog(@"property----&gt;%@", [NSString stringWithUTF8String:propertyName]);
+    }
+    
+    //获取方法列表
+    Method *methodList = class_copyMethodList([self class], &amp;count);
+    for (unsigned int i; i&lt;count; i++) {
+        Method method = methodList[i];
+        NSLog(@"method----&gt;%@", NSStringFromSelector(method_getName(method)));
+    }
+    
+    //获取成员变量列表
+    Ivar *ivarList = class_copyIvarList([self class], &amp;count);
+    for (unsigned int i; i&lt;count; i++) {
+        Ivar myIvar = ivarList[i];
+        const char *ivarName = ivar_getName(myIvar);
+        NSLog(@"Ivar----&gt;%@", [NSString stringWithUTF8String:ivarName]);
+    }
+    
+    //获取协议列表
+    __unsafe_unretained Protocol **protocolList = class_copyProtocolList([self class], &amp;count);
+    for (unsigned int i; i&lt;count; i++) {
+        Protocol *myProtocal = protocolList[i];
+        const char *protocolName = protocol_getName(myProtocal);
+        NSLog(@"protocol----&gt;%@", [NSString stringWithUTF8String:protocolName]);
+    }
+}
+#pragma mark -二.方法调用
+//如果用实例对象调用实例方法，会到实例的isa指针指向的对象（也就是类对象）操作。
+//如果调用的是类方法，就会到类对象的isa指针指向的对象（也就是元类对象）中操作。
+/*
+ 首先，在相应操作的对象中的缓存方法列表中找调用的方法，如果找到，转向相应实现并执行。
+ 如果没找到，在相应操作的对象中的方法列表中找调用的方法，如果找到，转向相应实现执行
+ 如果没找到，去父类指针所指向的对象中执行1，2.
+ 以此类推，如果一直到根类还没找到，转向拦截调用。
+ 如果没有重写拦截调用的方法，程序报错。
+ 以上的过程给我带来的启发：
+ 
+ 重写父类的方法，并没有覆盖掉父类的方法，只是在当前类对象中找到了这个方法后就不会再去父类中找了。
+ 如果想调用已经重写过的方法的父类的实现，只需使用super这个编译器标识，它会在运行时跳过在当前的类对象中寻找方法的过程。
+ */
+#pragma mark -三.拦截调用
+- (void)test_intercept{//拦截
+    [self performSelector:@selector(resolveAdd:) withObject:@"test"];
+}
+//后两个方法需要转发到其他的类处理
+//- (id)forwardingTargetForSelector:(SEL)aSelector;
+//- (void)forwardInvocation:(NSInvocation *)anInvocation;
+//- (id)forwardingTargetForSelector:(SEL)aSelector{
+//
+//    if (aSelector == @selector(resolveAdd:)) {
+//        NSLog(@"frowarding 处理");
+//    }
+//    return [[ZPerson alloc]init];
+//}
+- (NSMethodSignature *)methodSignatureForSelector:(SEL)aSelector {
+    NSMethodSignature *sig;
+    sig = [[[ZPerson alloc]init] methodSignatureForSelector:aSelector];
+    if (sig) return sig;
+    sig = [[[ZPerson alloc]init] methodSignatureForSelector:aSelector];
+    return sig;
+}
+
+// Invoke the invocation on whichever real object had a signature for it.
+- (void)forwardInvocation:(NSInvocation *)invocation {
+    id target = [self methodSignatureForSelector:[invocation selector]] ? [[ZPerson alloc]init]: [[ZPerson alloc]init];
+    [invocation invokeWithTarget:target];
+}
+
+/*在方法调用中说到了，如果没有找到方法就会转向拦截调用。
+ 那么什么是拦截调用呢。
+ 拦截调用就是，在找不到调用的方法程序崩溃之前，你有机会通过重写NSObject的四个方法来处理。
+ 
+ + (BOOL)resolveClassMethod:(SEL)sel;
+ + (BOOL)resolveInstanceMethod:(SEL)sel;
+ //后两个方法需要转发到其他的类处理
+ - (id)forwardingTargetForSelector:(SEL)aSelector;
+ - (void)forwardInvocation:(NSInvocation *)anInvocation;
+ 第一个方法是当你调用一个不存在的类方法的时候，会调用这个方法，默认返回NO，你可以加上自己的处理然后返回YES。
+ 第二个方法和第一个方法相似，只不过处理的是实例方法。
+ 第三个方法是将你调用的不存在的方法 重定向 到一个其他声明了这个方法的类，只需要你返回一个有这个方法的target。
+ 第四个方法是将你调用的不存在的方法打包成NSInvocation传给你。做完你自己的处理后，调用invokeWithTarget:方法让某个target触发这个方法。
+ */
+#pragma mark -四.动态添加方法
+//重写了拦截调用的方法并且返回了YES，我们要怎么处理呢？
+//有一个办法是根据传进来的SEL类型的selector动态添加一个方法。
+- (void)testAddMethod{
+    //首先从外部隐式调用一个不存在的方法：
+    //隐式调用方法
+    [self performSelector:@selector(resolveAdd1:) withObject:@"test"];
+    
+    //然后，在target对象内部重写拦截调用的方法，动态添加方法。
+}
+void runAddMethod(id self, SEL _cmd, NSString *string){
+    NSLog(@"add C IMP %@", string);
+}
+
+//+ (BOOL)resolveClassMethod:(SEL)sel;
+//+ (BOOL)resolveInstanceMethod:(SEL)sel;
++ (BOOL)resolveInstanceMethod:(SEL)sel{
+    
+    //给本类动态添加一个方法
+    if ([NSStringFromSelector(sel) isEqualToString:@"resolveAdd1:"]) {
+        class_addMethod(self, sel, (IMP)runAddMethod, "v@:*");
+    }
+    return YES;
+}
+/*
+ 其中class_addMethod的四个参数分别是：
+ 
+ Class cls 给哪个类添加方法，本例中是self
+ SEL name 添加的方法，本例中是重写的拦截调用传进来的selector。
+ IMP imp 方法的实现，C方法的方法实现可以直接获得。如果是OC方法，可以用+ (IMP)instanceMethodForSelector:(SEL)aSelector;获得方法的实现。
+ "v@:*"方法的签名，代表有一个参数的方法。
+ */
+
+#pragma mark -4.关联对象（动态添加属性）
+/*
+ 现在你准备用一个系统的类，但是系统的类并不能满足你的需求，你需要额外添加一个属性。
+ 这种情况的一般解决办法就是继承。
+ 但是，只增加一个属性，就去继承一个类，总是觉得太麻烦类。
+ 这个时候，runtime的关联属性就发挥它的作用了。
+ */
+- (void)test_associatedObjectKey{
+    //首先定义一个全局变量，用它的地址作为关联对象的key
+    static char associatedObjectKey;
+    typeof(self) target = self;
+    //设置关联对象
+    objc_setAssociatedObject(target, &amp;associatedObjectKey, @"testAddProperty", OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    //获取关联对象
+    NSString *string = objc_getAssociatedObject(target, &amp;associatedObjectKey);
+    NSLog(@"AssociatedObject = %@", string);
+}
+/*
+ objc_setAssociatedObject的四个参数：
+ 
+ id object给谁设置关联对象。
+ const void *key关联对象唯一的key，获取时会用到。
+ id value关联对象。
+ objc_AssociationPolicy关联策略，有以下几种策略：
+ enum {
+ OBJC_ASSOCIATION_ASSIGN = 0,
+ OBJC_ASSOCIATION_RETAIN_NONATOMIC = 1,
+ OBJC_ASSOCIATION_COPY_NONATOMIC = 3,
+ OBJC_ASSOCIATION_RETAIN = 01401,
+ OBJC_ASSOCIATION_COPY = 01403
+ };
+ 如果你熟悉OC，看名字应该知道这几种策略的意思了吧。
+ 
+ objc_getAssociatedObject的两个参数。
+ 
+ id object获取谁的关联对象。
+ const void *key根据这个唯一的key获取关联对象。
+ 
+ 其实，你还可以把添加和获取关联对象的方法写在你需要用到这个功能的类的类别中，方便使用。
+ //添加关联对象
+ - (void)addAssociatedObject:(id)object{
+ objc_setAssociatedObject(self, @selector(getAssociatedObject), object, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+ }
+ //获取关联对象
+ - (id)getAssociatedObject{
+ return objc_getAssociatedObject(self, _cmd);
+ }
+ 注意：这里面我们把getAssociatedObject方法的地址作为唯一的key，_cmd代表当前调用方法的地址。
+ */
+
+
+#pragma mark -5.交换方法
+//通过runtime的method_exchangeImplementations(Method m1, Method m2)方法，可以进行交换方法的实现；一般用自己写的方法（常用在自己写的框架中，添加某些防错措施）来替换系统的方法实现，常用的地方有：
+//在数组中，越界访问程序会崩，可以用自己的方法添加判断防止程序出现崩溃数组或字典中不能添加nil，如果添加程序会崩，用自己的方法替换系统防止系统崩溃
+//方法交换，顾名思义，就是将两个方法的实现交换。例如，将A方法和B方法交换，调用A方法的时候，就会执行B方法中的代码，反之亦然。
+/*
+ #import "UIViewController+swizzling.h"
+ #import &lt;objc/runtime.h&gt;
+ 
+ @implementation UIViewController (swizzling)
+ 
+ //load方法会在类第一次加载的时候被调用
+ //调用的时间比较靠前，适合在这个方法里做方法交换
+ + (void)load{
+     //方法交换应该被保证，在程序中只会执行一次
+     static dispatch_once_t onceToken;
+     dispatch_once(&amp;onceToken, ^{
+     
+         //获得viewController的生命周期方法的selector
+         SEL systemSel = @selector(viewWillAppear:);
+         //自己实现的将要被交换的方法的selector
+         SEL swizzSel = @selector(swiz_viewWillAppear:);
+         //两个方法的Method
+         Method systemMethod = class_getInstanceMethod([self class], systemSel);
+         Method swizzMethod = class_getInstanceMethod([self class], swizzSel);
+         
+         //首先动态添加方法，实现是被交换的方法，返回值表示添加成功还是失败
+         BOOL isAdd = class_addMethod(self, systemSel, method_getImplementation(swizzMethod), method_getTypeEncoding(swizzMethod));
+         if (isAdd) {
+         //如果成功，说明类中不存在这个方法的实现
+         //将被交换方法的实现替换到这个并不存在的实现
+         class_replaceMethod(self, swizzSel, method_getImplementation(systemMethod), method_getTypeEncoding(systemMethod));
+         }else{
+         //否则，交换两个方法的实现
+         method_exchangeImplementations(systemMethod, swizzMethod);
+         }
+     
+        });
+}
+ 
+ - (void)swiz_viewWillAppear:(BOOL)animated{
+     //这时候调用自己，看起来像是死循环
+     //但是其实自己的实现已经被替换了
+     [self swiz_viewWillAppear:animated];
+     NSLog(@"swizzle");
+ }
+ 
+ @end
+ 在一个自己定义的viewController中重写viewWillAppear
+ 
+ - (void)viewWillAppear:(BOOL)animated{
+     [super viewWillAppear:animated];
+     NSLog(@"viewWillAppear");
+ }
+ Run起来看看输出吧！
+ 
+ 我的理解：
+ 
+ 方法交换对于我来说更像是实现一种思想的最佳技术：AOP面向切面编程。
+ 既然是切面，就一定不要忘记，交换完再调回自己。
+ 一定要保证只交换一次，否则就会很乱。
+ 最后，据说这个技术很危险，谨慎使用。
+ */
+</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>BD3D73E9-C74F-4385-BC04-CF7580AEA75C</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>runtime详解</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

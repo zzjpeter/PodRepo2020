@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>Contorl_Template</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>#pragma mark - Lifecycle
+//创建view的正确姿势 i：重写init方法，并在其中addsubview ii：重写layoutSubviews方法，并在其中添加约束
+
+-(void)dealloc
+{
+    FbeeLog(@"%@ dealloc",NSStringFromClass(self.class));
+}
+
+#pragma mark - Public
+//- (void)ClassPublicMethod {}  用类名开头
+
+
+#pragma mark - Private
+//- (void)privateMethod {}  直接用功能命名方法
+
+
+#pragma mark - actions
+//按钮点击，touchBegan等方法
+
+#pragma mark - 系统delegate
+#pragma mark - UITextFieldDelegate
+#pragma mark - UITableViewDataSource
+#pragma mark - UITableViewDelegate
+#pragma mark - UIScrollViewDelegate等。
+#pragma mark - 自定义delegate
+
+
+#pragma mark - Private set/get
+//所有的view都写成属性，用懒加载的形式进行创建。然后只有在添加到父视图的时候，用self.view的形式表示，代表创建，其他情况下用_view，省去走懒加载的方法
+</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>CA9247C9-89A9-4AA6-8C8B-E7D4C15A1D9E</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Generic</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>创建控件的模版</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

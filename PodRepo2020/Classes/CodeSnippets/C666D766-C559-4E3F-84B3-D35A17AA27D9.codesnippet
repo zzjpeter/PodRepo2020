@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>gesture_demo fix view与yylabel的手势冲突问题</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>//解决view与YYLabel的手势冲突问题
+- (void)addGestureForView:(UIView *)info{
+    info.userInteractionEnabled = YES;
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideKeyboard)];
+    tap.delegate = self;
+    [info addGestureRecognizer:tap];
+}
+- (void)hideKeyboard {
+    [self.view endEditing:YES];
+}
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
+    UIView *view = touch.view;
+    if ([view isKindOfClass:[YYLabel class]] &amp;&amp;
+        [gestureRecognizer isKindOfClass:[UITapGestureRecognizer class]]) {
+        return NO;
+    }
+    return YES;
+}</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>C666D766-C559-4E3F-84B3-D35A17AA27D9</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>gesture_demo fix view与yylabel的手势冲突问题</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>gesture_demo fix view与yylabel的手势冲突问题</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

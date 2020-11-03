@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>Timer</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>#pragma mark --1.NSTimer
+- (void)testNSTimer
+{
+    //1.创建方式:
+    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(action:) userInfo:nil repeats:NO];
+    /**
+     TimerIntval:执行之前等待的时间.比如设置成1.0 就代表1秒后执行
+     target:需要执行方法的对象;
+     selector:需要执行的方法;
+     repeats:是否需要循环;
+     注意:调用创建方法后,target对象的引用计数会+1,直到执行完毕,自动-1.  如果循环执行的话必须手动关闭.否则--可以不执行释放方法;
+     
+     3.特性:
+     存在延迟:不管是一次性还是周期性的timer的实际触发事件的时间,都会与所加入的RunLoop和RunLoopMode有关.如果RunLoop正在执行一个连续的运算,timer就会被延迟触发.重复性的timer遇到这种情况,如果延迟超过一个周期,则会和后面的触发进行合并，即在一个周期内只会触发一次。但是不管该timer的触发时间延迟的有多离谱，他后面的timer的触发时间总是倍数于第一次添加timer的间隙。
+     
+     必须加入RunLoop::使用上面的创建方式,会自动把timer加入MainRunloop的NSDefaultRunLoopMode中.如果使用以下方式创建定时器,就必须手动加入Runloop:
+     
+     */
+    NSTimer *timer1 = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(timerAction:) userInfo:nil repeats:YES];
+    self.timer1 = timer1;
+    [[NSRunLoop mainRunLoop] addTimer:timer1 forMode:NSDefaultRunLoopMode];
+    
+}
+- (void)action:(NSTimer *)timer{
+    
+    NSLog(@"NSTimer 只执行一次 可以不用执行释放方法 ");
+    
+}
+
+- (void)timerAction:(NSTimer *)timer{
+    
+    NSLog(@"NSTimer 循环执行 需要手动关闭  执行释放方法 ");
+}
+
+//2.释放方法:一般在dealloc中调用
+- (void)releaseTimer:(NSTimer *)timer
+{
+    NSLog(@"释放定时器NSTimer");
+    [timer invalidate];
+    timer = nil;
+}
+</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>801F8C5B-A225-4C43-9474-00582F46BF24</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>timer_NSTimer</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

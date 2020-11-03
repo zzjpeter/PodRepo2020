@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>Objc_Demo_参考runtime</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>#pragma mark -4.关联对象（动态添加属性）
+/*
+ 现在你准备用一个系统的类，但是系统的类并不能满足你的需求，你需要额外添加一个属性。
+ 这种情况的一般解决办法就是继承。
+ 但是，只增加一个属性，就去继承一个类，总是觉得太麻烦类。
+ 这个时候，runtime的关联属性就发挥它的作用了。
+ */
+- (void)test_associatedObjectKey{
+    //首先定义一个全局变量，用它的地址作为关联对象的key
+    static char associatedObjectKey;
+    typeof(self) target = self;
+    //设置关联对象
+    objc_setAssociatedObject(target, &amp;associatedObjectKey, @"testAddProperty", OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    //获取关联对象
+    NSString *string = objc_getAssociatedObject(target, &amp;associatedObjectKey);
+    NSLog(@"AssociatedObject = %@", string);
+}
+/*
+ objc_setAssociatedObject的四个参数：
+ 
+ id object给谁设置关联对象。
+ const void *key关联对象唯一的key，获取时会用到。
+ id value关联对象。
+ objc_AssociationPolicy关联策略，有以下几种策略：
+ enum {
+ OBJC_ASSOCIATION_ASSIGN = 0,
+ OBJC_ASSOCIATION_RETAIN_NONATOMIC = 1,
+ OBJC_ASSOCIATION_COPY_NONATOMIC = 3,
+ OBJC_ASSOCIATION_RETAIN = 01401,
+ OBJC_ASSOCIATION_COPY = 01403
+ };
+ 如果你熟悉OC，看名字应该知道这几种策略的意思了吧。
+ 
+ objc_getAssociatedObject的两个参数。
+ 
+ id object获取谁的关联对象。
+ const void *key根据这个唯一的key获取关联对象。
+ 
+ 其实，你还可以把添加和获取关联对象的方法写在你需要用到这个功能的类的类别中，方便使用。
+ //添加关联对象
+ - (void)addAssociatedObject:(id)object{
+ objc_setAssociatedObject(self, @selector(getAssociatedObject), object, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+ }
+ //获取关联对象
+ - (id)getAssociatedObject{
+ return objc_getAssociatedObject(self, _cmd);
+ }
+ 注意：这里面我们把getAssociatedObject方法的地址作为唯一的key，_cmd代表当前调用方法的地址。
+ */
+</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>6829AF84-3393-42EE-ACB4-DB8DEE758633</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>Objc_Demo_参考runtime</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>Objc_Demo_参考runtime</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

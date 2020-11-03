@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>LSRequestDemo</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>/*
+ #define QQLogin @"/user/qq-login"
+ typedef void(^Block)(BOOL success, NSDictionary *response, NSError *error, NSURLSessionDataTask *task);
+ @property (nonatomic, copy) void(^block)(BOOL success, NSDictionary *response, NSError *error, NSURLSessionDataTask *task);
++ (void)requestQQLogin:(NSString * _Nullable)accessToken
+                 block:(void(^)(BOOL success, NSDictionary *response, NSError *error, NSURLSessionDataTask *task))block
+                   ext:(NSDictionary *_Nullable)ext;
+  */
++ (void)requestQQLogin:(NSString *_Nullable)accessToken
+                 block:(void(^)(BOOL success, NSDictionary *response, NSError *error, NSURLSessionDataTask *task))block
+                   ext:(NSDictionary *_Nullable)ext{
+    
+    NSMutableDictionary *params = [NSMutableDictionary new];
+    [params setValue:accessToken forKey:@"access_token"];
+    
+    [WXYZ_NetworkRequestManger.sharedManager POST:QQLogin parameters:params success:^(NSURLSessionDataTask * _Nonnull task, NSDictionary * _Nullable response) {
+        BlockCall(block, YES, response, nil, task);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        BlockCall(block, NO, nil, error, task);
+    }];
+}
+[LS_CommonRequestManager request:&lt;#params#&gt; block:^(BOOL success, NSDictionary * _Nonnull response, NSError * _Nonnull error, NSURLSessionDataTask * _Nonnull task) {
+    
+    if (success) {
+        
+        if(SafeGetIntValue(response[@"code"]) == 0) {
+
+            NSDictionary *data = SafeGetDictionaryValue(response[@"data"]);
+            
+            return;
+        }
+    
+        //[WXYZ_TopAlertManager showAlertWithType:WXYZ_TopAlertTypeError alertTitle:SafeGetStringValue(response[@"msg"])];
+        
+        return ;
+    }
+    
+    if (error) {
+        //NSLog(@"error: %@",error.description);
+        //[WXYZ_TopAlertManager showAlertWithType:WXYZ_TopAlertTypeError alertTitle:error.description];
+    }
+    
+} ext:nil];</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>E150290B-EE50-4984-A55A-563A86356130</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>LSRequestDemo</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>LSRequestDemo</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

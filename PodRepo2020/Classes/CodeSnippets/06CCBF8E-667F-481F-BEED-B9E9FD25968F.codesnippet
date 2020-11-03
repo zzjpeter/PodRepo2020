@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>UIAlertController--对话框</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>CodeBlock</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>        //UIAlertController--对话框
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@"请填写完整的用户名密码" preferredStyle:UIAlertControllerStyleAlert];
+        
+        //UIAlertAction
+        UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            
+        }];
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+        //UIAlertAction *destructiveAction = [UIAlertAction actionWithTitle:@"警告" style:UIAlertActionStyleDestructive handler:nil];
+        
+        //登录和密码样式对话框
+//        [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+//            textField.placeholder = @"登录";
+//        }];
+//        [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+//            textField.placeholder = @"密码";
+//            textField.secureTextEntry = YES;
+//        }];
+//        
+
+        //[alertController addAction:destructiveAction];
+        [alertController addAction:okAction];
+        [alertController addAction:cancelAction];
+
+        
+        [self presentViewController:alertController animated:YES completion:^{
+            
+        }];
+</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>06CCBF8E-667F-481F-BEED-B9E9FD25968F</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>UIAlertController--对话框</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

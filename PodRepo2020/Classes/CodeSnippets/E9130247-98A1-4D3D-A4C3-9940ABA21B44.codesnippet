@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>TYAttributeLabel_demo</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>//label能干的事，textContainer也能做。
+- (void)test {
+    
+    NSString *text = @"\t总有一天你将破蛹而出，成长得比人们期待的还要美丽。\n";
+    
+    TYAttributedLabel *label = ({
+
+        TYAttributedLabel *label = [TYAttributedLabel new];
+        label.width = self.view.width;
+        
+        label.text = text;
+
+        label.characterSpacing = 2;
+        label.linesSpacing = 6;
+        
+        NSMutableAttributedString *attStr = [[NSMutableAttributedString alloc] initWithString:text];
+        [attStr addAttributeTextColor:UIColor.blueColor];
+        [attStr addAttributeFont:[UIFont systemFontOfSize:15.0]];
+        [label appendTextAttributedString:attStr];
+        
+        TYTextStorage *textStorage = [TYTextStorage new];
+        textStorage.range = [label.attributedText.string rangeOfString:@"总有一天你将破蛹而出" options:NSBackwardsSearch];
+        textStorage.textColor = UIColor.redColor;
+        textStorage.font = [UIFont systemFontOfSize:14.0];
+        [label addTextStorage:textStorage];
+                
+        [label addImageWithName:@"CYLoLi" range:NSMakeRange(2, 1)];
+        [label appendImageWithName:@"CYLoLi" size:CGSizeMake(label.width, 180.0)];
+        
+        UIImageView *imageView = ({
+            UIImageView *imageView = [UIImageView new];
+            imageView.image = [UIImage imageNamed:@"CYLoLi"];
+            imageView;
+        });
+        imageView.frame = CGRectMake(0, 0, label.width, 180.0);
+        [label appendView:imageView];
+        
+        //[label sizeToFit];
+        
+        label;
+    });
+
+    [self.view addSubview:label];
+    [label setFrameWithOrign:CGPointMake(0,0) Width:self.view.width];
+    
+//    TYAttributedLabel *label2 = ({
+//
+//        TYAttributedLabel *label = [TYAttributedLabel new];
+//
+//        TYTextContainer *textContainer = [TYTextContainer new];
+//
+//        textContainer.text = text;
+//
+//        textContainer.characterSpacing = 2.0;
+//        textContainer.linesSpacing = 6.0;
+//
+//        TYTextStorage *textStorage = [TYTextStorage new];
+//        textStorage.range = [text rangeOfString:@"总有一天你将破蛹而出"];
+//        textStorage.textColor = UIColor.blueColor;
+//        textStorage.font = [UIFont systemFontOfSize:14.0];
+//        [textContainer addTextStorage:textStorage];
+//
+//        [textContainer addLinkWithLinkData:@"www.baidu.com" range:NSMakeRange(5, 8)];
+//
+//        [textContainer addImageWithName:@"CYLoLi" range:NSMakeRange(2, 1)];
+//
+//        UIImageView *imageView = ({
+//            UIImageView *imageView = [UIImageView new];
+//            imageView.image = [UIImage imageNamed:@"CYLoLi"];
+//            imageView;
+//        });
+//        imageView.frame  = CGRectMake(0, 0, self.view.width, 180.0);
+//        [textContainer addView:imageView range:NSMakeRange(16, 1)];
+//
+//        [textContainer createTextContainerWithTextWidth:self.view.width];
+//        label.textContainer = textContainer;
+//
+////        NSAttributedString *attString = [textContainer createAttributedString];
+////        label.attributedText = attString;
+//
+//        label;
+//    });
+//    [self.view addSubview:label2];
+//    [label2 setFrameWithOrign:CGPointMake(0, 0) Width:self.view.width];
+    
+}</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>E9130247-98A1-4D3D-A4C3-9940ABA21B44</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>TYAttributeLabel_demo</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>TYAttributeLabel_demo</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

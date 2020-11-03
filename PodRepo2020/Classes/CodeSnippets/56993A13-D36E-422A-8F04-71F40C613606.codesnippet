@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>LSRequest_Refresh_Demo</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>#pragma mark requestData
+
+//@property (nonatomic,strong) UICollectionView *collectionView;
+//@property (nonatomic,strong) UICollectionViewFlowLayout *flowLayout;
+//
+//@property (nonatomic, assign) BOOL isLoading;//是否正在加载标识
+//@property (nonatomic, strong) NSURLSessionDataTask *task;//当前task
+//@property (nonatomic, assign) NSInteger pageIndex;//页面标识 默认值一般是0（也可以是lastId 默认值一般-1）
+
+//[self.collectionView.mj_header beginRefreshing];
+//[self.collectionView.mj_header endRefreshing];
+//[self.collectionView.mj_footer endRefreshing];
+//[self.collectionView.mj_footer endRefreshingWithNoMoreData];
+//[self.collectionView.mj_footer resetNoMoreData];
+//[self.collectionView.mj_footer setTitle:@"" forState:MJRefreshStateIdle];
+//[self.collectionView.mj_footer setTitle:@"" forState:MJRefreshStatePulling];
+//[self.collectionView.mj_footer setTitle:@"" forState:MJRefreshStateRefreshing];
+//[self.collectionView.mj_footer setTitle:@"" forState:MJRefreshStateWillRefresh];
+//[self.collectionView.mj_footer setTitle:@"" forState:MJRefreshStateNoMoreData];
+//self.collectionView.mj_header.hidden = YES;//头部刷新隐藏
+//self.collectionView.mj_footer.hidden = YES;//尾部刷新隐藏
+/* 遵循下拉刷新 优先级 高于上拉加载【因为一般是下拉重置，上拉加载】 */
+- (void)addViewRefresh {
+    @weakify(self)
+    [self.collectionView addHeaderRefreshWithRefreshingBlock:^{
+        @strongify(self)
+        [self.collectionView.mj_footer resetNoMoreData];
+        [self loadData];
+    }];
+    [self.collectionView addFooterRefreshWithRefreshingBlock:^{
+        @strongify(self)
+        [self loadMoreData];
+    }];
+}
+
+- (void)stopAnimatingViewRefresh:(BOOL)isRefresh
+{
+    _isLoading = NO;
+    if (isRefresh) {
+        [self.collectionView.mj_header endRefreshing];
+        return;
+    }
+    
+    [self.collectionView.mj_footer endRefreshing];
+}
+
+- (void)loadData {
+    
+    //reset
+    _isLoading = NO;
+    [self.task cancel];
+    
+    _pageIndex = 0;
+    
+    [self requestData:YES];
+}
+
+- (void)loadMoreData {
+    
+    [self requestData:NO];
+}
+
+- (void)requestData:(BOOL)isRefresh {
+    
+    if (_isLoading) {
+        return;
+    }
+    
+    _isLoading = YES;
+    
+    @weakify(self)
+    
+    NSMutableDictionary *paramsM = [NSMutableDictionary new];
+    
+    self.task = [WXYZ_NetworkRequestManger.sharedManager POST:Message_Notice parameters:paramsM success:^(NSURLSessionDataTask * _Nonnull task, NSDictionary * _Nullable response) {
+        @strongify(self)
+        [self stopAnimatingViewRefresh:isRefresh];
+        
+        if(SafeGetIntValue(response[@"error"]) == 0) {
+            //数据处理
+            //_pageIndex = &lt;#pageNum#&gt;;//赋值
+            [self.collectionView reloadData];
+            return;
+        }
+        
+        return;
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        [self stopAnimatingViewRefresh:isRefresh];
+    }];
+    
+}
+</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>56993A13-D36E-422A-8F04-71F40C613606</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>LSRequest_Refresh_Demo</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>LSRequest_Refresh_Demo</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

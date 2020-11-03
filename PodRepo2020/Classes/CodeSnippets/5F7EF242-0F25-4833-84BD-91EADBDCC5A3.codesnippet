@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>View_Custom全屏弹框卡片</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>/*
+ - (void)showInView:(UIView *)view;
+ - (void)showInView:(UIView *)view
+      declineAction:(nullable void(^)(void))declineAction
+       acceptAction:(nullable void(^)(void))acceptAction
+ viewDidDismissAction:(nullable void(^)(void))viewDidDismissAction;
+ - (void)dismissView:(void(^)(void))complete;
+ */
+#define kDistanceToHeight (228)
+
+@interface LS_RewardAlertView ()
+
+@property (nonatomic, strong) UIView *backView;
+@property (nonatomic, strong) UIView *contentView;
+//@property (nonatomic, strong) UIVisualEffectView *effectView;
+
+@property (nonatomic, assign) BOOL isUp;//判断pan手势的方向
+
+//事件 根据需要实现
+@property (nonatomic, copy) void(^declineAction)(void);
+@property (nonatomic, copy) void(^acceptAction)(void);
+@property (nonatomic, copy) void(^viewDidDismissAction)(void);
+
+@end
+
+@implementation LS_RewardAlertView
+
+- (void)dealloc{
+    NSLog(@"%@##%@",NSStringFromClass([self class]),NSStringFromSelector(_cmd));
+}
+
+- (instancetype)init
+{
+    if (self = [super init]) {
+        [self initialize];
+        [self buildView];
+    }
+    return self;
+}
+
+- (void)initialize
+{
+    self.isUp = NO;
+}
+
+- (void)buildView
+{
+    [self addSubview:self.backView];
+    [self addSubview:self.contentView];
+    [self.backView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.leading.trailing.top.bottom.equalTo(self);
+    }];
+    [self setupContenView:self.contentView];
+}
+
+#pragma mark 此处根据需要定制UI
+- (void)setupContenView:(UIView *)contentView;
+{
+    [contentView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.leading.trailing.equalTo(self);
+        make.height.mas_equalTo(kDistanceToHeight);
+        make.top.equalTo(self.mas_bottom);
+    }];
+}
+
+#pragma mark 显示、隐藏
+#pragma mark public
+- (void)showInView:(UIView *)view
+{
+    [self showInView:view declineAction:nil acceptAction:nil viewDidDismissAction:nil];
+}
+
+- (void)showInView:(UIView *)view
+     declineAction:(nullable void(^)(void))declineAction
+      acceptAction:(nullable void(^)(void))acceptAction
+viewDidDismissAction:(nullable void(^)(void))viewDidDismissAction {
+
+    self.frame = view.bounds;
+    [view addSubview:self];
+    
+    self.declineAction = declineAction;
+    self.acceptAction = acceptAction;
+    self.viewDidDismissAction = viewDidDismissAction;
+    
+    [self resetContentView:YES];
+    self.backView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.0];
+    [self layoutIfNeeded];
+    
+    [UIView animateWithDuration:0.2 animations:^{
+        self.backView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.4];
+        [self resetContentView:NO];
+        [self layoutIfNeeded];
+    }];
+}
+
+- (void)dismissView:(void(^)(void))complete
+{
+    [self backViewTapGesture:complete];
+}
+#pragma mark private
+- (void)backViewTapGesture
+{
+    [self backViewTapGesture:nil];
+}
+- (void)backViewTapGesture:(void(^)(void))complete
+{
+    [UIView animateWithDuration:0.2 animations:^{
+        self.backView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.0];
+        [self resetContentView:YES];
+        [self layoutIfNeeded];
+    } completion:^(BOOL finished) {
+        !complete ? : complete();
+        !self.viewDidDismissAction ? : self.viewDidDismissAction();
+        [self removeFromSuperview];
+    }];
+}
+
+#pragma mark 布局
+- (void)resetContentView:(BOOL)isHide
+{
+    if (isHide) {
+        [self.contentView mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.leading.trailing.equalTo(self);
+            make.height.mas_equalTo(kDistanceToHeight);
+            make.top.equalTo(self.mas_bottom);
+        }];
+        return;
+    }
+    
+    [self.contentView mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.leading.trailing.equalTo(self);
+        make.height.mas_equalTo(kDistanceToHeight);
+        make.bottom.equalTo(self.mas_bottom);
+    }];
+}
+
+#pragma mark - setter/getter
+- (UIView *)backView
+{
+    if (!_backView) {
+        UIView *view = ({
+            UIView *view = [UIView new];
+            view;
+        });
+        _backView = view;
+        [self addGestureForView:view action:@selector(backViewTapGesture)];
+    }
+    return _backView;
+}
+
+- (UIView *)contentView
+{
+    if (!_contentView) {
+        UIView *view = ({
+            UIView *view = [UIView new];
+            view.backgroundColor = UIColor.whiteColor;
+            view.layer.cornerRadius = 12.0;
+            view.layer.masksToBounds = YES;
+            view;
+        });
+        _contentView = view;
+        
+        UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(contentViewPan:)];
+        [view addGestureRecognizer:pan];
+    }
+    return _contentView;
+}
+
+#pragma mark action
+- (void)addGestureForView:(UIView *)info action:(nullable SEL)action{
+    info.userInteractionEnabled = YES;
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:action];
+    [info addGestureRecognizer:tap];
+}
+
+#pragma mark 手势
+#pragma mark 下拉收起菜单手势
+- (void)contentViewPan:(UIPanGestureRecognizer*)pan{
+    switch (pan.state) {
+        case UIGestureRecognizerStateChanged:
+        {
+            CGPoint trans = [pan velocityInView:self.contentView];
+            CGPoint currentPoint = [pan translationInView:self.contentView];
+            if (currentPoint.y&gt;0) {//向下
+                if (trans.y&gt;0) {
+                    self.isUp = YES;
+                }else{
+                    self.isUp = NO;
+                }
+                [self.contentView mas_updateConstraints:^(MASConstraintMaker *make) {
+                    make.bottom.offset(currentPoint.y);
+                }];
+            }
+        }
+            break;
+        case UIGestureRecognizerStateEnded:
+        {
+            CGPoint currentPoint = [pan translationInView:self.contentView];
+            if (self.isUp &amp;&amp; currentPoint.y &gt; 100) {
+                [self backViewTapGesture];
+            }else{
+                [UIView animateWithDuration:0.3 animations:^{
+                    [self.contentView mas_updateConstraints:^(MASConstraintMaker *make) {
+                        make.bottom.equalTo(self.mas_bottom);
+                    }];
+                }];
+            }
+        }
+            break;
+        default:
+            break;
+    }
+}</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>5F7EF242-0F25-4833-84BD-91EADBDCC5A3</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>View_Custom全屏弹框卡片</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>View_Custom全屏弹框卡片</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

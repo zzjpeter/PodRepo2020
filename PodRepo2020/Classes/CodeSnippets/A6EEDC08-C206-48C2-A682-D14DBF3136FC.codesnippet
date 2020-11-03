@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>aLabel</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>   func aLabel() -&gt; UILabel {
+        let aLabel = UILabel()
+        view.addSubview(aLabel)
+        aLabel.snp.makeConstraints { (make) in
+            make.left.equalTo(0)
+            make.top.equalTo(220)
+            make.width.equalToSuperview()
+            make.height.equalTo(40)
+        }
+        aLabel.backgroundColor = UIColor.clear
+        aLabel.text = "Hello UILabel~"
+        aLabel.font = UIFont.systemFont(ofSize: 15)
+        aLabel.textColor = UIColor.black
+        aLabel.textAlignment = NSTextAlignment.natural
+        aLabel.numberOfLines = 0
+        //aLabel.lineBreakMode = NSLineBreakMode.byTruncatingTail
+        //aLabel.adjustsFontSizeToFitWidth = true
+        //aLabel.allowsDefaultTighteningForTruncation = true
+        //aLabel.shadowColor = UIColor.lightGray
+        //aLabel.shadowOffset = CGSize(width: 2, height: 2)
+        //aLabel.text = "adfasdjflkjalkjflkasjdlfkjaslkdjflkajsdlkfjaklsdjflkjalkdjfjsdajfjsdalfkjsajfljsdalkjflsafjldsajflkjsladkjflksdjalkfjlksajlkfjlksajdlfkjsalkdjflkajslfjlsa;jlfjasldkjflksajdlfkjsalkjdflkasjdfljsadklfjsalkdjflkajdlfjla;sdjlfkjaldjfadjlsf"
+        //let textMaxSize = CGSize(width: UIScreen.main.bounds.width, height: CGFloat(MAXFLOAT))
+        //let textRect = aLabel.textRect(forBounds: CGRect(origin: CGPoint(x: 0, y: 0), size: textMaxSize), limitedToNumberOfLines: 100)
+        //aLabel.snp.remakeConstraints({ (make) in
+            //make.left.equalTo(0)
+            //make.top.equalTo(220)
+            //make.size.equalTo(textRect.size)
+        //})
+        return aLabel
+    }</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>A6EEDC08-C206-48C2-A682-D14DBF3136FC</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Swift</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>aLabel</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>aLabel</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

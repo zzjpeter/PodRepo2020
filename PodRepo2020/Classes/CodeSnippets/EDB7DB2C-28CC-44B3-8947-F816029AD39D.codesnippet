@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>videoPlayPageDemo</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>/*
+[self addNoti];
+[self removeNoti];
+ - (void)viewWillDisappear:(BOOL)animated
+ {
+     [super viewWillDisappear:animated];
+     [self doSomeThingWhenViewAppearOrDisappear:NO];
+
+ }
+
+ - (void)viewDidAppear:(BOOL)animated
+ {
+     [super viewDidAppear:animated];
+     [self doSomeThingWhenViewAppearOrDisappear:YES];
+ }
+*/
+#pragma mark 短视频自动播放逻辑代码
+#pragma mark 短视频自动播放的停止和播放
+- (void)checkAutoVideoPlay {
+    LPNewFeedsView *newFeedsView = [self currentFeedsView].contentView;
+    [newFeedsView checkAutoVideoPlay];
+}
+- (void)stopAutoVideoPlay {
+    LPNewFeedsView *newFeedsView = [self currentFeedsView].contentView;
+    [newFeedsView.playerManager removePlayView];
+}
+- (LPFeedsView *)currentFeedsView {
+    return [_feedViews objectAtIndex:self.currentPage];
+}
+#pragma mark 短视频自动播放页面的显示和消失处理
+- (void)doSomeThingWhenViewAppearOrDisappear:(BOOL)appear
+{
+    if (appear) {
+        if (!IsOutOfArrayCount(_currentPage, _viewTypeArr)) {
+            BOOL isVideoPage = ([_viewTypeArr[_currentPage] unsignedIntegerValue] == LPNewFeedsViewTypeVideo);
+//#ifdef LESPARK_PRO
+//            _statusBarStyle = UIStatusBarStyleLightContent;
+//#else
+//            _statusBarStyle = (isVideoPage ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault);
+//#endif
+//            [self setNeedsStatusBarAppearanceUpdate];
+
+            _videoView.isAppeared = isVideoPage;
+            if (isVideoPage) {
+                [_videoView resumeVideoIfNeed];
+            }
+            
+            [self checkAutoVideoPlay];
+        }
+    }
+    else {
+        if (!IsOutOfArrayCount(_currentPage, _viewTypeArr)) {
+            BOOL isVideoPage = ([_viewTypeArr[_currentPage] unsignedIntegerValue] == LPNewFeedsViewTypeVideo);
+            if (isVideoPage) {
+                [_videoView pauseVideoIfNeed];
+            }
+            
+            [self stopAutoVideoPlay];
+        }
+    }
+}
+#pragma mark 短视频自动播放通知处理（1.app进入前台和退入后台处理 2.点击查看图片的显示和隐藏处理）
+- (void)addNoti {
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                              selector:@selector(applicationEnterBackground:)
+                                                  name: UIApplicationDidEnterBackgroundNotification
+                                                object:nil];
+     [[NSNotificationCenter defaultCenter] addObserver:self
+                                              selector:@selector(applicationDidBecomeActive:)
+                                                  name:UIApplicationDidBecomeActiveNotification
+                                                object:nil];
+     [[NSNotificationCenter defaultCenter] addObserver:self
+                                              selector:@selector(photoBrowserDidShow:)
+                                                  name:@"LesPark.photoBrowserDidShowNotification"
+                                                object:nil];
+     [[NSNotificationCenter defaultCenter] addObserver:self
+                                              selector:@selector(photoBrowserDidDismiss:)
+                                                  name:@"LesPark.photoBrowserDidDismissNotification"
+                                                object:nil];
+}
+
+- (void)removeNoti
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)applicationEnterBackground:(UIApplication *)application
+{
+    //进入后台
+    if (_startPresentPostCtl) {
+        CGPoint currentPoint = [_panGr translationInView:self.view];
+        [self endPresentTransition:fabs(currentPoint.x)/self.view.width];
+    }
+    [self stopAutoVideoPlay];
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+    //进入前台
+    [self checkAutoVideoPlay];
+}
+
+- (void)photoBrowserDidShow:(NSNotification *)noti{
+    //帖子查看图片显示
+    [self stopAutoVideoPlay];
+}
+
+- (void)photoBrowserDidDismiss:(NSNotification *)noti{
+    //帖子查看图片消失
+    [self checkAutoVideoPlay];
+}</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>EDB7DB2C-28CC-44B3-8947-F816029AD39D</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>videoPlayPageDemo</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>videoPlayPageDemo</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

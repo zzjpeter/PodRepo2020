@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>KVO_Observer_SimpleDemo</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>#pragma mark - Observer KVO
+- (void)addObservers {
+    [self.testView addObserver:self forKeyPath:NSStringFromSelector(@selector(&lt;#methodName#&gt;)) options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:nil];
+}
+
+- (void)removeObservers {
+    [self.testView removeObserver:self forKeyPath:NSStringFromSelector(@selector(&lt;#methodName#&gt;))];
+    if (self &amp;&amp; self.testView.observationInfo) {//判断接收者的observationInfo
+        @try {
+            //NSLog(@"observationInfo:%@",self.testView.observationInfo);
+            [self.testView removeObserver:self forKeyPath:NSStringFromSelector(@selector(&lt;#methodName#&gt;))];
+        } @catch (NSException *exception) {
+            
+        }
+    }
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if ([keyPath isEqualToString:NSStringFromSelector(@selector(&lt;#methodName#&gt;))]){
+        id newValue = change[@"new"];
+        id oldValue = change[@"old"];
+        NSLog(@"newValue:%@,oldValue:%@",newValue,oldValue);
+    } else {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
+}</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>04C35B71-2BAB-49D7-BB11-04E3E4937A2B</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>KVO_Observer_SimpleDemo</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>KVO_Observer_SimpleDemo</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>ATYAttributeLabel</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>TYAttributedLabel *label = ({
+
+        TYAttributedLabel *label = [TYAttributedLabel new];
+        label.width = self.view.width;
+        
+        label.text = text;
+
+        label.characterSpacing = 2;
+        label.linesSpacing = 6;
+        
+        NSMutableAttributedString *attStr = [[NSMutableAttributedString alloc] initWithString:text];
+        [attStr addAttributeTextColor:UIColor.blueColor];
+        [attStr addAttributeFont:[UIFont systemFontOfSize:15.0]];
+        [label appendTextAttributedString:attStr];
+        
+        TYTextStorage *textStorage = [TYTextStorage new];
+        textStorage.range = [label.attributedText.string rangeOfString:@"总有一天你将破蛹而出" options:NSBackwardsSearch];
+        textStorage.textColor = UIColor.redColor;
+        textStorage.font = [UIFont systemFontOfSize:14.0];
+        [label addTextStorage:textStorage];
+                
+        [label addImageWithName:@"CYLoLi" range:NSMakeRange(2, 1)];
+        [label appendImageWithName:@"CYLoLi" size:CGSizeMake(label.width, 180.0)];
+        
+        UIImageView *imageView = ({
+            UIImageView *imageView = [UIImageView new];
+            imageView.image = [UIImage imageNamed:@"CYLoLi"];
+            imageView;
+        });
+        imageView.frame = CGRectMake(0, 0, label.width, 180.0);
+        [label appendView:imageView];
+        
+        //[label sizeToFit];
+        
+        label;
+    });
+</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>DC978E4C-03AD-41D4-994D-303D0855BAC3</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>ATYAttributeLabel</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>ATYAttributeLabel</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

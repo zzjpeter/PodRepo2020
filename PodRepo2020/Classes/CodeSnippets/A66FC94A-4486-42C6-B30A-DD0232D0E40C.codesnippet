@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>JumpToxxx</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>- (void)jumpToController {
+    WXYZ_RechargeViewController *vc = [WXYZ_RechargeViewController new];
+    vc.hidesBottomBarWhenPushed = YES;
+    [self doPushViewController:vc];
+}</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>A66FC94A-4486-42C6-B30A-DD0232D0E40C</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>JumpToxxx</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>JumpToxxx</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

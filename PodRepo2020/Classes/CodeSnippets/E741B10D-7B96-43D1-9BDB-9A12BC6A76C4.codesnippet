@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>Animation</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>-(void)viewDidAppear:(BOOL)animated{
+    
+    //[self changeFrame];
+    //[self flipAni];
+    
+//    [self blockAni1];
+//    [self blockAni2];
+//    [self blockAni3];
+//    [self blockAni4];
+//    [self blockAni5];
+//    [self blockAni6];
+    [self blockAni7];
+}
+
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+/*
+ UIView动画简介
+ UIView动画实质上是对Core Animation的封装，提供简洁的动画接口。
+ UIView动画可以设置的动画属性有:
+ 1、大小变化(frame)
+ 2、拉伸变化(bounds)
+ 3、中心位置(center)
+ 4、旋转(transform)
+ 5、透明度(alpha)
+ 6、背景颜色(backgroundColor)
+ 7、拉伸内容(contentStretch)
+ */
+
+#pragma mark -属性变化动画（以frame变化为例）
+- (void)changeFrame {
+    [UIView beginAnimations:@"FrameAni" context:nil];
+    [UIView setAnimationDuration:1.0];
+    [UIView setAnimationDelegate:self];
+    [UIView setAnimationWillStartSelector:@selector(startAni:)];
+    [UIView setAnimationDidStopSelector:@selector(stopAni:)];
+    [UIView setAnimationRepeatCount:1];
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+    self.cartCenter.frame = self.centerShow.frame;
+    [UIView commitAnimations];
+}
+
+- (void)startAni:(NSString *)aniID {
+    NSLog(@"%@ start",aniID);
+}
+
+- (void)stopAni:(NSString *)aniID {
+    NSLog(@"%@ stop",aniID);
+}
+
+#pragma mark -转场效果动画（以Flip效果为例）
+-(void)flipAni{
+    [UIView beginAnimations:@"FlipAni" context:nil];
+    [UIView setAnimationDuration:1.0];
+    [UIView setAnimationDelegate:self];
+    [UIView setAnimationWillStartSelector:@selector(startAni:)];
+    [UIView setAnimationDidStopSelector:@selector(stopAni:)];
+    [UIView setAnimationRepeatCount:10];
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+    [UIView setAnimationTransition:UIViewAnimationTransitionFlipFromLeft forView:self.centerShow cache:YES];
+    self.centerShow.image = [UIImage imageNamed:@"service"];
+    [UIView commitAnimations];
+}
+
+#pragma mark -1.普通动画
+//下面三段代码都实现了相同的视图frame的变化，不同之处只在于其延迟时间、过渡效果和结束回调。
+- (void)blockAni1{
+    [UIView animateWithDuration:1.0 animations:^{
+        self.cartCenter.frame = self.centerShow.frame;
+    }];
+}
+
+- (void)blockAni2{
+    [UIView animateWithDuration:1.0 animations:^{
+        self.cartCenter.frame = self.centerShow.frame;
+    } completion:^(BOOL finished) {
+        NSLog(@"动画结束");
+    }];
+}
+
+- (void)blockAni3 {
+    [UIView animateWithDuration:1.0 delay:1.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.cartCenter.frame = self.centerShow.frame;
+    } completion:^(BOOL finished) {
+        NSLog(@"动画结束");
+    }];
+}
+
+#pragma mark -2.Spring动画
+-(void) blockAni4{
+    [UIView animateWithDuration:2.0 delay:1.0 usingSpringWithDamping:0.5f initialSpringVelocity:1.0   options:UIViewAnimationOptionCurveLinear animations:^{
+        self.cartCenter.frame = self.centerShow.frame;
+    } completion:^(BOOL finished) {
+        self.cartCenter.frame = self.centerShow.frame;
+    }];
+}
+
+#pragma mark -3.Keyframes动画
+//这里以实现视图背景颜色变化（红-绿-蓝-紫）的过程来演示关键帧动画。
+-(void)blockAni5{
+    self.centerShow.image = nil;
+    [UIView animateKeyframesWithDuration:9.0 delay:0.f options:UIViewKeyframeAnimationOptionCalculationModeLinear animations:^{
+        
+        [UIView addKeyframeWithRelativeStartTime:0.f relativeDuration:1.0 / 4 animations:^{
+            self.centerShow.backgroundColor = [UIColor colorWithRed:0.9475 green:0.1921 blue:0.1746 alpha:1.0];
+        }];
+        
+        [UIView addKeyframeWithRelativeStartTime:1.0 / 4 relativeDuration:1.0 / 4 animations:^{
+            self.centerShow.backgroundColor = [UIColor colorWithRed:0.1064 green:0.6052 blue:0.0334 alpha:1.0];
+        }];
+        
+        [UIView addKeyframeWithRelativeStartTime:2.0 / 4 relativeDuration:1.0 / 4 animations:^{
+            self.centerShow.backgroundColor = [UIColor colorWithRed:0.1366 green:0.3017 blue:0.8411 alpha:1.0];
+        }];
+
+        [UIView addKeyframeWithRelativeStartTime:3.0 / 4 relativeDuration:1.0 / 4 animations:^{
+            self.centerShow.backgroundColor = [UIColor colorWithRed:0.619 green:0.037 blue:0.6719 alpha:1.0];
+        }];
+        
+    } completion:^(BOOL finished) {
+        NSLog(@"动画结束");
+    }];
+}
+
+#pragma mark -4.转场动画
+//4.1 单个视图的过渡效果
+- (void)blockAni6 {
+    [UIView transitionWithView:self.centerShow duration:1.0 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+        self.centerShow.image = [UIImage imageNamed:@"service"];
+    } completion:^(BOOL finished) {
+        NSLog(@"动画结束");
+    }];
+}
+
+//4.2 从旧视图转到新视图的动画效果
+- (void)blockAni7 {
+    UIImageView * newCenterShow = [[UIImageView alloc]initWithFrame:self.centerShow.frame];
+    newCenterShow.image = [UIImage imageNamed:@"service"];
+    [UIView transitionFromView:self.centerShow toView:newCenterShow duration:1.0 options:UIViewAnimationOptionTransitionFlipFromLeft completion:^(BOOL finished) {
+        NSLog(@"动画结束");
+    }];
+}
+</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>E741B10D-7B96-43D1-9BDB-9A12BC6A76C4</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Generic</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>iOS基本动画，spring，关键帧动画</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

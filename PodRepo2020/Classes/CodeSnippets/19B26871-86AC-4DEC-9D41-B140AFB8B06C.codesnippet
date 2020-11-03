@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>AFN_post</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>#pragma mark -定义请求体 类型
+typedef NS_ENUM(NSInteger, RequestBodyStyle) {
+    RequestBodyStyle_JSON = 0,//JSON格式
+    RequestBodyStyle_String//字符串 格式 为了XML
+};
+
+#pragma mark -定义请求返回结果 类型
+typedef NS_ENUM(NSInteger, ResponseResultStyle) {
+    ResponseResultStyle_Data = 0,//nsdata格式
+    ResponseResultStyle_JSON ,//JSON格式
+    ResponseResultStyle_XML//XML格式
+};
+#pragma mark --2.1AFHTTPSessionManager实现(AFNetworking库)
+- (void)sendGetRequest_AFN:(NSString *)getUrl{
+    // 文档: 详细的订单数据放在 PostData 中,格式为 json
+    //1.获取网络请求管理类
+    AFHTTPSessionManager *session = [AFHTTPSessionManager manager];
+    
+    //2.设置网络请求返回值支持的参数类型
+    [session.responseSerializer setAcceptableContentTypes:[NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript",@"text/html",@"text/css",@"text/plain", nil]];
+    
+    //3.网络请求请求体的body体类型 常见的设置一般是JSON格式  当然也可以根据具体需要用字符串格式(for xml)
+    int requestStyle = RequestBodyStyle_JSON;
+    switch (requestStyle) {
+        case RequestBodyStyle_JSON:
+            /**
+             `AFJSONRequestSerializer` is a subclass of `AFHTTPRequestSerializer` that encodes parameters as JSON using `NSJSONSerialization`, setting the `Content-Type` of the encoded request to `application/json`.
+             */
+            session.requestSerializer = [AFJSONRequestSerializer serializer];
+            break;
+        case RequestBodyStyle_String:
+            /**
+             Set the a custom method of query string serialization according to the specified block.
+             @param block A block that defines a process of encoding parameters into a query string. This block returns the query string and takes three arguments: the request, the parameters to encode, and the error that occurred when attempting to encode parameters for the given request.
+             */
+            [session.requestSerializer setQueryStringSerializationWithBlock:^NSString *(NSURLRequest *request, id parameters, NSError **error) {
+                return parameters;
+            }];
+            break;
+        default:
+            break;
+    }
+    //NSLog(@" session.requestSerializer :%@", session.requestSerializer);
+    
+    
+    // 4. 给网络请求加请求头
+    //这里 不用设置 也行 af已经默认设置了一些请求头 已经默认设置了常用的请求头，再说了  请求头需不需要是服务器限制的,服务器不需要任何请求头就可以不设置请求头
+    //    [session.requestSerializer setValue:@"application/json; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
+    //    [session.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    
+    
+    // 5. 设置返回值类型---一般设置为NSData类型 (也即 返回值responseObject 是nsdata 类型)
+    int result = ResponseResultStyle_Data;
+    switch (result) {
+        case ResponseResultStyle_Data:
+            session.responseSerializer = [AFHTTPResponseSerializer serializer];
+            break;
+        case ResponseResultStyle_JSON:
+            session.responseSerializer = [AFJSONResponseSerializer serializer];
+            break;
+        case ResponseResultStyle_XML:
+            session.responseSerializer = [AFXMLParserResponseSerializer serializer];
+            break;
+        default:
+            break;
+    }
+    //NSLog(@" session.responseSerializer :%@", session.responseSerializer);
+    
+    
+    /*总结：1.AFNetworking 网络请求请求体的body体类型和返回值类型都未设置时 默认请求为 AFHTTPRequestSerializer类型  默认应答为 AFJSONResponseSerializer类型。
+     2.AFNetworking 网络请求请求体的body体类型设置了 而返回值类型未设置时 默认返回值类型 与 请求体数据类型一致
+     3.实际 使用中 需要我们根据需要  显示指定是 最好的。
+     */
+    __weak typeof(self) weakSelf = self;
+    //__weak typeof([WXPayClient class])  weakSelf = self;
+    //__weak typeof(WXPayClient)  *weakSelf = self;
+    // 6. 发送网络请求 --其中的参数 一般的常见类型是 字典(NSDictionary)
+    NSDictionary *postDic = nil;
+    [session POST:getUrl
+       parameters:postDic
+         progress:nil
+          success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+     {
+         
+         NSLog(@"responseObject=%@",responseObject);
+         NSError *error = nil;
+         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject
+                                                              options:kNilOptions
+                                                                error:&amp;error];
+         
+     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+         
+         NSLog(@"error:%@",error);
+     }];
+}
+</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>19B26871-86AC-4DEC-9D41-B140AFB8B06C</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>基于AFN的post请求</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

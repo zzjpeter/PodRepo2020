@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>LS_navigationBar</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>- (void)setNavigationBar:(WXYZ_BasicNavBarView *)navigationBar {
+    
+    //[self setNavigationBar:self.navigationBar];
+    
+    //[self hiddenSeparator];
+    //[self hiddenNavigationBar:YES];
+    [self setNavigationBarTitle:@""];
+    [self setStatusBarDefaultStyle];
+    
+    //navigationBar.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0];
+    //navigationBar.navTitleLabel.textColor = kBlackColor;
+    //navigationBar.navTitleLabel.alpha = 0;
+    //[navigationBar setLeftButtonTintColor:kCommonDarkColor];
+    
+}</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>6F868AA2-BEE6-44D4-A944-85A4DDC37B77</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>LS_navigationBar</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>LS_navigationBar</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

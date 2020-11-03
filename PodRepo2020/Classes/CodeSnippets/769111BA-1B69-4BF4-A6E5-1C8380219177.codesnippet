@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>Thread_</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>- (void)testNSThredCode{
+    //1.线程创建与启动
+    [NSThread detachNewThreadSelector:@selector(doSomeThing:) toTarget:self withObject:nil];
+    
+    NSThread *myThread = [[NSThread alloc]initWithTarget:self selector:@selector(doSomeThing1:) object:@"111"];
+    [myThread start];
+    
+    [self performSelectorInBackground:@selector(doSomeThing2:) withObject:@"隐式创建线程"];
+    //2.线程间通信
+    //2.1在应用程序主线程中做事情：
+    //performSelectorOnMainThread:withObject:waitUntilDone:
+    //performSelectorOnMainThread:withObject:waitUntilDone:modes:
+    //    2.2在当前线程中做事情：
+    //performSelector:withObject:afterDelay:
+    //performSelector:withObject:afterDelay:inModes:
+    //    2.3取消发送给当前线程的某个消息
+    //cancelPreviousPerformRequestsWithTarget:
+    //cancelPreviousPerformRequestsWithTarget:selector:object:
+    
+    //3.线程同步  iOS中的 mutex 对应的是 NSLock，它遵循 NSLooking协议，我们可以使用 lock, tryLock, lockBeforeData:来加锁，用 unLock来解锁  信号量控制(NSCodition signal wait) 详见NSThread详细
+}</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>769111BA-1B69-4BF4-A6E5-1C8380219177</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>NSThread代码demo</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

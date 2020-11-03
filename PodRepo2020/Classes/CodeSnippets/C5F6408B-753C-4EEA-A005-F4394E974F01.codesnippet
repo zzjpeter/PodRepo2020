@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>View_纯代码View简洁</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>- (instancetype)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self initialize];
+        
+        [self buildView];
+    }
+    return self;
+}
+
+-(void)layoutSubviews{
+    [super layoutSubviews];
+    
+}
+
+-(void)dealloc{
+    NSLog(@"%@##%@",NSStringFromClass([self class]),NSStringFromSelector(_cmd));
+}
+
+#pragma mark 初始化方法
+-(void)initialize{
+    
+    self.backgroundColor = [UIColor clearColor];
+}
+
+- (void)buildView{
+    
+    
+}
+
+#pragma mark 数据赋值
+- (void)bindData:(id)obj{
+    
+}
+
+#pragma mark Actions
+
+#pragma mark setter/getter</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>C5F6408B-753C-4EEA-A005-F4394E974F01</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Generic</string>
+	<key>IDECodeSnippetSummary</key>
+	<string></string>
+	<key>IDECodeSnippetTitle</key>
+	<string>自定义纯代码view</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

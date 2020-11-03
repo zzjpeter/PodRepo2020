@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>LP正则匹配demo</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>#pragma mark 正则匹配识别（1.Emoji 2.话题 3.URL）
+- (void)matchRegularExpression:(LPFeedTopicModel *)model{
+    
+    YYLabel *label = model.contentLabel;
+    UIFont *font = label.font;
+    NSMutableAttributedString *content = [[NSMutableAttributedString alloc] initWithAttributedString:label.attributedText];
+    NSMutableString *textContent = [NSMutableString stringWithString:label.attributedText.string];
+    
+    NSMutableArray *results = [NSMutableArray new];
+    
+    /// 1.识别Emoji正则
+    NSRegularExpression *regOfEmoji = [NSRegularExpression regularExpressionWithPattern:@"\\[/(0\\d{2}|10[0-4])\\]"
+                                                                                options:0
+                                                                                  error:nil];
+    __block NSUInteger base = 0;
+    [regOfEmoji enumerateMatchesInString:textContent options:0 range:NSMakeRange(0, textContent.length) usingBlock:^(NSTextCheckingResult * _Nullable result, NSMatchingFlags flags, BOOL * _Nonnull stop) {
+        NSRange range = [result range];
+        NSString *subString = [textContent substringWithRange:NSMakeRange(range.location+2, 3)];
+        
+        UIImage *image = [UIImage imageNamed:subString];
+        image = [UIImage imageWithCGImage:image.CGImage scale:3 orientation:UIImageOrientationUp];
+        
+        NSMutableAttributedString *attachText = [NSMutableAttributedString attachmentStringWithContent:image contentMode:UIViewContentModeCenter attachmentSize:image.size alignToFont:font alignment:YYTextVerticalAlignmentCenter];
+        
+        [content replaceCharactersInRange:NSMakeRange(range.location-base, range.length) withAttributedString:attachText];
+        base += range.length - attachText.length;
+    }];
+    
+    
+    NSString *tmpContent = content.string;
+    
+    /// 2.识别话题正则
+    NSString * pattern = @"#([^\\#|^\\#]+)#";//@"#([\\u4e00-\\u9fa5\\w\\-]+)#"
+    NSRegularExpression *regOfSubject = [NSRegularExpression regularExpressionWithPattern:pattern
+                                                                                  options:NSRegularExpressionCaseInsensitive
+                                                                                    error:nil];
+    if (regOfSubject) {
+        NSArray *matches = [regOfSubject matchesInString:tmpContent options:0 range:NSMakeRange(0, tmpContent.length)];
+        for (NSTextCheckingResult *item in matches) {
+            if (item.range.location == NSNotFound) {
+                continue;
+            }
+            
+            NSString *string = [tmpContent substringWithRange:item.range];
+            if (!IsEmptyOrNull(string)) {
+                NSDictionary *dict = @{@"type"  : @(LPFeedContentLinkTypeSubject),
+                                       @"url"   : string,
+                                       @"range" : [NSValue valueWithRange:item.range]};
+                [results addObject:dict];
+            }
+        }
+    }
+    
+    /// 2.识别URL正则
+    NSRegularExpression *regOfURL = [NSRegularExpression regularExpressionWithPattern:@"((http[s]{0,1}|ftp)://[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&amp;*+?:_/=&lt;&gt;]*)?)|(www.[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&amp;*+?:_/=&lt;&gt;]*)?)"
+                                                                              options:NSRegularExpressionCaseInsensitive
+                                                                                error:nil];
+    if (regOfURL) {
+        NSArray *matches = [regOfURL matchesInString:tmpContent options:0 range:NSMakeRange(0, tmpContent.length)];
+        for (NSTextCheckingResult *item in matches) {
+            if (item.range.location == NSNotFound) {
+                continue;
+            }
+            
+            NSString *string = [tmpContent substringWithRange:item.range];
+            if (!IsEmptyOrNull(string)) {
+                NSDictionary *dict = @{@"type"  : @(LPFeedContentLinkTypeURL),
+                                       @"url"   : string,
+                                       @"range" : [NSValue valueWithRange:item.range]};
+                [results addObject:dict];
+            }
+        }
+    }
+    
+    for (NSDictionary *dict in results) {
+        NSRange range = [dict[@"range"] rangeValue];
+        [content setColor:UIColorFromRGB(0x5793D9) range:range];
+        YYTextHighlight *highlight = [YYTextHighlight new];
+        [highlight setColor:UIColorFromRGB(LPCommonColorHex)];
+        highlight.userInfo = dict;
+        [content setTextHighlight:highlight range:range];
+    }
+}
+</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>24C7E11E-4649-49A9-A543-98B0DFE5B4E8</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>LP正则匹配demo</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>LP正则匹配demo</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

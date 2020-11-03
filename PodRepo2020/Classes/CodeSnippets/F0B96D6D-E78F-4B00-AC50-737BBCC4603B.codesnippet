@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>LPLoading_Simple</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>//loading实现代码
+@property (nonatomic, strong) UIView *loadingView;
+[self.playView addSubview:self.loadingView];
+[self.loadingView mas_makeConstraints:^(MASConstraintMaker *make) {
+    make.center.equalTo(self);
+    make.size.mas_equalTo(CGSizeMake(40.0, 40.0));
+}];
+- (UIView *)loadingView {
+    if (!_loadingView) {
+        
+        UIView *view = ({
+            view = [UIView new];
+            view.hidden = YES;
+            
+            UIImageView *imageView = ({
+                UIImageView *imageView = [UIImageView new];
+                imageView.image = [UIImage imageNamed:@"match_video_load"];
+                imageView;
+            });
+            [view addSubview:imageView];
+            
+            [imageView mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.edges.equalTo(view);
+            }];
+            
+            view;
+        });
+        _loadingView = view;
+        
+    }
+    return _loadingView;
+}
+- (void)startLoading {
+    if (!self.loadingView.hidden
+        &amp;&amp; [self.loadingView.layer.animationKeys containsObject:@"rotate"]) {
+        return;
+    }
+    self.loadingView.hidden = NO;
+    CABasicAnimation *rotate = [CABasicAnimation rotationZAnimationFrom:0 to:M_PI*2 delay:0 duration:1];
+    rotate.repeatCount = CGFLOAT_MAX;
+    [self.loadingView.layer addAnimation:rotate forKey:@"rotate"];
+}
+
+- (void)stopLoading {
+    self.loadingView.hidden = YES;
+    [self.loadingView.layer removeAllAnimations];
+}
+</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>F0B96D6D-E78F-4B00-AC50-737BBCC4603B</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>LPLoading代码逻辑简单实现</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>LPLoading_Simple</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>Swizzle_InstanceMethod</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>+ (void)swizzleInstanceMethod:(SEL)originalSel withSwizzledSel:(SEL)swizzledSel {
+    Method originalMethod = class_getInstanceMethod(self, originalSel);
+    Method swizzledMethod = class_getInstanceMethod(self, swizzledSel);
+    
+    //先尝试给源SEL添加IMP，这里是为了避免源SEL没有实现IMP的情况
+    BOOL didAddMethod = class_addMethod(self, originalSel, method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod));
+    if (didAddMethod) {
+        //添加成功：说明源SEL没有实现IMP，讲源SEL的IMP交换到SEL的IMP
+        class_replaceMethod(self,
+                            swizzledSel,
+                            method_getImplementation(originalMethod),
+                            method_getTypeEncoding(originalMethod));
+    }else {
+        //添加失败：说明原SEL已经有IMP，将源SEL的IMP替换到交换SEL的IMP
+        method_exchangeImplementations(originalMethod, swizzledMethod);
+    }
+}</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>4D378966-58B6-4585-B44B-837299F1DBF4</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>交换对象方法</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>Swizzle_InstanceMethod</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

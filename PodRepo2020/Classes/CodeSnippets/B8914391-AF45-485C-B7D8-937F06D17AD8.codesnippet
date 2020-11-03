@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>Push_Demo_AliPush</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>//
+//  AppDelegate+AliPush.m
+//  WXDating
+//
+//  Created by Andrew on 2017/12/21.
+//  Copyright © 2017年 Andrew. All rights reserved.
+//
+
+#import "AppDelegate+Push.h"
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-implementations"
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+
+@implementation AppDelegate (Push)
+- (void)initAliPushWithApplication:(UIApplication *)application launchOptions:(NSDictionary *)launchOptions
+{
+    ////注册本地推送通知（具体操作在ViewController中）
+    //[self registerLocalNotification];
+    // 注册远程推送通知
+    [self registerRemoteNotifications];
+    
+}
+
+#pragma mark 注册本地推送通知
+- (void)registerLocalNotification {
+    
+    if (@available(iOS 10.0, *)) {
+        UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+        center.delegate = self;
+        [center requestAuthorizationWithOptions:(UNAuthorizationOptionBadge | UNAuthorizationOptionSound | UNAuthorizationOptionAlert) completionHandler:^(BOOL granted, NSError * _Nullable error) {
+            if (!error) {
+                NSLog(@"request authorization succeeded!");
+            }
+        }];
+    } else {
+        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound categories:nil];
+        [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+    }
+}
+
+#pragma mark 注册远程推送通知
+- (void)registerRemoteNotifications
+{
+    if (@available(iOS 10.0, *)) {
+        UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+        center.delegate = self;
+        [center requestAuthorizationWithOptions:(UNAuthorizationOptionBadge | UNAuthorizationOptionSound | UNAuthorizationOptionAlert | UNAuthorizationOptionCarPlay) completionHandler:^(BOOL granted, NSError *_Nullable error) {
+            if (!error) {
+                NSLog(@"request authorization succeeded!");
+                if ([NSThread isMainThread]) {
+                    
+                } else {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [[UIApplication sharedApplication] registerForRemoteNotifications];
+                    });
+                }
+            } else {
+                NSLog(@"request authorization failed!");
+            }
+        }];
+    } else {
+        UIUserNotificationType types = (UIUserNotificationTypeAlert | UIUserNotificationTypeSound | UIUserNotificationTypeBadge);
+        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:types categories:nil];
+        [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+        [[UIApplication sharedApplication] registerForRemoteNotifications];
+    }
+}
+
+#pragma mark 远程通知注册成功回调
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    [self printDeviceToken:deviceToken];
+}
+- (void)printDeviceToken:(NSData *)deviceToken {
+    NSString *deviceTokenHexStr = @"";
+    if (@available(iOS 13.0, *)) {
+        // iOS 13，可以通过如下方式获取hexstring
+        NSUInteger dataLength = deviceToken.length;
+        if (dataLength == 0) {
+            return;
+        }
+        const unsigned char *dataBuffer = (const unsigned char *)deviceToken.bytes;
+        NSMutableString *hexTokenString  = [NSMutableString stringWithCapacity:(dataLength * 2)];
+        for (int i = 0; i &lt; dataLength; ++i) {
+            [hexTokenString appendFormat:@"%02x", dataBuffer[i]];
+        }
+        deviceTokenHexStr = hexTokenString;
+        
+    } else {
+        //iOS 13以下，可以通过如下方式获取hexstring
+        NSString *hexTokenString = [[deviceToken description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"&lt;&gt;"]];
+        hexTokenString = [hexTokenString stringByReplacingOccurrencesOfString:@" " withString:@""];
+        deviceTokenHexStr = hexTokenString;
+    }
+    NSLog(@"push DeviceToken token:%@", deviceTokenHexStr);
+}
+
+#pragma mark 远程通知注册失败回调
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
+    NSLog(@"%@##%@##%@",NSStringFromClass([self class]),NSStringFromSelector(_cmd),error.description);
+}
+
+#pragma mark 10.0以前
+#pragma mark 本地通知
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification API_DEPRECATED("", ios(4.0, 10.0)) {
+    NSLog(@"%@##%@",NSStringFromClass([self class]),NSStringFromSelector(_cmd));
+    [self handleiOS10Before:application userInfo:notification.userInfo fetchCompletionHandler:nil];
+}
+
+#pragma mark UIApplicationDelegate 远程通知
+// App 处于前台时，会走该代理回调，处于后台时，无法接收到推送信息
+// 注：iOS10以上如果不使用UNUserNotificationCenter时，也将走此代理回调方法
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo API_DEPRECATED("", ios(3.0, 10.0)){
+    NSLog(@"%@##%@",NSStringFromClass([self class]),NSStringFromSelector(_cmd));
+    [self handleiOS10Before:application userInfo:userInfo fetchCompletionHandler:nil];
+}
+// App处于后台时，为具有“远程通知”后台模式的应用程序提供了机会，以响应传入的远程通知而获取适当的新数据，完成该操作后，应立即调用fetchCompletionHandler
+// 即使由于远程通知而启动或恢复应用程序，也会调用此方法【此行为与application：didReceiveRemoteNotification：相反】
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler NS_AVAILABLE_IOS(7_0) {
+    NSLog(@"%@##%@",NSStringFromClass([self class]),NSStringFromSelector(_cmd));
+    /*
+     建议使用该方法，还有一个作用。根据苹果给出的文档，系统给出30s的时间对推送的消息进行处理，此后就会运行CompletionHandler程序块。
+     在处理这类推送消息（即程序被启动后接收到推送消息）的时候，通常会遇到这样的问题，
+     就是当前的推送消息是当前程序正在前台运行时接收到的，还是说是程序在后台运行，用户点击系统消息通知栏对应项进入程序时而接收到的？这个其实很简单，用下面的代码就可以解决：
+     */
+    [self handleiOS10Before:application userInfo:userInfo fetchCompletionHandler:completionHandler];
+    completionHandler(UIBackgroundFetchResultNewData);
+}
+//当应用程序被用户从远程通知中选择操作时激活。调用该方法处理程序
+- (void)application:(UIApplication *)application handleActionWithIdentifier:(nullable NSString *)identifier forRemoteNotification:(NSDictionary *)userInfo completionHandler:(void (^)(void))completionHandler API_DEPRECATED("", ios(8.0, 10.0))  {
+    NSLog(@"%@##%@",NSStringFromClass([self class]),NSStringFromSelector(_cmd));
+    [self handleiOS10Before:application userInfo:userInfo fetchCompletionHandler:nil];
+}
+
+#pragma mark 10.0及以后
+//只有当应用程序位于前台时，该方法才会在委托上调用。如果方法未被执行或处理程序没有及时调用，则通知将不会被提交。应用程序可以选择将通知呈现为声音、徽章、警报和/或通知列表中。此决定应基于通知中的信息是否对用户可见。
+//iOS 10 + 最后实现以下两个代理方法。 以后的 App处于前台状态时，通知打开回调
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler
+API_AVAILABLE(ios(10.0)){
+    NSLog(@"%@##%@",NSStringFromClass([self class]),NSStringFromSelector(_cmd));
+    [self handleiOS10Notification:notification currentInTheForeground:YES];
+    // 通知弹出，且带有声音、内容和角标（App处于前台时不建议弹出通知）
+    completionHandler(UNNotificationPresentationOptionBadge|UNNotificationPresentationOptionSound|UNNotificationPresentationOptionAlert);
+}
+//当APP处于后台(iOS 10+) 触发通知动作时回调，比如点击、删除通知和点击自定义action
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler
+API_AVAILABLE(ios(10.0)){
+    NSLog(@"%@##%@",NSStringFromClass([self class]),NSStringFromSelector(_cmd));
+    [self handleiOS10Notification:response.notification currentInTheForeground:NO];
+    completionHandler();
+}
+
+#pragma mark 推送消息 统一处理
+// 1. 处理在iOS10以前收到通知 （iOS 10 + 并上报通知打开回执）
+- (void)handleiOS10Before:(UIApplication *)application userInfo:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))completionHandler
+{
+    BOOL currentInTheForeground = NO;
+    switch (application.applicationState) {
+        case UIApplicationStateActive:
+        {
+            currentInTheForeground = YES;
+            break;
+        }
+        case UIApplicationStateInactive:
+        {
+            break;
+        }
+        case UIApplicationStateBackground:
+        {
+            if (completionHandler) {
+                if (@available(iOS 10.0, *)) {
+                    completionHandler(UNNotificationPresentationOptionSound | UNNotificationPresentationOptionAlert | UNNotificationPresentationOptionBadge);
+                } else {
+                    // Fallback on earlier versions
+                }
+            }
+            break;
+        }
+        default:
+            break;
+    }
+    
+    if (currentInTheForeground) {
+        [self handleBadgeNumberAndSendNotificationAck:application userInfo:userInfo];
+    }
+    
+    [self handlePush:userInfo currentInTheForeground:currentInTheForeground];
+}
+
+// 2. 处理在iOS10收到通知 （iOS 10 + 并上报通知打开回执）
+- (void)handleiOS10Notification:(UNNotification *)notification currentInTheForeground:(BOOL)currentInTheForeground NS_AVAILABLE_IOS(10_0)
+{
+    if (currentInTheForeground) {
+        [self handleBadgeNumberAndSendNotificationAck:UIApplication.sharedApplication userInfo:notification.request.content.userInfo];
+    }
+    
+    [self handlePush:notification.request.content.userInfo currentInTheForeground:currentInTheForeground];
+}
+
+// 3.清空babge并上报通知打开回执 [执行条件:app启动、前台收到通知]
+- (void)handleBadgeNumberAndSendNotificationAck:(UIApplication *)application userInfo:(NSDictionary *)userInfo{
+    //badge 清0
+    application.applicationIconBadgeNumber = 0;
+    // 通知打开回执上报
+}
+
+#pragma mark 推送(消息【三方推送sdk如阿里云推送】、通知【苹果】)处理
+//currentInTheForeground：接收到通知时是否在前台
+- (void)handlePush:(NSDictionary *)userInfo currentInTheForeground:(BOOL)currentInTheForeground{
+    [self handlePushMessage:nil];
+    if (!currentInTheForeground) {
+        [self handlePushSkipType:nil];
+    }
+}
+
+//处理UI刷新 如新消息【展示小红点】
+- (void)handlePushMessage:(id )model {
+}
+//处理页面跳转
+- (void)handlePushSkipType:(id )model {
+    
+}
+
+#pragma mark no use
+#pragma mark 注册通知设置项的回调
+- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings {
+    
+    NSLog(@"didRegisterUserNotificationSettings");
+}
+
+//// apsModel示例
+/*
+ 特殊说明：
+ 1. APNS去掉alert、badge、sound字段实现静默推送，增加增加字段"content-available":1，也可以在后台做一些事情。
+ 2. mutable-content这个键值为1，说明此条推送可以被 Service Extension 进行更改。
+ */
+
+/**
+ {
+   "aps" : {
+     "alert" : {
+       "body" : "通知的body",
+       "loc-args" : [
+         "l_01",
+         "l_02"
+       ],
+       "loc-key" : "LOC_KEY",
+       "subtitle" : "通知的subtitle",
+       "title" : "通知的title",
+       "title-loc-args" : [
+         "t_01",
+         "t_02"
+       ],
+       "title-loc-key" : "TITLE_LOC_KEY"
+     },
+     "badge" : 1,
+     "category" : "QiShareCategoryIdentifier",
+     "mutable-content" : 1,
+     "sound" : "sound01.wav"
+   },
+   "msgid" : "123"
+ }
+ */
+
+/**
+ {
+   "aps" : {
+     "alert" : {
+       "body" : "Body...",
+       "subtitle" : "Subtitle...",
+       "title" : "Title..."
+     },
+     "badge" : 1,
+     "category" : "QiShareCategoryIdentifier",
+     "mutable-content" : 1,
+     "sound" : "default"
+   },
+   "media" : {
+     "type" : "image",
+     "url" : "https://www.fotor.com/images2/features/photo_effects/e_bw.jpg"
+   },
+   "msgid" : "123"
+ }
+ */
+
+
+@end
+
+#pragma clang diagnostic pop
+</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>B8914391-AF45-485C-B7D8-937F06D17AD8</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>Push_Demo_AliPush</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>Push_Demo_AliPush</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

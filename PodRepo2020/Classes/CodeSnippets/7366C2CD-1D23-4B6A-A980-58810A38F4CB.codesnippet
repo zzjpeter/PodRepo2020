@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>Window</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>// 1. 创建窗口
+if (@available(iOS 13.0, *)) {
+    UIWindowScene *windowScene = (UIWindowScene *)scene;
+    self.window = [[UIWindow alloc] initWithWindowScene:windowScene];
+    self.window.frame = windowScene.coordinateSpace.bounds;
+} else {
+    self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+}
+self.window.backgroundColor = [UIColor whiteColor];
+// 层级关系（UIWindowLevelNormal &lt; UIWindowLevelStatusBar &lt; UIWindowLevelAlert）
+// self.window.windowLevel = UIWindowLevelNormal;
+//2. 设置根控制器
+&lt;#UIViewController#&gt; *vc = [[&lt;#UIViewController#&gt; alloc] init];
+self.window.rootViewController = vc;
+//3. 显示窗口
+[self.window makeKeyAndVisible];</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>7366C2CD-1D23-4B6A-A980-58810A38F4CB</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetSummary</key>
+	<string></string>
+	<key>IDECodeSnippetTitle</key>
+	<string>UIWindow</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

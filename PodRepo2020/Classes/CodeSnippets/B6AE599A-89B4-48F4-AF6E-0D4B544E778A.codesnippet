@@ -1,0 +1,616 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>Kvo</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>/*
+ KVO : (Key - Value - Observer) 键值观察者,是观察者设计模式的一种具体实现(C层和M层的通信)
+ KVO触发机制:一个对象(观察者),检测另一个对象(被观察者)的某属性是否发生变化,若被监测的属性发生了更改,会触发观察者的一个方法(方法名固定,类似代理方法)
+ 
+ 使用步骤:
+ 
+ 注册观察者(为被观察者指定观察者以及被观察者的属性)
+ 实现回调方法
+ 触发回调方法
+ 移除观察者
+ 一般KVO奔溃的原因:
+ 
+ 被观察的对象销毁掉了(被观察的对象是一个局部变量)
+ 观察者被释放掉了,但是没有移除监听(如模态推出,push,pop等)
+ 注册的监听没有移除掉,又重新注册了一遍监听
+ 
+ //3.触发回调方法(这儿需要注意一点,在Person.m文件中如果赋值没有通过setter方法或者是kvc,例如(_name = name)这个时候不会触发kvc的回调方法,也就是说赋值必须得通过setter方法或者KVC赋值,才会触发回调方法)
+ 
+ 
+ KVO为子类的观察者属性重写调用存取方法的工作原理在代码中相当于：
+ -(void)setName:(NSString *)newName{
+ [self willChangeValueForKey:@"name"];    //KVO在调用存取方法之前总调用
+ [super setValue:newName forKey:@"name"]; //调用父类的存取方法
+ [self didChangeValueForKey:@"name"];     //KVO在调用存取方法之后总调用}
+ 
+ 三、特点：
+ 
+ 观察者观察的是属性，只有遵循 KVO 变更属性值的方式才会执行KVO的回调方法，例如是否执行了setter方法、或者是否使用了KVC赋值。
+ 如果赋值没有通过setter方法或者KVC，而是直接修改属性对应的成员变量，例如：仅调用_name = @"newName"，这时是不会触发kvo机制，更加不会调用回调方法的。
+ 所以使用KVO机制的前提是遵循 KVO 的属性设置方式来变更属性值。
+ 
+ 四、步骤
+ 
+ 1.注册观察者，实施监听；
+ 2.在回调方法中处理属性发生的变化；
+ 3.移除观察者
+ 
+ A.注册观察者：
+ 
+ //第一个参数observer：观察者 （这里观察self.myKVO对象的属性变化）
+ //第二个参数keyPath： 被观察的属性名称(这里观察self.myKVO中num属性值的改变)
+ //第三个参数options： 观察属性的新值、旧值等的一些配置（枚举值，可以根据需要设置，例如这里可以使用两项）
+ //第四个参数context： 上下文，可以为kvo的回调方法传值（例如设定为一个放置数据的字典）
+ [self.myKVO addObserver:self forKeyPath:@"num" options:
+ NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:nil];
+ 
+ B. 属性(keyPath)的值发生变化时，收到通知，调用以下方法:
+ 
+ //keyPath:属性名称
+ //object:被观察的对象
+ //change:变化前后的值都存储在change字典中
+ //context:注册观察者时，context传过来的值
+ -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary&lt;NSString *,id&gt; *)change context:(void *)context
+ {
+ }
+ }
+ 
+ 
+ 二，运用键值观察
+ 1，注册与解除注册
+ 如果我们已经有了包含可供键值观察属性的类，那么就可以通过在该类的对象（被观察对象）上调用名为 NSKeyValueObserverRegistration 的 category 方法将观察者对象与被观察者对象注册与解除注册：
+ 
+ - (void)addObserver:(NSObject *)observer forKeyPath:(NSString *)keyPath options:(NSKeyValueObservingOptions)options context:(void *)context;
+ - (void)removeObserver:(NSObject *)observer forKeyPath:(NSString *)keyPath;
+ 这两个方法的定义在 Foundation/NSKeyValueObserving.h 中，NSObject，NSArray，NSSet均实现了以上方法，因此我们不仅可以观察普通对象，还可以观察数组或结合类对象。在该头文件中，我们还可以看到 NSObject 还实现了 NSKeyValueObserverNotification 的 category 方法（更多类似方法，请查看该头文件）：
+ 
+ - (void)willChangeValueForKey:(NSString *)key;
+ - (void)didChangeValueForKey:(NSString *)key;
+ 这两个方法在手动实现键值观察时会用到，暂且不提。
+ 
+ 值得注意的是：不要忘记解除注册，否则会导致资源泄露。
+ 
+ 2，设置属性
+ 将观察者与被观察者注册好之后，就可以对观察者对象的属性进行操作，这些变更操作就会被通知给观察者对象。注意，只有遵循 KVO 方式来设置属性，观察者对象才会获取通知，也就是说遵循使用属性的 setter 方法，或通过 key-path 来设置：
+ 
+ [target setAge:30];
+ [target setValue:[NSNumber numberWithInt:30] forKey:@"age"];
+ 3，处理变更通知
+ 观察者需要实现名为 NSKeyValueObserving 的 category 方法来处理收到的变更通知：
+ 
+ - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context;
+ 在这里，change 这个字典保存了变更信息，具体是哪些信息取决于注册时的 NSKeyValueObservingOptions。
+ 
+ 三，手动实现键值观察
+ 上面的 Target 应该怎么实现呢？首先来看手动实现。
+ 
+ @interface Target : NSObject
+ {
+ int age;
+ }
+ 
+ // for manual KVO - age
+ - (int) age;
+ - (void) setAge:(int)theAge;
+ 
+ @end
+ 
+ @implementation Target
+ 
+ - (id) init
+ {
+ self = [super init];
+ if (nil != self)
+ {
+ age = 10;
+ }
+ 
+ return self;
+ }
+ 
+ // for manual KVO - age
+ - (int) age
+ {
+ return age;
+ }
+ 
+ - (void) setAge:(int)theAge
+ {
+ [self willChangeValueForKey:@"age"];
+ age = theAge;
+ [self didChangeValueForKey:@"age"];
+ }
+ 
+ + (BOOL) automaticallyNotifiesObserversForKey:(NSString *)key {
+ if ([key isEqualToString:@"age"]) {
+ return NO;
+ }
+ 
+ return [super automaticallyNotifiesObserversForKey:key];
+ }
+ 
+ @end
+ 首先，需要手动实现属性的 setter 方法，并在设置操作的前后分别调用 willChangeValueForKey: 和 didChangeValueForKey方法，这两个方法用于通知系统该 key 的属性值即将和已经变更了；
+ 其次，要实现类方法 automaticallyNotifiesObserversForKey，并在其中设置对该 key 不自动发送通知（返回 NO 即可）。这里要注意，对其它非手动实现的 key，要转交给 super 来处理。
+ 
+ 四，自动实现键值观察
+ 自动实现键值观察就非常简单了，只要使用了自动属性即可。
+ 
+ 
+ 五，键值观察依赖键
+ 有时候一个属性的值依赖于另一对象中的一个或多个属性，如果这些属性中任一属性的值发生变更，被依赖的属性值也应当为其变更进行标记。因此，object 引入了依赖键。
+ 
+ 四，自动实现键值观察
+ 自动实现键值观察就非常简单了，只要使用了自动属性即可。
+ 
+ @interface Target : NSObject
+ // for automatic KVO - age
+ @property (nonatomic, readwrite) int age;
+ @end
+ 
+ @implementation Target
+ @synthesize age; // for automatic KVO - age
+ 
+ - (id) init
+ {
+ self = [super init];
+ if (nil != self)
+ {
+ age = 10;
+ }
+ 
+ return self;
+ }
+ 
+ @end
+ 
+ 五，键值观察依赖键
+ 有时候一个属性的值依赖于另一对象中的一个或多个属性，如果这些属性中任一属性的值发生变更，被依赖的属性值也应当为其变更进行标记。因此，object 引入了依赖键。
+ 
+ 1，观察依赖键
+ 观察依赖键的方式与前面描述的一样，下面先在 Observer 的 observeValueForKeyPath:ofObject:change:context: 中添加处理变更通知的代码：
+ 
+ #import "TargetWrapper.h"
+ 
+ - (void) observeValueForKeyPath:(NSString *)keyPath
+ ofObject:(id)object
+ change:(NSDictionary *)change
+ context:(void *)context
+ {
+ if ([keyPath isEqualToString:@"age"])
+ {
+ Class classInfo = (Class)context;
+ NSString * className = [NSString stringWithCString:object_getClassName(classInfo)
+ encoding:NSUTF8StringEncoding];
+ NSLog(@" &gt;&gt; class: %@, Age changed", className);
+ 
+ NSLog(@" old age is %@", [change objectForKey:@"old"]);
+ NSLog(@" new age is %@", [change objectForKey:@"new"]);
+ }
+ else if ([keyPath isEqualToString:@"information"])
+ {
+ Class classInfo = (Class)context;
+ NSString * className = [NSString stringWithCString:object_getClassName(classInfo)
+ encoding:NSUTF8StringEncoding];
+ NSLog(@" &gt;&gt; class: %@, Information changed", className);
+ NSLog(@" old information is %@", [change objectForKey:@"old"]);
+ NSLog(@" new information is %@", [change objectForKey:@"new"]);
+ }
+ else
+ {
+ [super observeValueForKeyPath:keyPath
+ ofObject:object
+ change:change
+ context:context];
+ }
+ }
+ 2，实现依赖键
+ 在这里，观察的是 TargetWrapper 类的 information 属性，该属性是依赖于 Target 类的 age 和 grade 属性。为此，我在 Target 中添加了 grade 属性：
+ 
+ @interface Target : NSObject
+ @property (nonatomic, readwrite) int grade;
+ @property (nonatomic, readwrite) int age;
+ @end
+ 
+ @implementation Target
+ @synthesize age; // for automatic KVO - age
+ @synthesize grade;
+ @end
+ 下面来看看 TragetWrapper 中的依赖键属性是如何实现的。
+ 
+ @class Target;
+ 
+ @interface TargetWrapper : NSObject
+ {
+ @private
+ Target * _target;
+ }
+ 
+ @property(nonatomic, assign) NSString * information;
+ @property(nonatomic, retain) Target * target;
+ 
+ -(id) init:(Target *)aTarget;
+ 
+ @end
+ 
+ #import "TargetWrapper.h"
+ #import "Target.h"
+ 
+ @implementation TargetWrapper
+ 
+ @synthesize target = _target;
+ 
+ -(id) init:(Target *)aTarget
+ {
+ self = [super init];
+ if (nil != self) {
+ _target = [aTarget retain];
+ }
+ 
+ return self;
+ }
+ 
+ -(void) dealloc
+ {
+ self.target = nil;
+ [super dealloc];
+ }
+ 
+ - (NSString *)information
+ {
+ return [[[NSString alloc] initWithFormat:@"%d#%d", [_target grade], [_target age]] autorelease];
+ }
+ 
+ - (void)setInformation:(NSString *)theInformation
+ {
+ NSArray * array = [theInformation componentsSeparatedByString:@"#"];
+ [_target setGrade:[[array objectAtIndex:0] intValue]];
+ [_target setAge:[[array objectAtIndex:1] intValue]];
+ }
+ 
+ + (NSSet *)keyPathsForValuesAffectingInformation
+ {
+ NSSet * keyPaths = [NSSet setWithObjects:@"target.age", @"target.grade", nil];
+ return keyPaths;
+ }
+ 
+ //+ (NSSet *)keyPathsForValuesAffectingValueForKey:(NSString *)key
+ //{
+ //    NSSet * keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
+ //    NSArray * moreKeyPaths = nil;
+ //
+ //    if ([key isEqualToString:@"information"])
+ //    {
+ //        moreKeyPaths = [NSArray arrayWithObjects:@"target.age", @"target.grade", nil];
+ //    }
+ //
+ //    if (moreKeyPaths)
+ //    {
+ //        keyPaths = [keyPaths setByAddingObjectsFromArray:moreKeyPaths];
+ //    }
+ //
+ //    return keyPaths;
+ //}
+ 
+ @end
+ 首先，要手动实现属性 information 的 setter/getter 方法，在其中使用 Target 的属性来完成其 setter 和 getter。
+ 
+ 其次，要实现 keyPathsForValuesAffectingInformation  或 keyPathsForValuesAffectingValueForKey: 方法来告诉系统 information 属性依赖于哪些其他属性，这两个方法都返回一个key-path 的集合。在这里要多说几句，如果选择实现 keyPathsForValuesAffectingValueForKey，要先获取 super 返回的结果 set，然后判断 key 是不是目标 key，如果是就将依赖属性的 key-path 结合追加到 super 返回的结果 set 中，否则直接返回 super的结果。
+ 在这里，information 属性依赖于 target 的 age 和 grade 属性，target 的 age/grade 属性任一发生变化，information 的观察者都会得到通知。
+ 
+ 3，使用示例：
+ Observer * observer = [[[Observer alloc] init] autorelease];
+ Target * target = [[[Target alloc] init] autorelease];
+ 
+ TargetWrapper * wrapper = [[[TargetWrapper alloc] init:target] autorelease];
+ [wrapper addObserver:observer
+ forKeyPath:@"information"
+ options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld
+ context:[TargetWrapper class]];
+ 
+ [target setAge:30];
+ [target setGrade:1];
+ [wrapper removeObserver:observer forKeyPath:@"information"];
+ 输出结果：
+ 
+ &gt;&gt; class: TargetWrapper, Information changed
+ 
+ old information is 0#10
+ 
+ new information is 0#30
+ 
+ &gt;&gt; class: TargetWrapper, Information changed
+ 
+ old information is 0#30
+ 
+ new information is 1#30
+ */
+
+#pragma mark -###########VC##############
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view, typically from a nib.
+    
+    [self initPerson];
+    
+    [self testDependencyKey];
+}
+
+#pragma mark - 初始化person
+- (void)initPerson{
+    self.person = [[Person alloc] init];
+    self.person.name = @"最初的名字";
+    self.person.age = 24;
+    [self registerObserver];
+}
+
+#pragma mark -1.注册观察者
+- (void)registerObserver{
+    //observer观察者 (观察self.person对象的属性的变化)
+    //KeyPath: 被观察属性的名称
+    //options: 观察属性的新值,旧值等的一些配置(枚举值)
+    //context:上下文 可以为kvo的回调方法传值
+    //这儿的self.person是被观察者
+    //注册观察者(可以是多个)
+    /*
+     options: 有4个值，分别是：
+     　　NSKeyValueObservingOptionOld 把更改之前的值提供给处理方法
+     　　NSKeyValueObservingOptionNew 把更改之后的值提供给处理方法
+     　　NSKeyValueObservingOptionInitial 把初始化的值提供给处理方法，一旦注册，立马就会调用一次。通常它会带有新值，而不会带有旧值。
+     　　NSKeyValueObservingOptionPrior 分2次调用。在值改变之前和值改变之后。
+     */
+    /*1.注册对象myKVO为被观察者: option中，
+     NSKeyValueObservingOptionOld 以字典的形式提供 “初始对象数据”;
+     NSKeyValueObservingOptionNew 以字典的形式提供 “更新后新的数据”; */
+    [self.person addObserver:self forKeyPath:@"name" options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:nil];
+    [self.person addObserver:self forKeyPath:@"age" options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:(__bridge void * _Nullable)([Person class])];
+}
+
+#pragma mark -2.实现回调方法
+#pragma mark - kvo的回调方法(系统提供的回调方法)
+//keyPath:属性名称
+//object:被观察的对象
+//change:变化前后的值都存储在change字典中
+//context:注册观察者的时候,context传递过来的值
+/* 2.只要object的keyPath属性发生变化，就会调用此回调方法，进行相应的处理：UI更新：*/
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary&lt;NSString *,id&gt; *)change context:(void *)context {
+    
+    id oldName = [change objectForKey:NSKeyValueChangeOldKey];
+    NSLog(@"oldName----------%@",oldName);
+    id newName = [change objectForKey:NSKeyValueChangeNewKey];
+    NSLog(@"newName-----------%@",newName);
+    
+    
+    // 判断是否为self.person的属性“name”:
+    if([keyPath isEqualToString:@"name"] &amp;&amp; object == self.person) {
+        // 响应变化处理：UI更新（label文本改变）
+        //change的使用：上文注册时，枚举为2个，因此可以提取change字典中的新、旧值的这两个方法
+        NSLog(@"\\noldName:%@ newName:%@",[change valueForKey:@"old"],
+              [change valueForKey:@"new"]);
+        
+    }else if ([keyPath isEqualToString:@"age"])
+    {
+        Class classInfo = (__bridge Class)context;
+        NSString * className = [NSString stringWithCString:object_getClassName(classInfo)
+                                                  encoding:NSUTF8StringEncoding];
+        NSLog(@" &gt;&gt; class: %@, Age changed", className);
+        
+        NSLog(@" old age is %@", [change objectForKey:@"old"]);
+        NSLog(@" new age is %@", [change objectForKey:@"new"]);
+    }else if ([keyPath isEqualToString:@"information"])
+    {
+        Class classInfo = (__bridge Class)context;
+        NSString * className = [NSString stringWithCString:object_getClassName(classInfo)
+                                                  encoding:NSUTF8StringEncoding];
+        NSLog(@" &gt;&gt; class: %@, Information changed", className);
+        NSLog(@" old information is %@", [change objectForKey:@"old"]);
+        NSLog(@" new information is %@", [change objectForKey:@"new"]);
+    }
+    else
+    {
+        [super observeValueForKeyPath:keyPath
+                             ofObject:object
+                               change:change
+                              context:context];
+    }
+    
+    //当界面要消失的时候,移除kvo
+    //    [object removeObserver:self forKeyPath:@"name"];
+    
+}
+//注意：在实现处理变更通知方法 observeValueForKeyPath 时，要将不能处理的 key 转发给 super 的 observeValueForKeyPath 来处理。
+
+
+//3.触发回调方法(这儿需要注意一点,在Person.m文件中如果赋值没有通过setter方法或者是kvc,例如(_name = name)这个时候不会触发kvc的回调方法,也就是说赋值必须得通过setter方法或者KVC赋值,才会触发回调方法)
+
+#pragma mark - 导航栏按钮方法(如果赋值没有通过setter方法或者是kvc,例如(_name = @"新值"),这个时候不会触发kvc的回调方法)
+//通过下划线赋值(不会触发回调方法)
+- (void)oldAction {
+    [self.person changeName:@"张三"];
+}
+//通过点语法赋值
+- (void)newAction {
+    [self.person changeNameFromSetter:@"李四"];
+}
+
+/*KVO以及通知的注销，一般是在-(void)dealloc中编写。
+ */
+#pragma mark -4.移除观察者
+//有两种方法:
+//第一种:当界面要消失的时候,移除KVO
+//当界面要消失的时候,移除kvo
+//[object removeObserver:self forKeyPath:@"name"];
+- (void)dealloc {
+    [self.person removeObserver:self forKeyPath:@"name"];
+    [self.person removeObserver:self forKeyPath:@"age"];
+    
+    [self.wrapper removeObserver:self forKeyPath:@"information"];
+    self.person = nil;
+    self.wrapper = nil;
+}
+
+
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+
+- (IBAction)old:(id)sender {
+    [self oldAction];
+}
+
+- (IBAction)new1:(id)sender {
+    [self newAction];
+}
+
+- (IBAction)age:(id)sender {
+    
+    self.person.age++;
+}
+
+- (IBAction)testDependency:(id)sender {
+    
+    //[self.person1 setName:@"zzj"];
+    //[self.person1 setAge:26];
+    self.person1.age++;
+    
+    //[self.wrapper setInformation:@"chuan#2"];
+    //NSLog(@"wrapper:information:%@",self.wrapper.information);
+}
+
+#pragma mark -五，键值观察依赖键
+- (void)testDependencyKey{
+    
+    Person *person = [[Person alloc]init];
+    self.person1 = person;
+    
+    PersonWrapper *wrapper = [[PersonWrapper alloc] init:person];
+    self.wrapper = wrapper;
+    
+    //键值观察依赖键－－生效前 必须先初始化
+    [self.wrapper addObserver:self forKeyPath:@"information" options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:(__bridge void * _Nullable)([PersonWrapper class])];
+    
+    [person setName:@"wyl"];
+    [person setAge:23];
+    
+    //[wrapper setInformation:@"chuan#2"];
+    
+}
+
+#pragma mark -######Person#######
+//第一种就是直接赋值 kvo代理不响应
+- (void)changeName:(NSString*)name{
+    _name = name;
+}
+//第二种点语法赋值 kvo代理响应
+- (void)changeNameFromSetter:(NSString*)name {
+    self.name = name;
+    
+}
+
+
+#pragma mark -手动实现KVO
+// for manual KVO - age
+- (int) age
+{
+    return age;
+}
+//- (void) setAge:(int)theAge
+//{
+//    age = theAge;
+//}
+- (void) setAge:(int)theAge
+{
+    [self willChangeValueForKey:@"age"];
+    age = theAge;
+    [self didChangeValueForKey:@"age"];
+}
+
++ (BOOL) automaticallyNotifiesObserversForKey:(NSString *)key {
+    if ([key isEqualToString:@"age"]) {
+        return NO;
+    }
+    
+    return [super automaticallyNotifiesObserversForKey:key];
+}
+//首先，需要手动实现属性的 setter 方法，并在设置操作的前后分别调用 willChangeValueForKey: 和 didChangeValueForKey方法，这两个方法用于通知系统该 key 的属性值即将和已经变更了；
+//其次，要实现类方法 automaticallyNotifiesObserversForKey，并在其中设置对该 key 不自动发送通知（返回 NO 即可）。这里要注意，对其它非手动实现的 key，要转交给 super 来处理。
+
+#pragma mark -#########PersonWrapper############
+#pragma mark -键值观察依赖键实现必须必须先初始化 键值观察依赖键－－生效前 必须先初始化
+-(id) init:(Person *)aPerson
+{
+    self = [super init];
+    if (nil != self) {
+        _person = aPerson;
+    }
+    
+    return self;
+}
+
+- (NSString *)information
+{
+    return [[NSString alloc] initWithFormat:@"%@#%d", [_person name], [_person age] ];
+}
+
+//首先，要手动实现属性 information 的 setter/getter 方法，在其中使用 Target 的属性来完成其 setter 和 getter。
+//其次，要实现 keyPathsForValuesAffectingInformation  或 keyPathsForValuesAffectingValueForKey: 方法来告诉系统 information 属性依赖于哪些其他属性，这两个方法都返回一个key-path 的集合。在这里要多说几句，如果选择实现 keyPathsForValuesAffectingValueForKey，要先获取 super 返回的结果 set，然后判断 key 是不是目标 key，如果是就将依赖属性的 key-path 结合追加到 super 返回的结果 set 中，否则直接返回 super的结果。
+//在这里，information 属性依赖于 target 的 age 和 grade 属性，target 的 age/grade 属性任一发生变化，information 的观察者都会得到通知。
+- (void)setInformation:(NSString *)theInformation
+{
+    NSArray * array = [theInformation componentsSeparatedByString:@"#"];
+    [_person setName:[array objectAtIndex:0]];
+    [_person setGrade:[[array objectAtIndex:1] intValue]];
+}
+//keyPathsForValuesAffectingInformation
+//等价与keyPathsForValuesAffecting＋属性名 来命名的
+//+ (NSSet *)keyPathsForValuesAffectingInformation
+//{
+//    NSSet * keyPaths = [NSSet setWithObjects:@"person.name", @"person.grade", nil];
+//    return keyPaths;
+//}
+
++ (NSSet *)keyPathsForValuesAffectingValueForKey:(NSString *)key
+{
+    NSSet * keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
+    NSArray * moreKeyPaths = nil;
+    
+    if ([key isEqualToString:@"information"])
+    {
+        moreKeyPaths = [NSArray arrayWithObjects:@"person.name", @"person.age", nil];
+    }
+    
+    if (moreKeyPaths)
+    {
+        keyPaths = [keyPaths setByAddingObjectsFromArray:moreKeyPaths];
+    }
+    
+    return keyPaths;
+}
+</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>B6AE599A-89B4-48F4-AF6E-0D4B544E778A</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>KVO_详解键值观察，手动，自动，键值观察依赖键</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

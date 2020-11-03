@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>ATextViewDemo</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>- (UITextView *)textView {
+    if (!_textView) {
+        UITextView *textView = ({
+            UITextView *textView = [UITextView new];
+            textView.text = @"";
+            textView.font=[UIFont systemFontOfSize:14.0];
+            textView.textColor=[UIColor blackColor];
+            textView.textAlignment = NSTextAlignmentNatural;
+            textView.scrollEnabled = NO;
+            textView.editable = YES;
+            textView.keyboardType = UIKeyboardTypeDefault;
+            textView.returnKeyType = UIReturnKeyDefault;
+            textView.keyboardAppearance = UIKeyboardAppearanceDefault;
+            textView.dataDetectorTypes = UIDataDetectorTypeAll;
+            
+            textView.delegate = self;
+            
+            textView;
+        });
+        _textView = textView;
+    }
+    return _textView;
+}
+#pragma mark UITextViewDelegate
+//- (BOOL)textViewShouldBeginEditing:(UITextView *)textView {
+//    return YES;
+//}
+//- (BOOL)textViewShouldEndEditing:(UITextView *)textView {
+//    return YES;
+//}
+- (void)textViewDidBeginEditing:(UITextView *)textView {//UITextViewTextDidBeginEditingNotification
+    
+}
+- (void)textViewDidEndEditing:(UITextView *)textView {//UITextViewTextDidEndEditingNotification
+    
+}
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {//UITextViewTextDidChangeNotification
+    return YES;
+}
+- (void)textViewDidChange:(UITextView *)textView {//UITextViewTextDidChangeNotification
+    
+}</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>EB6877C6-5CC7-48BE-B3A9-58DF0A8686D0</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>ATextViewDemo</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>ATextViewDemo</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

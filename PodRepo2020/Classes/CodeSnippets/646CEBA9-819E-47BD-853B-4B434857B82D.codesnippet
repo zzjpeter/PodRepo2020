@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>Xib_代码demo</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>&lt;#ShowViewController#&gt; *showVc = [[&lt;#ShowViewController#&gt; alloc]initWithNibName:@"&lt;#ShowViewController#&gt;" bundle:nil];
+
+&lt;#CustomView#&gt; *cV = [[NSBundle mainBundle] loadNibNamed:@"&lt;#CustomView#&gt;" owner:self options:nil].firstObject;
+
+&lt;#XibView#&gt;* customView = [[&lt;#XibView#&gt; alloc] init];
+
+UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"&lt;#StoryboardName#&gt;" bundle:nil];
+NSLog(@"%@", storyboard);
+&lt;#StoryboardOneViewController#&gt; *vc = [storyboard instantiateViewControllerWithIdentifier:@"&lt;#StoryboardOneViewController#&gt;"];
+&lt;#StoryboardOneViewController#&gt; *vc = [storyboard instantiateInitialViewController];</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>646CEBA9-819E-47BD-853B-4B434857B82D</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>xib和storyboard的实例化</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

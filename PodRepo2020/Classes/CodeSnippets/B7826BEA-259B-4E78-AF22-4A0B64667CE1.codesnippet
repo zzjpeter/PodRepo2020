@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>ATextField_All</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>UITextField *textField = ({
+    UITextField *textField = [UITextField new];
+    textField.placeholder = @"";
+    textField.text = @"";
+    textField.font=[UIFont systemFontOfSize:14.0];
+    textField.textColor=[UIColor blackColor];
+    textField.textAlignment = NSTextAlignmentNatural;
+    textField.enabled = YES;
+    textField.secureTextEntry = NO;
+    textField.background = [UIImage imageNamed:@""];
+    textField.borderStyle = UITextBorderStyleRoundedRect;
+    textField.clearButtonMode = UITextFieldViewModeNever;
+    textField.minimumFontSize = 12.0;
+    textField.keyboardType = UIKeyboardTypeDefault;
+    textField.returnKeyType = UIReturnKeyDefault;
+    textField.keyboardAppearance = UIKeyboardAppearanceDefault;
+    textField.spellCheckingType = UITextSpellCheckingTypeNo;
+    textField.autocorrectionType = UITextAutocorrectionTypeYes;
+    textField.autocapitalizationType = UITextAutocapitalizationTypeAllCharacters;
+    
+    textField.leftViewMode = UITextFieldViewModeAlways;
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 20, 20)];
+    imageView.image = [UIImage imageNamed:@"验证码"];
+    textField.leftView = imageView;
+    
+    textField.rightViewMode = UITextFieldViewModeAlways;
+    UIImageView *imageView1 = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 20, 20)];
+    imageView1.image = [UIImage imageNamed:@"验证码"];
+    textField.rightView = imageView;
+    //textField.inputView = ;
+    //textField.inputAccessoryView = ;
+    
+    textField.delegate = self;
+    
+    [textField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged]
+    
+    textField;
+});
+</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>B7826BEA-259B-4E78-AF22-4A0B64667CE1</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>ATextField_All</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>ATextField_All</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>ATextField</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>UITextField *textField = ({
+    UITextField *textField = [UITextField new];
+    textField.placeholder = @"";
+    textField.text = @"";
+    textField.font=[UIFont systemFontOfSize:14.0];
+    textField.textColor=[UIColor blackColor];
+    textField.textAlignment = NSTextAlignmentNatural;
+    textField.enabled = YES;
+    textField.borderStyle = UITextBorderStyleRoundedRect;
+    textField.clearButtonMode = UITextFieldViewModeNever;
+    textField.keyboardType = UIKeyboardTypeNumberPad;
+    textField.returnKeyType = UIReturnKeyDone;
+    textField.keyboardAppearance = UIKeyboardAppearanceDefault;
+
+    textField.delegate = self;
+    
+    [textField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged]
+
+    textField;
+});</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>D1A3B3DE-871D-4987-B990-CC403534A544</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>ATextField</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>ATextField</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

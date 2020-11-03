@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>ASwitch_WXUIStateMore</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>NSMutableArray *titleArrM = @[MyLocal(@"noverfragment_xiaoshuo")].mutableCopy;
+        NSMutableArray *childArrM = @[bookVC].mutableCopy;
+        switch (WXYZ_UtilsHelper.getUIState) {
+            case WXUIStateBook: {
+                break;
+            }
+            case WXUIStateBookComic: {
+                titleArrM = @[MyLocal(@"noverfragment_xiaoshuo"),MyLocal(@"noverfragment_manhua")].mutableCopy;
+                childArrM = @[bookVC,comicVC].mutableCopy;
+                break;
+            }
+            case WXUIStateBookComicAudio: {
+                titleArrM = @[MyLocal(@"noverfragment_xiaoshuo"),MyLocal(@"noverfragment_manhua"),MyLocal(@"noverfragment_audio")].mutableCopy;//gjh
+                childArrM = @[bookVC,comicVC,audioBookVC].mutableCopy;
+                break;
+            }
+                
+            default:
+                break;
+        }
+        
+        self.titleArr = titleArrM.copy;
+        self.childArr = childArrM.copy;</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>2FD7904A-920C-4502-94F1-035B4345B3D6</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>ASwitch_WXUIStateMore</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>ASwitch_WXUIStateMore</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

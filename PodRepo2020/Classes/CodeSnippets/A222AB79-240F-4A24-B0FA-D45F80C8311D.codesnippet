@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>LS_ChangeNavi导航栏渐变</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>#pragma mark UIScrollViewDelegate
+//[self changeNavBarColorState:self.mainTableViewGroup.contentOffset.y withAnimate:NO];
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    CGFloat pointY = scrollView.contentOffset.y;
+    [self changeNavBarColorState:pointY withAnimate:YES];
+}
+
+#pragma mark 导航栏渐变
+
+- (void)changeNavBarColorState:(CGFloat)contentOffsetY withAnimate:(BOOL)animate
+{
+    CGFloat alpha = [WXYZ_ColorHelper getAlphaWithContentOffsetY:contentOffsetY];
+    CGFloat rbgColor = [WXYZ_ColorHelper getColorWithContentOffsetY:contentOffsetY];
+    
+    self.navigationBar.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:alpha];
+    self.navigationBar.navTitleLabel.backgroundColor = [UIColor clearColor];
+    self.navigationBar.navTitleLabel.alpha = alpha;
+    self.navigationBar.navTitleLabel.textColor = kColorRGBA(rbgColor, rbgColor, rbgColor, 1);
+    
+    if (contentOffsetY &gt; 60) {
+        [self setStatusBarDefaultStyle];
+    } else {
+        [self setStatusBarDefaultStyle];
+    }
+}</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>A222AB79-240F-4A24-B0FA-D45F80C8311D</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>LS_ChangeNavi导航栏渐变</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>LS_ChangeNavi导航栏渐变</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

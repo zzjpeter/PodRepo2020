@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>AButton_Code</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>        UIButton *btn = ({
+            UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+            [btn setTitle:MyLocal(@"") forState:UIControlStateNormal];
+            btn.titleLabel.font = [UIFont lp_systemFontOfSize:14.0 weight:UIFontWeightRegular];
+            [btn setTitleColor:UIColorFromRGB(0xAAAAAA) forState:UIControlStateNormal];
+            btn.backgroundColor = UIColorFromRGB(0xFFFFFF);
+            btn.layer.cornerRadius = 0.0;
+            [btn addTarget:self action:@selector(&lt;#buttonAction#&gt;) forControlEvents:UIControlEventTouchUpInside];
+            //btn.adjustsImageWhenHighlighted = NO;
+            btn;
+        });</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>4233E6B9-9F05-47B0-8DBE-80A7625D6EF2</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetSummary</key>
+	<string></string>
+	<key>IDECodeSnippetTitle</key>
+	<string>AButton_Code</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

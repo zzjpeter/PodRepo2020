@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>UserDefault_msgCount_枚举存取值</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>//+ (void)setMsgCount:(StartPage *)model;
+//+ (NSInteger)msgCount:(LS_PushMsgType)msgType;
++ (void)setMsgCount:(StartPage *)model {
+    switch (model.msgType) {
+        case LS_PushMsgTypeSystem:{
+            [_UD setInteger:model.msgCount forKey:@"kPushMsgTypeSystem_MsgNum"];
+            break;
+        }
+        case LS_PushMsgTypeFeedBack:{
+            [_UD setInteger:model.msgCount forKey:@"kPushMsgTypeFeedBack_MsgNum"];
+            break;
+        }
+        default:
+            break;
+    }
+}
+
++ (NSInteger)msgCount:(LS_PushMsgType)msgType {
+    NSInteger msgCount = 0;
+    switch (msgType) {
+        case LS_PushMsgTypeSystem:{
+            msgCount = [_UD integerForKey:@"kPushMsgTypeSystem_MsgNum"];
+            break;
+        }
+        case LS_PushMsgTypeFeedBack:{
+            msgCount = [_UD integerForKey:@"kPushMsgTypeFeedBack_MsgNum"];
+            break;
+        }
+        default:
+            break;
+    }
+    return msgCount;
+}</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>B0B3BDB1-067B-4A1B-A85F-49D0EC757950</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>UserDefault_msgCount_枚举存取值</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>UserDefault_msgCount_枚举存取值</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

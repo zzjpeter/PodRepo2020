@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>Localize_国际化_APP内切换语言_字段"AppLanguage"_app内切换语言需要软重启</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>//国际化
+// 当前语言
+// 国际通用语言Code+国际通用国家地区代码Code
+#define CURRENT_LANGUAGE (NSLocale.preferredLanguages.firstObject)
+// 国际通用国家地区代码Code
+#define CURRENT_LOCALE ([[NSLocale currentLocale] objectForKey: NSLocaleCountryCode])
+// 国际通用语言Code
+#define CURRENT_LANGUAGE_NOCountryCode ({\
+NSString *languageCode = CURRENT_LANGUAGE;\
+NSString *countryCode = [NSString stringWithFormat:@"-%@",CURRENT_LOCALE];\
+if (languageCode) {\
+languageCode = [languageCode stringByReplacingOccurrencesOfString:countryCode withString:@""];\
+}\
+languageCode;\
+})
+// 当前语言前缀（对应国际化语言资源文件名） 需要指定默认语言如"en"使加载相应的国际化资源文件（避免显示的都是key）
+#define APPLanguagePrefixsDefault (@"zh-Hans")
+#define APPLanguagePrefixs (@[\
+@"zh-Hans",\
+@"zh-Hant",\
+])
+#define CURRENT_LANGUAGE_PREFIXS  ({\
+NSString *CURRENT_LANGUAGE_PREFIXS = CURRENT_LANGUAGE;\
+NSArray *languagePrefixs = APPLanguagePrefixs;\
+BOOL isContainedLanauage = NO;\
+for (NSString *lanauage in languagePrefixs) {\
+if ([CURRENT_LANGUAGE hasPrefix:lanauage]) {\
+CURRENT_LANGUAGE_PREFIXS = lanauage;\
+isContainedLanauage = YES;\
+break;\
+}\
+}\
+if (!isContainedLanauage) {\
+CURRENT_LANGUAGE_PREFIXS = APPLanguagePrefixsDefault;\
+}\
+SETTINGCurrentAPPLanguage(CURRENT_LANGUAGE_PREFIXS);\
+CURRENT_LANGUAGE_PREFIXS;\
+})
+// app内语言键
+#define APPLanguageKey (@"APPLanguageKey")
+// 设置app内语言 @"APPLanguageKey" 值：languagePrefixs
+#define SETTINGCurrentAPPLanguage(languagePrefixs) ({\
+[NSUserDefaults.standardUserDefaults setObject:languagePrefixs forKey:APPLanguageKey];\
+[NSUserDefaults.standardUserDefaults synchronize];\
+})
+// 当前app内语言 @"APPLanguageKey" 没有时会用默认值进行初始化并设置"APPLanguageKey"的值
+#define CurrentAPPLanguage ([NSUserDefaults.standardUserDefaults objectForKey:APPLanguageKey] ? [NSUserDefaults.standardUserDefaults objectForKey:APPLanguageKey] : CURRENT_LANGUAGE_PREFIXS)
+#define CurrentAPPLanguageLocalizationFilePath [NSBundle.mainBundle pathForResource:CurrentAPPLanguage ofType:@"lproj"]
+#define LPLocalizedString(key, comment) \
+({ \
+NSString *string = [[NSBundle bundleWithPath:CurrentAPPLanguageLocalizationFilePath] localizedStringForKey:(key) value:@"" table:nil]; \
+string == nil ? key : string; \
+})
+#define MyLocal(x, ...) LPLocalizedString(x, nil)
+
+// 当前App内语言 appLanguageNames 需要根据app的需要自定义【语言种类更新时记得修改，否则会导致异常】
+#define AppLanguageNames \
+({\
+NSArray *appLanguageNames = @[MyLocal(@"settings_zhcn"),MyLocal(@"settings_zhhk")];\
+appLanguageNames;\
+})
+// 当前App内语言 AppLanguagePrefixsAndNames (APPLanguagePrefixs、AppLanguageNames需要同步数据)
+#define AppLanguagePrefixsAndNames \
+({\
+NSMutableDictionary *languagePrefixsAndNames = [NSMutableDictionary new];\
+NSArray *appLanguagePrefixs = APPLanguagePrefixs;\
+NSArray *appLanguageNames = AppLanguageNames;\
+NSInteger count = appLanguagePrefixs.count &gt; appLanguageNames.count ? appLanguageNames.count : appLanguagePrefixs.count;\
+for (NSInteger i = 0; i &lt; count; i++) {\
+NSString *languagePrefix = [appLanguagePrefixs safeObjectAtIndex:i];\
+NSString *language = [appLanguageNames safeObjectAtIndex:i];\
+[languagePrefixsAndNames setValue:language forKey:languagePrefix];\
+}\
+languagePrefixsAndNames;\
+});
+</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>E6A379F0-0667-4184-BDD9-A13102B7961F</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C-Plus-Plus</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>Localize_国际化_APP内切换语言_字段"AppLanguage"_app内切换语言需要软重启</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>Localize_国际化_APP内切换语言_字段"AppLanguage"_app内切换语言需要软重启</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

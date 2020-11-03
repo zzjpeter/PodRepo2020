@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>TintColor_demo</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>//tintColor
+/*
+ btn.adjustsImageWhenHighlighted = NO;
+ [btn setImage:[[UIImage imageNamed:@""] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]forState:UIControlStateNormal] ;
+ btn.tintColor = UIColor.redColor;
+ */
+//自定义view
+- (void)tintColorDidChange {
+    [self setTitleColor:self.tintColor forState:UIControlStateNormal];
+}</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>6A130BA2-BE05-43F3-A820-DE36C7650553</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>TintColor_demo</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>TintColor_demo</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

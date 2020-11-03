@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        
+    }
+    return self;
+}
+
+- (void)initializer{
+    [self addNoti];
+}
+- (void)addNoti{
+    //[NSNotificationCenter defaultCenter] qn_addSingleObserver:self selector:@selector(checklo) name:&lt;#(nonnull NSString *)#&gt; object:&lt;#(id _Nullable)#&gt;
+}
+- (void)removeNoti{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+#pragma mark - Lifecycle
+-(void)dealloc
+{
+    [self removeNoti];
+    FbeeLog(@"%@ dealloc",NSStringFromClass(self.class));
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+- (void)viewDidLoad{
+    [super viewDidLoad];
+    
+    [self initializer];
+    
+    self.title = @"";
+    self.view.backgroundColor = [UIColor whiteColor];
+    
+    
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    
+    //[self makeTheNavBarBlack];
+    //[self.navigationController.navigationBar navBarBottomLineHidden:NO];
+    
+}
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    //self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+}
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    //[self makeTheNavBarBlack];
+}
+
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    //self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+}
+
+- (void)buildView{
+    
+    
+}
+
+#pragma mark - Public 功能方法
+//- (void)ClassPublicMethod {}  用类名开头 //注：一般没有用类名开头，直接用功能命名简洁些
+
+#pragma mark - Private 功能方法
+//- (void)privateMethod {}  直接用功能命名方法
+
+#pragma mark - Private set/get
+//根据类型分类 lazy加载方式创建对象
+#pragma mark -- vc
+
+#pragma mark -- view
+
+#pragma mark -- model
+
+#pragma mark -- viewModel
+
+
+#pragma mark - actions
+//按钮点击，touchBegan等方法
+//#pragma mark - 系统delegate
+//#pragma mark - UITextFieldDelegate
+//#pragma mark - UITableViewDataSource
+//#pragma mark - UITableViewDelegate
+//#pragma mark - UIScrollViewDelegate等。
+#pragma mark - 自定义delegate</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>AE2AB670-CD6C-41F9-9B88-781E7C73B197</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Generic</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>SC</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

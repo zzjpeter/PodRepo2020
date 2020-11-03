@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>Window</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>    //UIWindow实现窗口的切换
+    self.window =[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    XYLoginViewController *LoginView = [[XYLoginViewController alloc] init];
+    CustomNavigationController *navControl =[[CustomNavigationController alloc] initWithRootViewController:LoginView];
+    self.window.rootViewController = navControl;
+    
+    LockController *LockView = [[LockController alloc] init];
+    self.LockWindow =[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.LockWindow.backgroundColor = [UIColor yellowColor];
+    //设置高的优先级，保证窗口在最上方
+    self.LockWindow.windowLevel = UIWindowLevelAlert + 2;
+    self.LockWindow.rootViewController = LockView;
+    
+    if ([self isFirstTimeRun]) {
+        //修改为不再是第一次运行
+        [self setFirstTimeRun:NO];
+        //显示主窗口
+        self.window.hidden = NO;
+        [self.window makeKeyAndVisible];
+    } else {
+        self.LockWindow.hidden = NO;
+        [self.LockWindow makeKeyAndVisible];
+    }
+    
+    //窗口隐藏：
+    AppDelegate *myDelegate = [[UIApplication sharedApplication] delegate];
+    //隐藏解锁窗口
+    [myDelegate.LockWindow resignKeyWindow];
+    myDelegate.LockWindow.hidden=YES;</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>FFF188CE-63F5-4881-919A-752CE517F068</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>UIWindow实现窗口的切换与隐藏</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

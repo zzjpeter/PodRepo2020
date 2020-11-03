@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>aTabbarView</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>func testWindow() {
+        
+        let vc01 = ViewController01()
+        let vc02 = ViewController02()
+        let vc03 = ViewController03()
+        let vc04 = ViewController04()
+        createTabbarView(viewController: vc01, image: "tab1", selectImage: "selectTab1", title: "微信")
+        createTabbarView(viewController: vc02, image: "tab2", selectImage: "selectTab2", title: "通讯录")
+        createTabbarView(viewController: vc03, image: "tab3", selectImage: "selectTab3", title: "发现")
+        createTabbarView(viewController: vc04, image: "tab4", selectImage: "selectTab4", title: "我")
+        let tabBarController = UITabBarController()
+        tabBarController.tabBar.tintColor = UIColor(red: 9/255.0, green: 187/255.0, blue: 7/255.0, alpha: 1)
+        tabBarController.viewControllers = [UINavigationController(rootViewController: vc01),
+                                            UINavigationController(rootViewController: vc02),
+                                            UINavigationController(rootViewController: vc03),
+                                            UINavigationController(rootViewController: vc04),
+        ]
+        window?.rootViewController = tabBarController
+        tabBarController.selectedIndex = 2
+        vc01.tabBarItem.badgeValue = "10"
+    }
+    
+    func createTabbarView(viewController: UIViewController, image: NSString, selectImage: NSString, title: NSString) {
+        viewController.tabBarItem.image = UIImage(named: image as String)?.withRenderingMode(.alwaysOriginal)
+        viewController.tabBarItem.selectedImage = UIImage(named: image as String)?.withRenderingMode(.alwaysOriginal)
+        viewController.title = title as String
+    }
+</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>E13971C1-C021-42DA-8255-52259F97912D</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Swift</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>aTabbarView</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>aTabbarView</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>0</integer>
+</dict>
+</plist>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>ATextField_Demo</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>- (UITextField *)textField {
+    if (!_textField) {
+        UITextField *textField = ({
+            UITextField *textField = [UITextField new];
+            textField.placeholder = @"";
+            textField.text = @"";
+            textField.font=[UIFont systemFontOfSize:14.0];
+            textField.textColor=[UIColor blackColor];
+            textField.textAlignment = NSTextAlignmentNatural;
+            textField.enabled = YES;
+            textField.borderStyle = UITextBorderStyleRoundedRect;
+            textField.clearButtonMode = UITextFieldViewModeNever;
+            textField.keyboardType = UIKeyboardTypeNumberPad;
+            textField.returnKeyType = UIReturnKeyDone;
+            textField.keyboardAppearance = UIKeyboardAppearanceDefault;
+            
+            textField.delegate = self;
+            
+            [textField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged]
+            
+            textField;
+        });
+        _textField = textField;
+    }
+    return _textField;
+}
+
+#pragma mark UITextFieldDelegate
+//- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
+//    return YES;
+//}
+//- (BOOL)textFieldShouldEndEditing:(UITextField *)textField{
+//    return YES;
+//}
+- (void)textFieldDidBeginEditing:(UITextField *)textField {//UITextFieldTextDidBeginEditingNotification
+    
+}
+- (void)textFieldDidEndEditing:(UITextField *)textField {//UITextFieldTextDidEndEditingNotification
+    
+}
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {//UITextFieldTextDidChangeNotification
+    return YES;
+}
+//- (BOOL)textFieldShouldClear:(UITextField *)textField {
+//    return YES;
+//}
+//- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+//    return YES;
+//}
+</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>98312117-6747-4D01-BA1A-3BAEE39D6237</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>ATextField_Demo</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>ATextField_Demo</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>
