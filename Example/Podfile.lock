@@ -1,19 +1,4 @@
 PODS:
-  - AFNetworking (4.0.1):
-    - AFNetworking/NSURLSession (= 4.0.1)
-    - AFNetworking/Reachability (= 4.0.1)
-    - AFNetworking/Security (= 4.0.1)
-    - AFNetworking/Serialization (= 4.0.1)
-    - AFNetworking/UIKit (= 4.0.1)
-  - AFNetworking/NSURLSession (4.0.1):
-    - AFNetworking/Reachability
-    - AFNetworking/Security
-    - AFNetworking/Serialization
-  - AFNetworking/Reachability (4.0.1)
-  - AFNetworking/Security (4.0.1)
-  - AFNetworking/Serialization (4.0.1)
-  - AFNetworking/UIKit (4.0.1):
-    - AFNetworking/NSURLSession
   - Expecta (1.0.6)
   - "Expecta+Snapshots (3.1.1)":
     - Expecta (~> 1.0)
@@ -24,65 +9,27 @@ PODS:
   - FBSnapshotTestCase/Core (2.1.4)
   - FBSnapshotTestCase/SwiftSupport (2.1.4):
     - FBSnapshotTestCase/Core
-  - JLAuthorizationManager (2.1.1):
-    - JLAuthorizationManager/All (= 2.1.1)
-  - JLAuthorizationManager/All (2.1.1)
-  - LookinServer (1.0.0)
-  - Masonry (1.1.0)
-  - MJRefresh (3.4.3)
-  - PodRepo2020 (0.1.0):
-    - AFNetworking (= 4.0.1)
-    - JLAuthorizationManager (= 2.1.1)
-    - LookinServer (= 1.0.0)
-    - Masonry (= 1.1.0)
-    - MJRefresh (= 3.4.3)
-    - UITextView-WZB (= 1.1.1)
-    - YYKit (= 1.0.9)
   - Specta (1.0.7)
-  - UITextView-WZB (1.1.1)
-  - YYKit (1.0.9):
-    - YYKit/no-arc (= 1.0.9)
-  - YYKit/no-arc (1.0.9)
 
 DEPENDENCIES:
   - Expecta
   - "Expecta+Snapshots"
   - FBSnapshotTestCase
-  - PodRepo2020 (from `../`)
   - Specta
 
 SPEC REPOS:
   trunk:
-    - AFNetworking
     - Expecta
     - "Expecta+Snapshots"
     - FBSnapshotTestCase
-    - JLAuthorizationManager
-    - LookinServer
-    - Masonry
-    - MJRefresh
     - Specta
-    - UITextView-WZB
-    - YYKit
-
-EXTERNAL SOURCES:
-  PodRepo2020:
-    :path: "../"
 
 SPEC CHECKSUMS:
-  AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
   Expecta: 3b6bd90a64b9a1dcb0b70aa0e10a7f8f631667d5
   "Expecta+Snapshots": dcff217eef506dabd6dfdc7864ea2da321fafbb8
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
-  JLAuthorizationManager: 0e2f3ebe2e0945e314af6f2ba8a4acc4764d530b
-  LookinServer: 0002891cd3cec5e082a910e897dfe71b4f06b89e
-  Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
-  MJRefresh: 53e3e3219f204425ee6d3e62e8733d3295944cd6
-  PodRepo2020: 540cea9d2592f51b39955db98695133bb6eb7264
   Specta: 3e1bd89c3517421982dc4d1c992503e48bd5fe66
-  UITextView-WZB: aa7306ec35ad35d325f8e608366ecd5ac8c8eed9
-  YYKit: 7cda43304a8dc3696c449041e2cb3107b4e236e7
 
-PODFILE CHECKSUM: 8847c5c857bfb07ae82e05249f7eb4827de34c2f
+PODFILE CHECKSUM: cde0e9af5d27da40cacb8be715a09056a3dde581
 
 COCOAPODS: 1.8.4

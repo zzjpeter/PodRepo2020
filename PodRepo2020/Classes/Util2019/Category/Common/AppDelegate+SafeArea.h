@@ -6,20 +6,19 @@
 //  Copyright © 2020 Andrew. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-//#import "AppDelegate.h"
-//
-//NS_ASSUME_NONNULL_BEGIN
-//
-//extern CGFloat LPiPhoneXMarginTop;
-//extern CGFloat LPiPhoneXMarginBottom;
-//extern BOOL iPhoneX;
-//
-//@interface AppDelegate (SafeArea)
-//
-////必须先调用一次才能正常使用
-//- (void)commonInit;
-//
-//@end
-//
-//NS_ASSUME_NONNULL_END
+#import "AppDelegate.h"
+
+NS_ASSUME_NONNULL_BEGIN
+
+extern CGFloat LPiPhoneXMarginTop;
+extern CGFloat LPiPhoneXMarginBottom;
+extern BOOL iPhoneX;
+
+@interface AppDelegate (SafeArea)
+
+//必须先调用一次才能正常使用
+- (void)commonInit;
+
+@end
+
+NS_ASSUME_NONNULL_END

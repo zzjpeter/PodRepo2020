@@ -1,6 +1,0 @@
-framework module PodRepo2020 {
-  umbrella header "PodRepo2020-umbrella.h"
-
-  export *
-  module * { export * }
-}

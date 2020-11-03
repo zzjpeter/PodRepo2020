@@ -2,8 +2,12 @@ use_frameworks!
 
 platform :ios, '9.0'
 
+# pod 需要指定仓库 因为CocoaPods下没有的库需要指定 如下
+source 'https://github.com/CocoaPods/Specs.git'
+source 'https://github.com/zzjpeter/PodRepo2020.git'
+
 target 'PodRepo2020_Example' do
-  pod 'PodRepo2020', :path => '../'
+  pod 'PodRepo2020'
 
   target 'PodRepo2020_Tests' do
     inherit! :search_paths
