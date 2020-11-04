@@ -38,12 +38,13 @@ TODO: Add long description of the pod here.
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   s.frameworks = 'UIKit', 'MapKit', 'Foundation'
-  s.dependency 'YYKit', '1.0.9'
   s.dependency 'JLAuthorizationManager', '2.1.1'
   s.dependency 'Masonry','1.1.0'
   s.dependency 'AFNetworking','4.0.1'
   s.dependency 'MJRefresh', '3.4.3'
-  #  测试
-  s.dependency 'LookinServer','1.0.0'
   s.dependency 'UITextView-WZB','1.1.1'
+  s.dependency 'RMMapper','1.1.5'
+  # pod lib lint 校验不通过的库 移出
+  #s.dependency 'YYKit', '1.0.9'
+  #s.dependency 'LookinServer','1.0.0'
 end

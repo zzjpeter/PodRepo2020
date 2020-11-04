@@ -7,8 +7,13 @@ source 'https://github.com/CocoaPods/Specs.git'
 source 'https://github.com/zzjpeter/PodRepo2020.git'
 
 target 'PodRepo2020_Example' do
-  pod 'PodRepo2020'
+  pod 'PodRepo2020'#, :path => '../'
 
+  # pod lib lint 校验不通过的库 移出 后需要手动添加
+  #  测试
+  pod 'LookinServer','1.0.0', :configurations => ['Debug'], :inhibit_warnings => true
+  pod 'YYKit', '1.0.9', :inhibit_warnings => true
+  
   target 'PodRepo2020_Tests' do
     inherit! :search_paths
 

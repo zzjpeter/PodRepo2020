@@ -7,9 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-
-#import "RMMapper.h"//依赖于RMMapper
+#import "RMMapper.h"
 #import "NSUserDefaults+RMSaveCustomObject.h"
+
 #define Defaults [NSUserDefaults standardUserDefaults]
 
 @interface SaveUtil : NSObject

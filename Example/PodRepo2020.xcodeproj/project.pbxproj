@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		47BD45422552705C00E0689D /* UrlLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 47BD45382552705C00E0689D /* UrlLabel.m */; };
+		47BD45432552705C00E0689D /* NSData之间数据类型转化.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 47BD453A2552705C00E0689D /* NSData之间数据类型转化.rtf */; };
+		47BD45442552705C00E0689D /* AppDelegate+SafeArea.m in Sources */ = {isa = PBXBuildFile; fileRef = 47BD453D2552705C00E0689D /* AppDelegate+SafeArea.m */; };
+		47BD45452552705C00E0689D /* SaveUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 47BD45402552705C00E0689D /* SaveUtil.m */; };
 		55F5E01B464A3A0522D91FAF /* Pods_PodRepo2020_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6980F111A21A22FD52E36173 /* Pods_PodRepo2020_Tests.framework */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
@@ -39,6 +43,14 @@
 /* Begin PBXFileReference section */
 		125137C4E0B462A32C49D752 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		47A8F1A2612F3CF1A7850955 /* Pods_PodRepo2020_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PodRepo2020_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		47BD45382552705C00E0689D /* UrlLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UrlLabel.m; sourceTree = "<group>"; };
+		47BD45392552705C00E0689D /* UrlLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UrlLabel.h; sourceTree = "<group>"; };
+		47BD453A2552705C00E0689D /* NSData之间数据类型转化.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = "NSData之间数据类型转化.rtf"; sourceTree = "<group>"; };
+		47BD453C2552705C00E0689D /* AppDelegate+SafeArea.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AppDelegate+SafeArea.h"; sourceTree = "<group>"; };
+		47BD453D2552705C00E0689D /* AppDelegate+SafeArea.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AppDelegate+SafeArea.m"; sourceTree = "<group>"; };
+		47BD453F2552705C00E0689D /* SaveUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SaveUtil.h; sourceTree = "<group>"; };
+		47BD45402552705C00E0689D /* SaveUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SaveUtil.m; sourceTree = "<group>"; };
+		47BD45412552705C00E0689D /* BaseYYKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseYYKit.h; sourceTree = "<group>"; };
 		581DB7B5F81D3D90D627FFB3 /* Pods-PodRepo2020_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PodRepo2020_Example.debug.xcconfig"; path = "Target Support Files/Pods-PodRepo2020_Example/Pods-PodRepo2020_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		5F9A772195186485BE37DB76 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		6003F58A195388D20070C39A /* PodRepo2020_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PodRepo2020_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -96,10 +108,51 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		47BD45362552705C00E0689D /* BaseYYKit */ = {
+			isa = PBXGroup;
+			children = (
+				47BD45372552705C00E0689D /* UrlLabel */,
+				47BD453A2552705C00E0689D /* NSData之间数据类型转化.rtf */,
+				47BD453B2552705C00E0689D /* Common */,
+				47BD453E2552705C00E0689D /* SaveUtil */,
+				47BD45412552705C00E0689D /* BaseYYKit.h */,
+			);
+			name = BaseYYKit;
+			path = PodRepo2020/BaseYYKit;
+			sourceTree = "<group>";
+		};
+		47BD45372552705C00E0689D /* UrlLabel */ = {
+			isa = PBXGroup;
+			children = (
+				47BD45382552705C00E0689D /* UrlLabel.m */,
+				47BD45392552705C00E0689D /* UrlLabel.h */,
+			);
+			path = UrlLabel;
+			sourceTree = "<group>";
+		};
+		47BD453B2552705C00E0689D /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				47BD453C2552705C00E0689D /* AppDelegate+SafeArea.h */,
+				47BD453D2552705C00E0689D /* AppDelegate+SafeArea.m */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		47BD453E2552705C00E0689D /* SaveUtil */ = {
+			isa = PBXGroup;
+			children = (
+				47BD453F2552705C00E0689D /* SaveUtil.h */,
+				47BD45402552705C00E0689D /* SaveUtil.m */,
+			);
+			path = SaveUtil;
+			sourceTree = "<group>";
+		};
 		6003F581195388D10070C39A = {
 			isa = PBXGroup;
 			children = (
 				F1705F652551A6AA009A1F38 /* PrefixHeader.pch */,
+				47BD45362552705C00E0689D /* BaseYYKit */,
 				60FF7A9C1954A5C5007DD14C /* Podspec Metadata */,
 				6003F593195388D20070C39A /* Example for PodRepo2020 */,
 				6003F5B5195388D20070C39A /* Tests */,
@@ -249,6 +302,9 @@
 				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = zzjpeter;
 				TargetAttributes = {
+					6003F589195388D20070C39A = {
+						DevelopmentTeam = KLZ6FTC7C7;
+					};
 					6003F5AD195388D20070C39A = {
 						TestTargetID = 6003F589195388D20070C39A;
 					};
@@ -281,6 +337,7 @@
 			files = (
 				873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */,
 				71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */,
+				47BD45432552705C00E0689D /* NSData之间数据类型转化.rtf in Resources */,
 				6003F5A9195388D20070C39A /* Images.xcassets in Resources */,
 				6003F598195388D20070C39A /* InfoPlist.strings in Resources */,
 			);
@@ -372,6 +429,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				47BD45442552705C00E0689D /* AppDelegate+SafeArea.m in Sources */,
+				47BD45422552705C00E0689D /* UrlLabel.m in Sources */,
+				47BD45452552705C00E0689D /* SaveUtil.m in Sources */,
 				6003F59E195388D20070C39A /* AppDelegate.m in Sources */,
 				6003F5A7195388D20070C39A /* ZZJViewController.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
@@ -502,11 +562,12 @@
 			baseConfigurationReference = 581DB7B5F81D3D90D627FFB3 /* Pods-PodRepo2020_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = KLZ6FTC7C7;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/PrefixHeader.pch";
 				INFOPLIST_FILE = "PodRepo2020/PodRepo2020-Info.plist";
 				MODULE_NAME = ExampleApp;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zzj.test2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				WRAPPER_EXTENSION = app;
@@ -518,11 +579,12 @@
 			baseConfigurationReference = E55751843BCADCAA13E1496B /* Pods-PodRepo2020_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = KLZ6FTC7C7;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/PrefixHeader.pch";
 				INFOPLIST_FILE = "PodRepo2020/PodRepo2020-Info.plist";
 				MODULE_NAME = ExampleApp;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zzj.test2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				WRAPPER_EXTENSION = app;

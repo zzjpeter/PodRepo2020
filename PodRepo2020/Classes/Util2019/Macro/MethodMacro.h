@@ -115,11 +115,7 @@ Strong(self)
 
 #import "NSArray+Safe.h"
 
-//yykit
-#import "YYKit.h"
-
 #import "NSString+EncodeUrl.h"
-#import "AppDelegate+SafeArea.h"
 
 #import "ZSingleton.h"
 #import "CacheManager.h"
