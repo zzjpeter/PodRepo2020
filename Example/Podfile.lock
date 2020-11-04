@@ -54,19 +54,20 @@ DEPENDENCIES:
   - YYKit (= 1.0.9)
 
 SPEC REPOS:
-  trunk:
+  https://github.com/CocoaPods/Specs.git:
     - AFNetworking
-    - Expecta
-    - "Expecta+Snapshots"
-    - FBSnapshotTestCase
     - JLAuthorizationManager
-    - LookinServer
     - Masonry
     - MJRefresh
     - PodRepo2020
     - RMMapper
-    - Specta
     - UITextView-WZB
+  trunk:
+    - Expecta
+    - "Expecta+Snapshots"
+    - FBSnapshotTestCase
+    - LookinServer
+    - Specta
     - YYKit
 
 SPEC CHECKSUMS:
@@ -84,6 +85,6 @@ SPEC CHECKSUMS:
   UITextView-WZB: aa7306ec35ad35d325f8e608366ecd5ac8c8eed9
   YYKit: 7cda43304a8dc3696c449041e2cb3107b4e236e7
 
-PODFILE CHECKSUM: 916446e8147841ab1c3eb796d44ee093fed013a3
+PODFILE CHECKSUM: 25c152df4210d3704dffe76bc3154931270c15db
 
 COCOAPODS: 1.8.4
