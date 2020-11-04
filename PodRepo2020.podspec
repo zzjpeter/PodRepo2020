@@ -17,9 +17,7 @@ Pod::Spec.new do |s|
 #   * Write the description between the DESC delimiters below.
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
-  s.description      = <<-DESC
-TODO: Add long description of the pod here.
-                       DESC
+  s.description      = 'PodRepo2020'
 
   s.homepage         = 'https://github.com/zzjpeter/PodRepo2020'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
@@ -47,4 +45,7 @@ TODO: Add long description of the pod here.
   # pod lib lint 校验不通过的库 移出
   #s.dependency 'YYKit', '1.0.9'
   #s.dependency 'LookinServer','1.0.0'
+  #校验spec文件
+  #pod lib lint --allow-warnings #本地验证spec文件
+  #pod repo push PodRepo2020 PodRepo2020.podspec --allow-warnings #远程本地验证spec文件
 end
