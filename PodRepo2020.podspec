@@ -48,4 +48,9 @@ Pod::Spec.new do |s|
   #校验spec文件
   #pod lib lint --allow-warnings #本地验证spec文件
   #pod repo push PodRepo2020 PodRepo2020.podspec --allow-warnings #远程本地验证spec文件
+  #发布到cocoapods，成为公开库
+  #pod trunk me #验证cocoaPods
+  #pod trunk push ***.podspec --allow-warnings #发布
+  #pod trunk me #验证查看cocoaPods
+  #详细参考链接 https://www.jianshu.com/p/e63c6f1a5df9
 end

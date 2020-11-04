@@ -18,6 +18,7 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+    NSLog(@"测试Pod管理自己的仓库OK");
 }
 
 - (void)didReceiveMemoryWarning
