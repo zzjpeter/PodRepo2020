@@ -41,7 +41,6 @@ Pod::Spec.new do |s|
   s.dependency 'AFNetworking','4.0.1'
   s.dependency 'MJRefresh', '3.4.3'
   s.dependency 'UITextView-WZB','1.1.1'
-  s.dependency 'RMMapper','1.1.5'
   # pod lib lint 校验不通过的库 移出
   #s.dependency 'YYKit', '1.0.9'
   #s.dependency 'LookinServer','1.0.0'

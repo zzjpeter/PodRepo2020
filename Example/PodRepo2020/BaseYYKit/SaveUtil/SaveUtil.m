@@ -23,16 +23,16 @@
 }
 
 #pragma mark --数据读写NSUserDefaults （自持自定义数据类型 其通过归档成NSData实现的）
-+ (void)writeData_3RD:(id)object key:(NSString *)key{
-    
-    //统一使用的归档
-    [Defaults rm_setCustomObject:object forKey:key];
-}
-+ (id)readData_3RD:(NSString *)key{
-    
-    //统一使用的归档
-   return [Defaults rm_customObjectForKey:key];
-}
+//+ (void)writeData_3RD:(id)object key:(NSString *)key{
+//
+//    //统一使用的归档
+//    [Defaults rm_setCustomObject:object forKey:key];
+//}
+//+ (id)readData_3RD:(NSString *)key{
+//
+//    //统一使用的归档
+//   return [Defaults rm_customObjectForKey:key];
+//}
 
 #pragma mark --数据读写 归档实现 支持自定义数据类型
 + (void)writeData:(id)object key:(NSString *)key filePath:(NSString *)filePath{
