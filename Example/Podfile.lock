@@ -30,14 +30,12 @@ PODS:
   - LookinServer (1.0.0)
   - Masonry (1.1.0)
   - MJRefresh (3.4.3)
-  - PodRepo2020 (0.1.0):
+  - PodRepo2020 (0.2.0):
     - AFNetworking (= 4.0.1)
     - JLAuthorizationManager (= 2.1.1)
     - Masonry (= 1.1.0)
     - MJRefresh (= 3.4.3)
-    - RMMapper (= 1.1.5)
     - UITextView-WZB (= 1.1.1)
-  - RMMapper (1.1.5)
   - Specta (1.0.7)
   - UITextView-WZB (1.1.1)
   - YYKit (1.0.9):
@@ -49,25 +47,23 @@ DEPENDENCIES:
   - "Expecta+Snapshots"
   - FBSnapshotTestCase
   - LookinServer (= 1.0.0)
-  - PodRepo2020 (= 0.1.0)
+  - PodRepo2020 (= 0.2.0)
   - Specta
   - YYKit (= 1.0.9)
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
-    - AFNetworking
-    - JLAuthorizationManager
-    - Masonry
-    - MJRefresh
-    - PodRepo2020
-    - RMMapper
-    - UITextView-WZB
   trunk:
+    - AFNetworking
     - Expecta
     - "Expecta+Snapshots"
     - FBSnapshotTestCase
+    - JLAuthorizationManager
     - LookinServer
+    - Masonry
+    - MJRefresh
+    - PodRepo2020
     - Specta
+    - UITextView-WZB
     - YYKit
 
 SPEC CHECKSUMS:
@@ -79,12 +75,11 @@ SPEC CHECKSUMS:
   LookinServer: 0002891cd3cec5e082a910e897dfe71b4f06b89e
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MJRefresh: 53e3e3219f204425ee6d3e62e8733d3295944cd6
-  PodRepo2020: 49112bc1de8ec258c34e419f0655d77b5a1676e2
-  RMMapper: 21122d753c736d975f6c61e674afce8db73579af
+  PodRepo2020: 6ac6862298bf01017bcfb1d9cdb71065bc81e6d0
   Specta: 3e1bd89c3517421982dc4d1c992503e48bd5fe66
   UITextView-WZB: aa7306ec35ad35d325f8e608366ecd5ac8c8eed9
   YYKit: 7cda43304a8dc3696c449041e2cb3107b4e236e7
 
-PODFILE CHECKSUM: 25c152df4210d3704dffe76bc3154931270c15db
+PODFILE CHECKSUM: 11c74e0cbd4283b3ed162a2722f98f5228644a6d
 
 COCOAPODS: 1.8.4
