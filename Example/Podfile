@@ -1,4 +1,5 @@
 use_frameworks!
+inhibit_all_warnings!
 
 platform :ios, '9.0'
 
@@ -8,9 +9,9 @@ platform :ios, '9.0'
 #注意点：用本地库的时候 可能会报目录冲突错误，用一级目录就行，不用Classes、Assets的二级目录即可解决
 
 target 'PodRepo2020_Example' do
-  pod 'PodRepo2020','0.1.0', :inhibit_warnings => true# :path => '../'
+  pod 'PodRepo2020','0.2.0', :inhibit_warnings => true# :path => '../'
 
-  # pod lib lint 校验不通过的库 移s出 后需要手动添加
+  # pod lib lint 校验不通过的库 移出 后需要手动添加
   #  测试
   pod 'LookinServer','1.0.0', :configurations => ['Debug'], :inhibit_warnings => true
   pod 'YYKit', '1.0.9', :inhibit_warnings => true
